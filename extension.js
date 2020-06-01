@@ -5,8 +5,10 @@ const GLib = imports.gi.GLib;
 const Clutter = imports.gi.Clutter;
 
 let panelButton, panelButtonText, timeout;
+let counter = 0;
 
-var metadataReq = "dbus-send --print-reply" + 
+/*
+let metadataReq = "dbus-send --print-reply" + 
  " --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 " + 
  "org.freedesktop.DBus.Properties.Get string:\"org.mpris.MediaPlayer2.Player\""
  + " string:'Metadata' | grep -Ev \"^metho\"" 
@@ -14,6 +16,7 @@ var metadataReq = "dbus-send --print-reply" +
  + " | sed -E '2~2 a|' | tr -d '\n' | sed -E 's/\|/\n/g'" 
  + " | sed -E 's/(xesam:)|(mpris:)//' | sed -E 's/^\"//'"
  + " | sed -E 's/\"$//' | sed -E  's/\"+/|/' | sed -E 's/ +/ /g'\"";
+*/
 
 function init () {
     panelButton = new St.Bin({
@@ -21,7 +24,7 @@ function init () {
     });
 
     panelButtonText = new St.Label({
-        style_class : "examplePanelText",
+        style_class : "taskbarPanelText",
         text : "Yerim yerim yerim",
         y_align : Clutter.ActorAlign.CENTER
     });
@@ -40,12 +43,13 @@ function disable () {
 
 function setButtonText () {
 
-    let artist, track;
+    //let artist, track;
 
-    var [ok, out, err, exit] = GLib.spawn_command_line_sync(metadataReq);
+    //var [ok, out, err, exit] = GLib.spawn_command_line_sync(metadataReq);
 
-    out = out.toString();
+    //out = out.toString();
 
+    /*
     if (out.includes("Error: ")) {
         panelButtonText.set_text("");
     } else {
@@ -58,7 +62,9 @@ function setButtonText () {
         track = track.substring(track.indexOf("|") + 1).replace("\n", "");
 
         panelButtonText.set_text(artist + " - " + track);
-    }
+    }*/
     
+    panelButton.set_text(counter.toString());
+    counter++;
     return true;
 }
