@@ -42,7 +42,7 @@ function init () {
 
     panelButtonText = new St.Label({
         style_class : "taskbarPanelText",
-        text: "🍔",
+        text: "⚙️⚙️⚙️",
         y_align : Clutter.ActorAlign.CENTER
     });
     panelButton.set_child(panelButtonText);

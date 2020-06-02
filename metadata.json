@@ -1,5 +1,5 @@
 {
-    "description" : "Show currently playing song on Spotify",
+    "description" : "Shows currently playing song on Spotify",
     "name" : "sp-tray",
     "shell-version" : [
         "3.36"
