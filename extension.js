@@ -32,7 +32,7 @@ const freedesktopDbus = `<node>
 const spotifyProxyWrapper = Gio.DBusProxy.makeProxyWrapper(spotifyDbus);
 const freedesktopProxyWrapper = Gio.DBusProxy.makeProxyWrapper(freedesktopDbus);
 
-let spotfyProxy = spotifyProxyWrapper(Gio.DBus.session, dest, path);
+let spotifyProxy = spotifyProxyWrapper(Gio.DBus.session, dest, path);
 let freedesktopProxy = freedesktopProxyWrapper(Gio.DBus.session, dest, path);
 
 function init () {
@@ -59,18 +59,12 @@ function disable () {
 }
 
 function decideText () {
-
-    //var [ok, out, err, exit] = GLib.spawn_command_line_sync('./.sp.sh current');
-
-    //out = out.toString();
-
-  /*  if (out.includes("Error: ")) {
+    if (!isSpotifyRunning()) {
         setButtonText("");
-        return true;
     } else {
-*/
-        let status = spotfyProxy.PlaybackStatus;
-        let metadata = spotfyProxy.Metadata;
+
+        let status = spotifyProxy.PlaybackStatus;
+        let metadata = spotifyProxy.Metadata;
 
         if (status == "Paused") {
             setButtonText("⏸️ Paused");
@@ -82,18 +76,13 @@ function decideText () {
             let output = "🧑‍🦲 " + artist + " - 🎶 " + title;
             setButtonText(output);
         }
+    }
+    return true;
+}
 
-        return true;
-
-        /*
-        let artist = out.substring(out.indexOf("AlbumArtist") + 11,
-            out.indexOf("\n", out.indexOf("AlbumArtist"))).trim();
-        let track = out.substring(out.indexOf("Title") + 5).trim();
-
-        panelButtonText.set_text(artist + " | " + track);
-        */
-//    }
-
+function isSpotifyRunning() {
+    let status = spotifyProxy.PlaybackStatus;
+    return (typeof(status) === 'string');
 }
 
 function setButtonText (output) {
