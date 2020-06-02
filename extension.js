@@ -29,15 +29,22 @@ function disable () {
     Main.panel._rightBox.remove_child(panelButton);
 }
 
-async function setButtonText () {
+function setButtonText () {
 
     var [ok, out, err, exit] = GLib.spawn_command_line_sync('./.sp.sh current');
+
     out = out.toString();
 
-    let artist = out.subString(out.indexOf("AlbumArtist") + 11,
-     out.indexOf("\n", out.indexOf("AlbumArtist"))).trim();
-    let track = out.subString(out.indexOf("Title")).trim();
+    if (out.includes("Error: ")) {
+        panelButtonText.set_text("");
+    } else {
 
-    panelButtonText.set_text(out.toString());
+        let artist = out.substring(out.indexOf("AlbumArtist") + 11,
+            out.indexOf("\n", out.indexOf("AlbumArtist"))).trim();
+        let track = out.substring(out.indexOf("Title") + 5).trim();
+
+        panelButtonText.set_text(artist + " | " + track);
+    }
+    
     return true;
 }
