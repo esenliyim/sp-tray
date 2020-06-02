@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+
+    <schema id="org.gnome.shell.extensions.sp-tray"
+        path="/org/gnome/shell/extensions/sp-tray/">
+    
+    <key type="s" name="starting">
+        <default>"⚙️⚙️⚙️"</default>
+        <summary>starting icon</summary>
+        <descritpion>the default icon that's briefly displayed as the extension starts</descritpion>
+    </key> 
+
+    <key type="s" name="paused">
+        <default>"⏸️ Paused"</default>
+        <summary>paused icon</summary>
+        <descritpion>the display text to indicate playback is paused</descritpion>
+    </key> 
+
+    <key type="s" name="off">
+        <default>""</default>
+        <summary>off icon</summary>
+        <descritpion>the display text to indicate spotify is not running</descritpion>
+    </key> 
+
+    <key type="s" name="artist-indicator">
+        <default>"🧑‍🦲"</default>
+        <summary>artist icon</summary>
+        <descritpion>the icon to the left of artist</descritpion>
+    </key> 
+
+    <key type="s" name="track-indicator">
+        <default>"🎶"</default>
+        <summary>track icon</summary>
+        <descritpion>the icon to the left of track</descritpion>
+    </key> 
+
+    <key type="s" name="separator">
+        <default>" || "</default>
+        <summary>artist-track separator/summary>
+        <descritpion>the string that separates artist and track</descritpion>
+    </key>
+
+</schemalist>

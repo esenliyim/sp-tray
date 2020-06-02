@@ -5,11 +5,13 @@ const Clutter = imports.gi.Clutter;
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const Variant = imports.gi.GLib.Variant;
+const Me = imports.misc.extensionUtils.getCurrentExtension();
 
-let panelButton, panelButtonText, timeout;
+let panelButton, panelButtonText, timeout, settings;
 
 const dest = "org.mpris.MediaPlayer2.spotify";
 const path = "/org/mpris/MediaPlayer2";
+const schemaId = "org.gnome.shell.extensions.sp-tray";
 
 const spotifyDbus = `<node>
 <interface name="org.mpris.MediaPlayer2.Player">
@@ -36,13 +38,16 @@ let spotifyProxy = spotifyProxyWrapper(Gio.DBus.session, dest, path);
 let freedesktopProxy = freedesktopProxyWrapper(Gio.DBus.session, dest, path);
 
 function init () {
+
+    settings = getSettings();
+
     panelButton = new St.Bin({
         style_class : "panel-button"
     });
 
     panelButtonText = new St.Label({
         style_class : "taskbarPanelText",
-        text: "⚙️⚙️⚙️",
+        text: settings.get_string('starting'),
         y_align : Clutter.ActorAlign.CENTER
     });
     panelButton.set_child(panelButtonText);
@@ -73,7 +78,7 @@ function decideText () {
             let artist = metadata['xesam:albumArtist'].get_strv()[0];
             //log(title + " | " + artist);
             //setButtonText(metadata['xesam:title'].value);
-            let output = "🧑‍🦲 " + artist + " - 🎶 " + title;
+            let output = "🧑‍🦲 " + artist + " || 🎶 " + title;
             setButtonText(output);
         }
     }
@@ -89,4 +94,18 @@ function setButtonText (output) {
 
     panelButtonText.set_text(output);
 
+}
+
+function getSettings() {
+    let GioSSS = Gio.SettingsSchemaSource;
+    let schemaSource = GioSSS.new_from_directory(
+        Me.dir.get_child("schemas").get_path(),
+        GioSSS.get_default(),
+        false
+    );
+    let schemaObj = schemaSource.lookup(schemaId, true);
+    if (!schemaObj) {
+        throw new Error('cannot find schema');
+    }
+    return new Gio.Settings({ settings_schema : schemaObj });
 }
