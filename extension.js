@@ -31,7 +31,7 @@ function disable () {
 
 async function setButtonText () {
 
-    var [ok, out, err, exit] = GLib.spawn_command_line_sync('./sp.sh current');
+    var [ok, out, err, exit] = GLib.spawn_command_line_sync('./.sp.sh current');
     out = out.toString();
 
     let artist = out.subString(out.indexOf("AlbumArtist") + 11,
