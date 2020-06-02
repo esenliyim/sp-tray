@@ -1,22 +1,16 @@
 const St = imports.gi.St;
 const Mainloop = imports.mainloop;
 const Main = imports.ui.main;
-const GLib = imports.gi.GLib;
 const Clutter = imports.gi.Clutter;
 
-let panelButton, panelButtonText, timeout;
-let counter = 0;
+var dest = "org.mpris.MediaPlayer2.spotify"
+var path = "/org/mpris/MediaPlayer2"
+var iface = "org.mpris.MediaPlayer2.Player"
+var propertiesIface = "org.freedesktop.DBus.Properties"
 
-/*
-let metadataReq = "dbus-send --print-reply" + 
- " --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 " + 
- "org.freedesktop.DBus.Properties.Get string:\"org.mpris.MediaPlayer2.Player\""
- + " string:'Metadata' | grep -Ev \"^metho\"" 
- + " | grep -Eo '(\"(.*)\")|(\b[0-9][a-zA-Z0-9.]*\b)'"
- + " | sed -E '2~2 a|' | tr -d '\n' | sed -E 's/\|/\n/g'" 
- + " | sed -E 's/(xesam:)|(mpris:)//' | sed -E 's/^\"//'"
- + " | sed -E 's/\"$//' | sed -E  's/\"+/|/' | sed -E 's/ +/ /g'\"";
-*/
+var dbus = require('dbus-next');
+
+let panelButton, panelButtonText, timeout;
 
 function init () {
     panelButton = new St.Bin({
@@ -43,28 +37,13 @@ function disable () {
 
 function setButtonText () {
 
-    //let artist, track;
-
-    //var [ok, out, err, exit] = GLib.spawn_command_line_sync(metadataReq);
-
-    //out = out.toString();
-
-    /*
-    if (out.includes("Error: ")) {
-        panelButtonText.set_text("");
-    } else {
-        out = out.toString();
-
-        artist = out.substring(out.indexOf("artist"), out.indexOf("autoRating", out.indexOf("artist")));
-        artist = artist.substring(artist.indexOf("|") + 1).replace("\n", "");
-
-        track = out.substring(out.indexOf("title"), out.indexOf("trackNumber", out.indexOf("title")));
-        track = track.substring(track.indexOf("|") + 1).replace("\n", "");
-
-        panelButtonText.set_text(artist + " - " + track);
-    }*/
+    let obj = await dbus.getProxyObject(dest, path);
+    let props = obj.getInterface(propertiesIface);
+    let metadata = await props.Get(iface, 'Metadata');
     
-    panelButton.set_text(counter.toString());
-    counter++;
+    let artist = metadata.value['xesam:artist'] ? metadata.value['xesam:artist'].value : 'unknown';
+    let title = metadata.value['xesam:title'] ? metadata.value['xesam:title'].value : 'unknown';
+    
+    panelButtonText.set_text(artist + " - " + title);
     return true;
 }
