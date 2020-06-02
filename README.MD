@@ -1,7 +1,8 @@
 
 # sp-tray
 
-sp-tray is GNOME Shell extension that displays current track information using Spotify's dbus interface. No web API.
+sp-tray is GNOME Shell extension that displays current track information using Spotify's dbus interface without using the web API. Like this. 
+![tray][tray]
 
 Tested on GNOME 3.36.2
 
@@ -27,6 +28,8 @@ to /\<user>/home directory.
 
 * Move on to GDBus
 
+* Icons?
+
 ## License 
 
 MIT
@@ -34,3 +37,5 @@ MIT
 [sp_repo]: https://gist.github.com/wandernauta/6800547
 
 [libgtop]: https://developer.gnome.org/libgtop/stable/
+
+[tray][https://github.com/esenliyim/sp-tray/blob/master/tray.png]
