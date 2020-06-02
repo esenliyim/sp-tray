@@ -79,7 +79,7 @@ function decideText () {
             let artist = metadata['xesam:albumArtist'].get_strv()[0];
             //log(title + " | " + artist);
             //setButtonText(metadata['xesam:title'].value);
-            let output = "🧑‍🦲 " + artist + " 🎶 " + title;
+            let output = "🧑‍🦲 " + artist + " - 🎶 " + title;
             setButtonText(output);
         }
 
