@@ -6,15 +6,6 @@ const Clutter = imports.gi.Clutter;
 
 let panelButton, panelButtonText, timeout;
 
-var metadataReq = "dbus-send --print-reply" + 
- " --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 " + 
- "org.freedesktop.DBus.Properties.Get string:\"org.mpris.MediaPlayer2.Player\""
- + " string:'Metadata' | grep -Ev \"^metho\"" 
- + " | grep -Eo '(\"(.*)\")|(\b[0-9][a-zA-Z0-9.]*\b)'"
- + " | sed -E '2~2 a|' | tr -d '\n' | sed -E 's/\|/\n/g'" 
- + " | sed -E 's/(xesam:)|(mpris:)//' | sed -E 's/^\"//'"
- + " | sed -E 's/\"$//' | sed -E  's/\"+/|/' | sed -E 's/ +/ /g'\"";
-
 function init () {
     panelButton = new St.Bin({
         style_class : "panel-button"
@@ -42,22 +33,20 @@ function setButtonText () {
 
     let artist, track;
 
-    var [ok, out, err, exit] = GLib.spawn_command_line_sync(metadataReq);
+    var [ok, out, err, exit] = GLib.spawn_command_line_sync('./.sp.sh current');
 
     out = out.toString();
 
     if (out.includes("Error: ")) {
         panelButtonText.set_text("");
     } else {
-        out = out.toString();
+
+        track = out.substring(out.indexOf("Title") + 5).trim();
 
         artist = out.substring(out.indexOf("artist"), out.indexOf("autoRating", out.indexOf("artist")));
         artist = artist.substring(artist.indexOf("|") + 1).replace("\n", "");
 
-        track = out.substring(out.indexOf("title"), out.indexOf("trackNumber", out.indexOf("title")));
-        track = track.substring(track.indexOf("|") + 1).replace("\n", "");
-
-        panelButtonText.set_text(artist + " - " + track);
+        panelButtonText.set_text(track);
     }
     
     return true;
