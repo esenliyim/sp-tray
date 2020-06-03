@@ -20,8 +20,6 @@ sp-tray is GNOME Shell extension that displays current track information using S
 
 * Icons?
 
-* Translation?
-
 ## License 
 
 MIT
