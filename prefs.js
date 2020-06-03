@@ -80,11 +80,11 @@ const SpTrayPrefsWidget = new GObject.Class({
                  this.trackInput.get_text());
                 settings.set_string("separator",
                  this.separatorInput.get_text());
-                this.destroy();
+                this.get_toplevel().destroy();
             },
 
             on_cancel_clicked(w) {
-                this.destroy();
+                this.get_toplevel().destroy();
             }
 
         };

@@ -23,7 +23,7 @@
     </key> 
 
     <key type="s" name="artist-indicator">
-        <default>"🧑‍🦲"</default>
+        <default>"👩‍🎤️"</default>
         <summary>artist icon</summary>
         <description>the icon to the left of artist</description>
     </key> 
