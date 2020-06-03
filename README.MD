@@ -18,6 +18,8 @@ Tested on GNOME version 3.36.2 & Spotify version 1.1.26.501.gbe11e53b
 
 ## TODO
 
+* state changes
+
 * prefs
 
 * Icons?

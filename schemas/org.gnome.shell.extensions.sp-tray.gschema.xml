@@ -7,37 +7,46 @@
     <key type="s" name="starting">
         <default>"⚙️⚙️⚙️"</default>
         <summary>starting icon</summary>
-        <descritpion>the default icon that's briefly displayed as the extension starts</descritpion>
+        <description>the default icon that's briefly displayed as the extension starts</description>
     </key> 
 
     <key type="s" name="paused">
-        <default>"⏸️ Paused"</default>
+        <default>"⏸️"</default>
         <summary>paused icon</summary>
-        <descritpion>the display text to indicate playback is paused</descritpion>
+        <description>the display text to indicate playback is paused</description>
     </key> 
 
     <key type="s" name="off">
-        <default>""</default>
+        <default>"💤️"</default>
         <summary>off icon</summary>
-        <descritpion>the display text to indicate spotify is not running</descritpion>
+        <description>the display text to indicate spotify is not running</description>
     </key> 
 
     <key type="s" name="artist-indicator">
         <default>"🧑‍🦲"</default>
         <summary>artist icon</summary>
-        <descritpion>the icon to the left of artist</descritpion>
+        <description>the icon to the left of artist</description>
     </key> 
 
     <key type="s" name="track-indicator">
         <default>"🎶"</default>
         <summary>track icon</summary>
-        <descritpion>the icon to the left of track</descritpion>
+        <description>the icon to the left of track</description>
     </key> 
 
     <key type="s" name="separator">
         <default>" || "</default>
-        <summary>artist-track separator/summary>
-        <descritpion>the string that separates artist and track</descritpion>
+        <summary>artist-track separator</summary>
+        <description>the string that separates artist and track</description>
     </key>
+
+    <key type="b" name="hidden-when-inactive">
+        <default>true</default>
+        <summary>hide when spotify is not running?</summary>
+        <description>the variable that determines if the widget is hidden 
+        when spotify is no running</description>
+    </key>
+
+    </schema>
 
 </schemalist>

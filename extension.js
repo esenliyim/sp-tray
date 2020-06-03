@@ -9,10 +9,13 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 let panelButton, panelButtonText, timeout, settings;
 
+//dbus constants
 const dest = "org.mpris.MediaPlayer2.spotify";
 const path = "/org/mpris/MediaPlayer2";
+//settings schema id
 const schemaId = "org.gnome.shell.extensions.sp-tray";
 
+//define required dbus interfaces with relevant methods and properties
 const spotifyDbus = `<node>
 <interface name="org.mpris.MediaPlayer2.Player">
     <property name="PlaybackStatus" type="s" access="read"/>
@@ -20,7 +23,6 @@ const spotifyDbus = `<node>
 </interface>
 </node>`;
 
-//org.freedesktop.DBus.Properties.Get( s:interface_name, s:property_name ) -> ( v:value )
 const freedesktopDbus = `<node>
 <interface name="org.freedesktop.DBus.Properties">
     <method name="Get">
@@ -65,20 +67,23 @@ function disable () {
 
 function decideText () {
     if (!isSpotifyRunning()) {
-        setButtonText("");
+        let hidden = settings.get_boolean("hidden-when-inactive");
+        setButtonText(hidden ? "" : settings.get_string("off"));
     } else {
 
         let status = spotifyProxy.PlaybackStatus;
         let metadata = spotifyProxy.Metadata;
 
         if (status == "Paused") {
-            setButtonText("⏸️ Paused");
+            setButtonText(settings.get_string("paused"));
         } else {
+            let artistIndicator = settings.get_string("artist-indicator");
+            let trackIndicator = settings.get_string("track-indicator");
+            let separator = settings.get_string("separator");
             let title = metadata['xesam:title'].get_string()[0];
             let artist = metadata['xesam:albumArtist'].get_strv()[0];
-            //log(title + " | " + artist);
-            //setButtonText(metadata['xesam:title'].value);
-            let output = "🧑‍🦲 " + artist + " || 🎶 " + title;
+            let output = artistIndicator + " " + artist + " " + separator 
+            + " " + trackIndicator + " " + title;
             setButtonText(output);
         }
     }

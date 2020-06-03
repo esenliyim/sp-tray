@@ -64,8 +64,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="valign">center</property>
-                            <property name="active">True</property>
-                            <signal name="state-set" handler="on_my_switch_state_set" swapped="no"/>
+                            <signal name="state-set" handler="on_hidden_state_set" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -97,7 +96,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkListBoxRow">
+              <object class="GtkListBoxRow" id="notRunningRow">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <child>
@@ -375,10 +374,11 @@
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkButton" id="okButton">
-                        <property name="label" translatable="yes">OK</property>
+                        <property name="label" translatable="yes">Cancel</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="on_ok_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -388,11 +388,12 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="cancelButton">
-                        <property name="label" translatable="yes">Cancel</property>
+                        <property name="label">gtk-cancel</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="relief">none</property>
+                        <property name="use_stock">True</property>
+                        <signal name="clicked" handler="on_cancel_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -406,6 +407,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="on_defaults_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -419,6 +421,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="on_apply_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">True</property>
