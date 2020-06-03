@@ -6,11 +6,21 @@ sp-tray is GNOME Shell extension that displays current track information using S
 
 ## Installation 
 
+From GitHub:
+
 1. Clone this repo anywhere on your computer
 
 2. Run the install script from anywhere with `./<path_to_dir>/install.sh`
 
 2. Restart gnome shell and enable the extension via gnome-tweaks under the "extensions" tab
+
+Or from my ppa:
+
+1. `sudo add-apt-repository ppa:esenliyim/ubuntu-things`
+
+2. `sudo apt update`
+
+3. `sudo apt install sp-tray`
 
 ## Dependencies 
 
