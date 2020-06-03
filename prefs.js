@@ -3,6 +3,11 @@ const Gtk = imports.gi.Gtk;
 const Gdk = imports.gi.Gdk;
 const Gio = imports.gi.Gio;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
+const Gettext = imports.gettext;
+
+Gettext.bindtextdomain("sp-tray", Me.dir.get_child("locale").get_path());
+Gettext.textdomain("sp-tray");
+const _ = Gettext.gettext;
 
 const schemaId = "org.gnome.shell.extensions.sp-tray";
 
