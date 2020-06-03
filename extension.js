@@ -5,6 +5,11 @@ const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const Variant = imports.gi.GLib.Variant;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
+const Gettext = imports.gettext;
+
+Gettext.bindtextdomain("sp-tray", Me.dir.get_child("locale").get_path());
+Gettext.textdomain("sp-tray");
+const _ = Gettext.gettext;
 
 let panelButton, panelButtonText, settings;
 
