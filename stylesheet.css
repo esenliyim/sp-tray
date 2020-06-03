@@ -1,3 +1,7 @@
 .taskbarPanelText{
-    color: rgb(0, 150, 130);
+    color: rgb(255, 255, 255);
+}
+
+.cancelButton{
+    background-color: red;
 }

@@ -1,5 +1,6 @@
 const GObject = imports.gi.GObject;
 const Gtk = imports.gi.Gtk;
+const Gdk = imports.gi.Gdk;
 const Gio = imports.gi.Gio;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
@@ -10,7 +11,7 @@ let settings;
 const SpTrayPrefsWidget = new GObject.Class({
     Name: "SP.Prefs.Widget",
     GTypeName: "SPPrefsWidget",
-    Extends: Gtk.ScrolledWindow,
+    Extends: Gtk.Frame,
 
     _init: function(params) {
         this.parent(params);
@@ -30,7 +31,6 @@ const SpTrayPrefsWidget = new GObject.Class({
         hidden = settings.get_boolean("hidden-when-inactive");
         this.runningSwitch.set_active(hidden);
         this.notRunningRow.set_sensitive(!hidden);
-
         this.notRunningInput.set_text(settings.get_string("off"));
         this.pausedInput.set_text(settings.get_string("paused"));
         this.artistInput.set_text(settings.get_string("artist-indicator"));

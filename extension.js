@@ -1,5 +1,4 @@
 const St = imports.gi.St;
-const Mainloop = imports.mainloop;
 const Main = imports.ui.main;
 const Clutter = imports.gi.Clutter;
 const GLib = imports.gi.GLib;
@@ -7,7 +6,7 @@ const Gio = imports.gi.Gio;
 const Variant = imports.gi.GLib.Variant;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
-let panelButton, panelButtonText, timeout, settings;
+let panelButton, panelButtonText, settings;
 
 //dbus constants
 const dest = "org.mpris.MediaPlayer2.spotify";
@@ -53,15 +52,15 @@ function init () {
         y_align : Clutter.ActorAlign.CENTER
     });
     panelButton.set_child(panelButtonText);
+    spotifyProxy.connect("g-properties-changed", decideText);
+    decideText();
 }
 
 function enable () {
     Main.panel._rightBox.insert_child_at_index(panelButton, 1);
-    timeout = Mainloop.timeout_add_seconds(1, decideText);
 }
 
 function disable () {
-    Mainloop.source_remove(timeout);
     Main.panel._rightBox.remove_child(panelButton);
 }
 

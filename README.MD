@@ -12,13 +12,13 @@ sp-tray is GNOME Shell extension that displays current track information using S
 
 ## Dependencies 
 
-* [ligbtop][libgtop] to load/install shell extensions
+* [ligbtop][libgtop] to load/install shell extensions. `sudo apt install libgtop2-dev`
 
 ## TODO
 
-* state changes (dbus and internal)
-
 * Icons?
+
+* Translation?
 
 ## License 
 

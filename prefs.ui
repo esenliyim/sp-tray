@@ -2,12 +2,7 @@
 <!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.18"/>
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">-60</property>
-    <property name="upper">60</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">2</property>
-  </object>
+  <!-- interface-css-provider-path stylesheet.css -->
   <object class="GtkBox" id="main_prefs">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -374,11 +369,15 @@
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkButton" id="okButton">
-                        <property name="label" translatable="yes">OK</property>
+                        <property name="label">gtk-ok</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="use_stock">True</property>
                         <signal name="clicked" handler="on_ok_clicked" swapped="no"/>
+                        <style>
+                          <class name="suggested-action"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -403,11 +402,15 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="resetButton">
-                        <property name="label" translatable="yes">Defaults</property>
+                        <property name="label">gtk-revert-to-saved</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="use_stock">True</property>
                         <signal name="clicked" handler="on_defaults_clicked" swapped="no"/>
+                        <style>
+                          <class name="destructive-action"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -417,10 +420,11 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="applyButton">
-                        <property name="label" translatable="yes">Apply</property>
+                        <property name="label">gtk-apply</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="use_stock">True</property>
                         <signal name="clicked" handler="on_apply_clicked" swapped="no"/>
                       </object>
                       <packing>
