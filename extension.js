@@ -58,6 +58,7 @@ function init () {
     });
     panelButton.set_child(panelButtonText);
     spotifyProxy.connect("g-properties-changed", decideText);
+    settings.connect("changed", decideText);
     decideText();
 }
 
@@ -74,7 +75,6 @@ function decideText () {
         let hidden = settings.get_boolean("hidden-when-inactive");
         setButtonText(hidden ? "" : settings.get_string("off"));
     } else {
-
         let status = spotifyProxy.PlaybackStatus;
         let metadata = spotifyProxy.Metadata;
 
