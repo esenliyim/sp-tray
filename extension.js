@@ -74,12 +74,12 @@ function decideText () {
         let hidden = settings.get_boolean("hidden-when-inactive");
         setButtonText(hidden ? "" : settings.get_string("off"));
     } else {
-
         let status = spotifyProxy.PlaybackStatus;
         let metadata = spotifyProxy.Metadata;
 
         if (status == "Paused") {
-            setButtonText(settings.get_string("paused"));
+            //setButtonText(settings.get_string("paused"));
+            setButtonText(typeof Me);
         } else {
             let artistIndicator = settings.get_string("artist-indicator");
             let trackIndicator = settings.get_string("track-indicator");
