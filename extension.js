@@ -58,6 +58,7 @@ function init () {
     });
     panelButton.set_child(panelButtonText);
     spotifyProxy.connect("g-properties-changed", decideText);
+    settings.connect("changed", decideText);
     decideText();
 }
 
