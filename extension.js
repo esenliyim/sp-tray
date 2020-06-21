@@ -58,7 +58,6 @@ function init () {
     });
     panelButton.set_child(panelButtonText);
     spotifyProxy.connect("g-properties-changed", decideText);
-    settings.connect("changed", decideText);
     decideText();
 }
 
@@ -79,8 +78,7 @@ function decideText () {
         let metadata = spotifyProxy.Metadata;
 
         if (status == "Paused") {
-            //setButtonText(settings.get_string("paused"));
-            setButtonText(typeof Me);
+            setButtonText(settings.get_string("paused"));
         } else {
             let artistIndicator = settings.get_string("artist-indicator");
             let trackIndicator = settings.get_string("track-indicator");
