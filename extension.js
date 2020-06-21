@@ -99,9 +99,7 @@ function isSpotifyRunning() {
 }
 
 function setButtonText (output) {
-
     panelButtonText.set_text(output);
-
 }
 
 function getSettings() {
