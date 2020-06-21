@@ -65,7 +65,6 @@ const SpTrayPrefsWidget = new GObject.Class({
                 this.separatorInput.set_text(settings.get_string("separator"));
             },
 
-            //TODO clean this
             on_apply_clicked(w) {
                 settings.set_string("off", this.notRunningInput.get_text());
                 settings.set_string("paused", this.pausedInput.get_text());
