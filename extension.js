@@ -74,7 +74,6 @@ function decideText () {
         let hidden = settings.get_boolean("hidden-when-inactive");
         setButtonText(hidden ? "" : settings.get_string("off"));
     } else {
-
         let status = spotifyProxy.PlaybackStatus;
         let metadata = spotifyProxy.Metadata;
 

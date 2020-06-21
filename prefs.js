@@ -48,6 +48,7 @@ const SpTrayPrefsWidget = new GObject.Class({
                 newHidden = w.get_active();
                 this.notRunningRow.set_sensitive(!newHidden);
                 settings.set_boolean("hidden-when-inactive", newHidden);
+                Me.decideText();
             },
 
             on_defaults_clicked(w) {
