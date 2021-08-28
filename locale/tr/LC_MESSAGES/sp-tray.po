@@ -40,3 +40,7 @@ msgstr "Parça"
 #: prefs.ui:327
 msgid "Separator"
 msgstr "Ayraç"
+
+#: prefs.ui:327
+msgid "Restore defaults"
+msgstr "Varsayılanlara dön"

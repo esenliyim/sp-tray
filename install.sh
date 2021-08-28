@@ -8,6 +8,6 @@ SCRIPTNAME=`basename $0`
 
 [ ! -d $EXT_PATH ] && mkdir $EXT_PATH
 [ -d $EXT_PATH$EXT_NAME ] && rm -rf $EXT_PATH$EXT_NAME 
-mkdir $EXT_PATH$EXT_NAME
+# mkdir $EXT_PATH$EXT_NAME
 
 rsync -rv $SCRIPTPATH/* $EXT_PATH$EXT_NAME --exclude=$SCRIPTNAME

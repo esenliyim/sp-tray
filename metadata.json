@@ -2,8 +2,7 @@
     "description" : "Shows currently playing song on Spotify",
     "name" : "sp-tray",
     "shell-version" : [
-        "3.36",
-	"3.28.4"
+        "40"
     ],
     "url" : "https://github.com/esenliyim/sp-tray",
     "uuid" : "sp-tray@esenliyim.com",
