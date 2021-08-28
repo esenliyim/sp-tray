@@ -39,10 +39,8 @@ Alternatively, you could clone this repo anywhere on your computer and run the i
 ## TODO
 
 * locale test
-* clean install script -> SYMLINK
-* album option
-* metadata order in tray
-
+* make strings more consistent
+* fix //HACKs
 ## License 
 
 MIT

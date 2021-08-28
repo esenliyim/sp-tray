@@ -2,6 +2,11 @@
 <schemalist>
     <schema id="org.gnome.shell.extensions.sp-tray"
         path="/org/gnome/shell/extensions/sp-tray/">
+
+        <key type="s" name="display-format">
+            <default>"{artist} | {track}"</default>
+            <summary>how the track info is displayed</summary>
+        </key>
     
         <key type="s" name="starting">
             <default>"⚙️⚙️⚙️"</default>
@@ -19,31 +24,20 @@
             <default>"💤️"</default>
             <summary>off icon</summary>
             <description>the display text to indicate spotify is not running</description>
-        </key> 
+        </key>
 
-        <key type="s" name="artist-indicator">
-            <default>"👩‍🎤️"</default>
-            <summary>artist icon</summary>
-            <description>the icon to the left of artist</description>
-        </key> 
-
-        <key type="s" name="track-indicator">
-            <default>"🎶"</default>
-            <summary>track icon</summary>
-            <description>the icon to the left of track</description>
-        </key> 
-
-        <key type="s" name="separator">
-            <default>" || "</default>
-            <summary>artist-track separator</summary>
-            <description>the string that separates artist and track</description>
+        <key type="b" name="hidden-when-paused">
+            <default>true</default>
+            <summary>hide when playback is paused?</summary>
+            <description>the variable that determines if the widget is hidden 
+            when playback is paused</description>
         </key>
 
         <key type="b" name="hidden-when-inactive">
             <default>true</default>
             <summary>hide when spotify is not running?</summary>
             <description>the variable that determines if the widget is hidden 
-            when spotify is no running</description>
+            when spotify is not running</description>
         </key>
 
     </schema>

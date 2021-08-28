@@ -1,11 +1,11 @@
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
-const Me = imports.misc.extensionUtils.getCurrentExtension();
 const { St, Clutter, GObject, GLib, Gio } = imports.gi;
-const Gettext = imports.gettext;
 
+const Me = imports.misc.extensionUtils.getCurrentExtension();
 const { Settings } = Me.imports.settings;
 
+const Gettext = imports.gettext;
 Gettext.bindtextdomain("sp-tray", Me.dir.get_child("locale").get_path());
 Gettext.textdomain("sp-tray");
 const _ = Gettext.gettext;
@@ -13,10 +13,7 @@ const _ = Gettext.gettext;
 //dbus constants
 const dest = "org.mpris.MediaPlayer2.spotify";
 const path = "/org/mpris/MediaPlayer2";
-//settings schema id
-const schemaId = "org.gnome.shell.extensions.sp-tray";
 
-//define required dbus interfaces with relevant methods and properties
 const spotifyDbus = `<node>
 <interface name="org.mpris.MediaPlayer2.Player">
     <property name="PlaybackStatus" type="s" access="read"/>
@@ -60,12 +57,10 @@ var SpTrayButton = GObject.registerClass(
         _initSettings() {
             settings = Settings.getSettings();
 
-            settings.connect(`changed::separator`, this.updateText);
             settings.connect(`changed::paused`, this.updateText);
             settings.connect(`changed::off`, this.updateText);
-            settings.connect(`changed::artist-indicator`, this.updateText);
-            settings.connect(`changed::track-indicator`, this.updateText);
             settings.connect(`changed::hidden-when-inactive`, this.updateText);
+            settings.connect(`changed::display-format`, this.updateText);
         }
 
         _initUi() {
@@ -105,21 +100,24 @@ var SpTrayButton = GObject.registerClass(
 
             if (status !== 'string') {
                 let hidden = settings.get_boolean("hidden-when-inactive");
+                //HACK
                 panelButtonText.set_text(hidden ? "" : this.settings.get_string("off"));
             } else {
                 let status = spotifyProxy.PlaybackStatus;
                 let metadata = spotifyProxy.Metadata;
 
                 if (status == "Paused") {
-                    panelButtonText.set_text(settings.get_string("paused"));
+                    let hidden = settings.get_boolean("hidden-when-paused");
+                    //HACK
+                    panelButtonText.set_text(hidden ? "" : settings.get_string("paused"));
                 } else {
-                    let artistIndicator = settings.get_string("artist-indicator");
-                    let trackIndicator = settings.get_string("track-indicator");
-                    let separator = settings.get_string("separator");
+                    let displayFormat = settings.get_string("display-format");
+
                     let title = metadata['xesam:title'].get_string()[0];
+                    let album = metadata['xesam:album'].get_string()[0];
                     let artist = metadata['xesam:albumArtist'].get_strv()[0];
-                    let output = artistIndicator + " " + artist + " " + separator
-                        + " " + trackIndicator + " " + title;
+                    
+                    let output = displayFormat.replace("{artist}", artist).replace("{track}", title).replace("{album}", album);
                     panelButtonText.set_text(output);
                 }
             }
