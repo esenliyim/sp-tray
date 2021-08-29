@@ -3,9 +3,10 @@
     "name" : "sp-tray",
     "shell-version" : [
         "3.36",
-	"3.28.4"
+	    "3.38",
+        "40"
     ],
     "url" : "https://github.com/esenliyim/sp-tray",
     "uuid" : "sp-tray@esenliyim.com",
-    "version" : 1.0
+    "version" : 2.0
 }

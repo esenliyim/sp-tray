@@ -18,8 +18,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "str_formathint"
-msgstr "Şarkı .\n"
-"Valid placeholders are {track}, {album}, and {artist}"
+msgstr "Şarkı bilgilerinin nasıl gösterileceğini burada ayarlayabilirsiniz.\n"
+"Geçerli semboller: {track}, {album} ve {artist}"
 
 msgid "str_dispformat"
 msgstr "Gösterim formatı"
@@ -37,4 +37,4 @@ msgid "str_paused_icon_label"
 msgstr "Duraklatıldı"
 
 msgid "str_defaults_button_label"
-msgstr "Her şeyi sıfırla"
+msgstr "Hepsini sıfırla"
