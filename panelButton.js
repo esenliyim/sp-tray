@@ -1,9 +1,25 @@
+// Copyright(C) 2021  Emre Şenliyim
+
+// This program is free software: you can redistribute it and / or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+// GNU General Public License for more details.
+
+//     You should have received a copy of the GNU General Public License
+// along with this program.If not, see < http://www.gnu.org/licenses/>.
+
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const { St, Clutter, GObject, GLib, Gio } = imports.gi;
 
 const Me = imports.misc.extensionUtils.getCurrentExtension();
-const { Settings } = Me.imports.settings;
+const ExtensionUtils = imports.misc.extensionUtils;
+let settings = ExtensionUtils.getSettings();
 
 //dbus constants
 const dest = "org.mpris.MediaPlayer2.spotify";
@@ -32,7 +48,7 @@ const freedesktopProxyWrapper = Gio.DBusProxy.makeProxyWrapper(freedesktopDbus);
 let spotifyProxy = spotifyProxyWrapper(Gio.DBus.session, dest, path);
 let freedesktopProxy = freedesktopProxyWrapper(Gio.DBus.session, dest, path);
 
-let panelButtonText, settings;
+let panelButtonText;
 
 var SpTrayButton = GObject.registerClass(
     { GTypeName: 'SpTrayButton' },
@@ -50,9 +66,7 @@ var SpTrayButton = GObject.registerClass(
         }
 
         _initSettings() {
-            settings = Settings.getSettings();
-
-            // the display on the system tray is instantly updated when the settings are changed
+             // the display on the system tray is instantly updated when the settings are changed
             settings.connect(`changed::paused`, this.updateText);
             settings.connect(`changed::off`, this.updateText);
             settings.connect(`changed::hidden-when-inactive`, this.updateText);
@@ -88,8 +102,14 @@ var SpTrayButton = GObject.registerClass(
         }
 
         destroy() {
+            //TODO disconnects
+            settings.disconnect(`changed::paused`, this.updateText);
+            settings.disconnect(`changed::off`, this.updateText);
+            settings.disconnect(`changed::hidden-when-inactive`, this.updateText);
+            settings.disconnect(`changed::display-format`, this.updateText);
+            spotifyProxy.disconnect("g-properties-changed", this.updateText);
+            
             this.ui.forEach(element => element.destroy());
-            //TODO disconnects necessary?
             super.destroy();
         }
 

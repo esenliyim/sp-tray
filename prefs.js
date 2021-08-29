@@ -1,21 +1,36 @@
+// Copyright(C) 2021  Emre Şenliyim
+
+// This program is free software: you can redistribute it and / or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+// GNU General Public License for more details.
+
+//     You should have received a copy of the GNU General Public License
+// along with this program.If not, see < http://www.gnu.org/licenses/>.
+
 const { GObject, Gtk, Gio } = imports.gi;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
-// set up translations
 const Gettext = imports.gettext;
-Gettext.bindtextdomain("sp-tray", Me.dir.get_child("locale").get_path());
-Gettext.textdomain("sp-tray");
-const _ = Gettext.gettext;
 
-const { Settings } = Me.imports.settings;
-const settings = Settings.getSettings();
+const ExtensionUtils = imports.misc.extensionUtils;
+let settings = ExtensionUtils.getSettings();
 
 // gtk4 does things quite a bit differently, so we gots to know what we're dealing with
 const _isGtk4 = _checkIfGtk4();
 
 let builder;
 
-function init() {}
+function init() {
+    // init translations
+    Gettext.bindtextdomain("sp-tray", Me.dir.get_child("locale").get_path());
+    Gettext.textdomain("sp-tray");
+}
 
 function buildPrefsWidget() {
 
@@ -25,7 +40,7 @@ function buildPrefsWidget() {
         const SpBuilderScope = GObject.registerClass({
             Implements: [Gtk.BuilderScope],
         }, class SpBuilderScope extends GObject.Object {
-        
+
             vfunc_create_closure(builder, handlerName, flags, connectObject) {
                 if (flags & Gtk.BuilderClosureFlags.SWAPPED) {
                     throw new Error('Unsupported template signal flag "swapped"');
@@ -35,21 +50,21 @@ function buildPrefsWidget() {
                 }
                 return this[handlerName].bind(connectObject || this);
             }
-        
+
             on_defaults_clicked(connectObject) {
                 settings.reset("off");
                 settings.reset("paused");
                 settings.reset("display-format");
             }
-        
+
             on_resetNotRunning_clicked(connectObject) {
                 settings.reset("off");
             }
-        
+
             on_resetPaused_clicked(connectObject) {
                 settings.reset("paused");
             }
-        
+
             on_resetFormat_clicked(connectObject) {
                 settings.reset("display-format");
             }
