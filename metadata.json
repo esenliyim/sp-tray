@@ -2,11 +2,8 @@
     "description" : "Adds a button to the panel that shows currently playing song on Spotify",
     "name" : "spotify-tray",
     "shell-version" : [
-<<<<<<< HEAD
-=======
         "3.36",
 	    "3.38",
->>>>>>> multi-gtk
         "40"
     ],
     "url" : "https://github.com/esenliyim/sp-tray",

@@ -16,39 +16,20 @@ GNU General Public License for more details.
 along with this program.If not, see < http://www.gnu.org/licenses/>. -->
 
 <schemalist>
-<<<<<<< HEAD
-    <schema id="org.gnome.shell.extensions.sp-tray"
-        path="/org/gnome/shell/extensions/sp-tray/">
-
-        <key type="s" name="display-format">
-            <default>"{artist} | {track}"</default>
-            <summary>how the track info is displayed</summary>
-        </key>
-    
-=======
 
     <schema id="org.gnome.shell.extensions.sp-tray" path="/org/gnome/shell/extensions/sp-tray/">
 
->>>>>>> multi-gtk
         <key type="s" name="starting">
             <default>"⚙️⚙️⚙️"</default>
             <summary>starting icon</summary>
             <description>the default icon that's briefly displayed as the extension starts</description>
-<<<<<<< HEAD
-        </key> 
-=======
         </key>
->>>>>>> multi-gtk
 
         <key type="s" name="paused">
             <default>"⏸️"</default>
             <summary>paused icon</summary>
             <description>the display text to indicate playback is paused</description>
-<<<<<<< HEAD
-        </key> 
-=======
         </key>
->>>>>>> multi-gtk
 
         <key type="s" name="off">
             <default>"💤️"</default>
@@ -56,26 +37,15 @@ along with this program.If not, see < http://www.gnu.org/licenses/>. -->
             <description>the display text to indicate spotify is not running</description>
         </key>
 
-<<<<<<< HEAD
-        <key type="b" name="hidden-when-paused">
-            <default>true</default>
-            <summary>hide when playback is paused?</summary>
-            <description>the variable that determines if the widget is hidden 
-            when playback is paused</description>
-=======
         <key type="s" name="display-format">
             <default>"{artist} | {track}"</default>
             <summary>how the track info is displayed</summary>
->>>>>>> multi-gtk
         </key>
 
         <key type="b" name="hidden-when-inactive">
             <default>true</default>
             <summary>hide when spotify is not running?</summary>
             <description>the variable that determines if the widget is hidden 
-<<<<<<< HEAD
-            when spotify is not running</description>
-=======
         when spotify is not running</description>
         </key>
 
@@ -84,7 +54,6 @@ along with this program.If not, see < http://www.gnu.org/licenses/>. -->
             <summary>hide when playback is paused?</summary>
             <description>the variable that determines if the widget is hidden 
         when playback is paused</description>
->>>>>>> multi-gtk
         </key>
 
     </schema>

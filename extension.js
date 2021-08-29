@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 // Copyright(C) 2021  Emre Şenliyim
 
 // This program is free software: you can redistribute it and / or modify
@@ -15,14 +13,12 @@
 //     You should have received a copy of the GNU General Public License
 // along with this program.If not, see < http://www.gnu.org/licenses/>.
 
->>>>>>> multi-gtk
 'use strict';
 
 const Main = imports.ui.main;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 const { SpTrayButton } = Me.imports.panelButton;
-<<<<<<< HEAD
 
 class SpTrayExtension {
     constructor() {
@@ -41,26 +37,5 @@ class SpTrayExtension {
 }
 
 function init () {
-
-=======
-
-class SpTrayExtension {
-    constructor() {
-        this.extensionButton = null;
-    }
-
-    enable() {
-        this.extensionButton = new SpTrayButton();
-        Main.panel.addToStatusArea('SpTray', this.extensionButton);
-    }
-
-    disable() {
-        this.extensionButton.destroy();
-        this.extensionButton = null;
-    }
-}
-
-function init () {
->>>>>>> multi-gtk
     return new SpTrayExtension();
 }

@@ -10,5 +10,6 @@ SCRIPTNAME=`basename $0`
 [ ! -d $EXT_PATH ] && mkdir $EXT_PATH
 [ -d $EXT_PATH$EXT_NAME ] && rm -rf $EXT_PATH$EXT_NAME
 
-# create symlink
-ln -s $SCRIPTPATH $EXT_PATH$EXT_NAME
+# copy files
+# TODO filter pls
+cp -r $SCRIPTPATH $EXT_PATH$EXT_NAME

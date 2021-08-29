@@ -22,12 +22,7 @@
                         <property name="margin-start">12</property>
                         <child>
                             <object class="GtkLabel">
-<<<<<<< HEAD
-                                <property name="label" translatable="yes">Here you can enter the expression to define how the track metadata is going to be displayed. 
-                                    Accepted placeholders are {track}, {album}, and {artist}</property>
-=======
                                 <property name="label" translatable="yes">str_formathint</property>
->>>>>>> multi-gtk
                                 <property name="hexpand">true</property>
                                 <property name="halign">1</property>
                             </object>
@@ -41,11 +36,7 @@
                         <property name="margin-start">12</property>
                         <child>
                             <object class="GtkLabel">
-<<<<<<< HEAD
-                                <property name="label" translatable="yes">Display format</property>
-=======
                                 <property name="label" translatable="yes">str_dispformat</property>
->>>>>>> multi-gtk
                                 <property name="hexpand">true</property>
                                 <property name="halign">1</property>
                             </object>
@@ -82,11 +73,7 @@
                         <property name="spacing">12</property>
                         <child>
                             <object class="GtkLabel">
-<<<<<<< HEAD
-                                <property translatable="yes" name="label">Hide when Spotify isn't running?</property>
-=======
                                 <property translatable="yes" name="label">str_inactive_hide_switch_label</property>
->>>>>>> multi-gtk
                                 <property name="hexpand">true</property>
                                 <property name="halign">1</property>
                             </object>
@@ -105,11 +92,7 @@
                         <property name="margin-start">12</property>
                         <child>
                             <object class="GtkLabel">
-<<<<<<< HEAD
-                                <property name="label" translatable="yes">Icon to show when Spotify is inactive</property>
-=======
                                 <property name="label" translatable="yes">str_inactive_icon_label</property>
->>>>>>> multi-gtk
                                 <property name="hexpand">true</property>
                                 <property name="halign">1</property>
                             </object>
@@ -147,11 +130,7 @@
                         <property name="spacing">12</property>
                         <child>
                             <object class="GtkLabel">
-<<<<<<< HEAD
-                                <property translatable="yes" name="label">Hide when playback is paused?</property>
-=======
                                 <property translatable="yes" name="label">str_paused_hide_switch_label</property>
->>>>>>> multi-gtk
                                 <property name="hexpand">true</property>
                                 <property name="halign">1</property>
                             </object>
@@ -170,11 +149,7 @@
                         <property name="margin-start">12</property>
                         <child>
                             <object class="GtkLabel">
-<<<<<<< HEAD
-                                <property name="label" translatable="yes">Icon to show when playback is paused</property>
-=======
                                 <property name="label" translatable="yes">str_paused_icon_label</property>
->>>>>>> multi-gtk
                                 <property name="hexpand">true</property>
                                 <property name="halign">1</property>
                             </object>
@@ -207,11 +182,7 @@
 
                         <child>
                             <object class="GtkButton" id="resetButton">
-<<<<<<< HEAD
-                                <property name="label" translatable="yes">Restore defaults</property>
-=======
                                 <property name="label" translatable="yes">str_defaults_button_label</property>
->>>>>>> multi-gtk
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>

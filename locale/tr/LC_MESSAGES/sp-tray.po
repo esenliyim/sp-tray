@@ -36,15 +36,5 @@ msgstr "Müzik duraklatıldığında widget'ı gizle?"
 msgid "str_paused_icon_label"
 msgstr "Duraklatıldı"
 
-<<<<<<< HEAD
-#: prefs.ui:327
-msgid "Separator"
-msgstr "Ayraç"
-
-#: prefs.ui:327
-msgid "Restore defaults"
-msgstr "Varsayılanlara dön"
-=======
 msgid "str_defaults_button_label"
-msgstr "Hepsini sıfırla"
->>>>>>> multi-gtk
+msgstr "Her şeyi sıfırla"
