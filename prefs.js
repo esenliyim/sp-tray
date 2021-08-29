@@ -19,12 +19,9 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Gettext = imports.gettext;
 
 const ExtensionUtils = imports.misc.extensionUtils;
-let settings = ExtensionUtils.getSettings();
 
 // gtk4 does things quite a bit differently, so we gots to know what we're dealing with
 const _isGtk4 = _checkIfGtk4();
-
-let builder;
 
 function init() {
     // init translations
@@ -34,7 +31,8 @@ function init() {
 
 function buildPrefsWidget() {
 
-    builder = new Gtk.Builder();
+    let settings = ExtensionUtils.getSettings();
+    let builder = new Gtk.Builder();
     // use Gtk.BuilderScope to attach signal handlers to buttons on gtk 4+
     if (_isGtk4) {
         const SpBuilderScope = GObject.registerClass({

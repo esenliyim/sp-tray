@@ -44,9 +44,6 @@ I have provided English, German and Turkish translations. If you'd like to contr
 
 ## TODO
 
-* fix //HACKs
-* code compliance with extensions.gnome
-
 ## License 
 
 GPLv2+

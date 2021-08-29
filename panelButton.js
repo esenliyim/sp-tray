@@ -19,7 +19,6 @@ const { St, Clutter, GObject, GLib, Gio } = imports.gi;
 
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const ExtensionUtils = imports.misc.extensionUtils;
-let settings = ExtensionUtils.getSettings();
 
 //dbus constants
 const dest = "org.mpris.MediaPlayer2.spotify";
@@ -32,24 +31,6 @@ const spotifyDbus = `<node>
 </interface>
 </node>`;
 
-const freedesktopDbus = `<node>
-<interface name="org.freedesktop.DBus.Properties">
-    <method name="Get">
-        <arg type="s" direction="in" name="interface_name"/>
-        <arg type="s" direction="in" name="property_name"/>
-        <arg type="v" direction="out" name="value"/>
-    </method>
-</interface>
-</node>`;
-
-const spotifyProxyWrapper = Gio.DBusProxy.makeProxyWrapper(spotifyDbus);
-const freedesktopProxyWrapper = Gio.DBusProxy.makeProxyWrapper(freedesktopDbus);
-
-let spotifyProxy = spotifyProxyWrapper(Gio.DBus.session, dest, path);
-let freedesktopProxy = freedesktopProxyWrapper(Gio.DBus.session, dest, path);
-
-let panelButtonText;
-
 var SpTrayButton = GObject.registerClass(
     { GTypeName: 'SpTrayButton' },
     class SpTrayButton extends PanelMenu.Button {
@@ -60,25 +41,28 @@ var SpTrayButton = GObject.registerClass(
             this.ui = new Map();
 
             this._initSettings();
+            this._initDbus();
             this._initUi();
 
             this.updateText();
         }
 
         _initSettings() {
+            this.settings = ExtensionUtils.getSettings();
+            
              // the display on the system tray is instantly updated when the settings are changed
-            settings.connect(`changed::paused`, this.updateText);
-            settings.connect(`changed::off`, this.updateText);
-            settings.connect(`changed::hidden-when-inactive`, this.updateText);
-            settings.connect(`changed::display-format`, this.updateText);
+            this.settings.connect(`changed::paused`, this.updateText.bind(this));
+            this.settings.connect(`changed::off`, this.updateText.bind(this));
+            this.settings.connect(`changed::hidden-when-inactive`, this.updateText.bind(this));
+            this.settings.connect(`changed::display-format`, this.updateText.bind(this));
         }
 
         _initUi() {
             const box = new St.BoxLayout({ style_class: 'panel-status-menu-box' });
             // the 'text' variable below is what's actually shown on the tray
-            panelButtonText = new St.Label({
+            let panelButtonText = new St.Label({
                 style_class: "taskbarPanelText",
-                text: settings.get_string('starting'),
+                text: this.settings.get_string('starting'),
                 y_align: Clutter.ActorAlign.CENTER
             });
 
@@ -91,7 +75,7 @@ var SpTrayButton = GObject.registerClass(
             this.ui.set('box', box);
 
             // listen to spotify status changes to update the tray display immediately. no busy waiting
-            spotifyProxy.connect("g-properties-changed", this.updateText);
+            this.spotifyProxy.connect("g-properties-changed", this.updateText.bind(this));
 
             // launch the settings menu when the tray display is clicked
             this.connect('button-press-event', () => {
@@ -100,13 +84,18 @@ var SpTrayButton = GObject.registerClass(
 
             this.add_child(box);
         }
+        
+        _initDbus() {
+            let spotifyProxyWrapper = Gio.DBusProxy.makeProxyWrapper(spotifyDbus);
+            this.spotifyProxy = spotifyProxyWrapper(Gio.DBus.session, dest, path);
+        }
 
         destroy() {
-            //TODO disconnects
-            settings.disconnect(`changed::paused`, this.updateText);
-            settings.disconnect(`changed::off`, this.updateText);
-            settings.disconnect(`changed::hidden-when-inactive`, this.updateText);
-            settings.disconnect(`changed::display-format`, this.updateText);
+            //TODO disconnects foreach
+            this.settings.disconnect(`changed::paused`, this.updateText);
+            this.settings.disconnect(`changed::off`, this.updateText);
+            this.settings.disconnect(`changed::hidden-when-inactive`, this.updateText);
+            this.settings.disconnect(`changed::display-format`, this.updateText);
             spotifyProxy.disconnect("g-properties-changed", this.updateText);
             
             this.ui.forEach(element => element.destroy());
@@ -115,29 +104,38 @@ var SpTrayButton = GObject.registerClass(
 
         // update the text on the tray display
         updateText() {
-            let status = typeof(spotifyProxy.PlaybackStatus);
+            let status = this.spotifyProxy.PlaybackStatus;
+            let button = this.ui.get('label');
 
-            if (status !== 'string') {
-                let hidden = settings.get_boolean("hidden-when-inactive");
-                //HACK
-                panelButtonText.set_text(hidden ? "" : settings.get_string("off"));
+            if (typeof(status) !== 'string') {
+                let hidden = this.settings.get_boolean("hidden-when-inactive");
+                if (hidden) {
+                    button.visible = false;
+                } else {
+                    button.set_text(this.settings.get_string("off"));
+                }
             } else {
-                let status = spotifyProxy.PlaybackStatus;
-                let metadata = spotifyProxy.Metadata;
+                let metadata = this.spotifyProxy.Metadata;
 
                 if (status == "Paused") {
-                    let hidden = settings.get_boolean("hidden-when-paused");
-                    //HACK
-                    panelButtonText.set_text(hidden ? "" : settings.get_string("paused"));
+                    let hidden = this.settings.get_boolean("hidden-when-paused");
+                    if (hidden) {
+                        this.visible = false;
+                    } else {
+                        button.set_text(this.settings.get_string("paused"));
+                    }
                 } else {
-                    let displayFormat = settings.get_string("display-format");
+                    if (!this.visible) {
+                        this.visible = true;
+                    }
+                    let displayFormat = this.settings.get_string("display-format");
 
                     let title = metadata['xesam:title'].get_string()[0];
                     let album = metadata['xesam:album'].get_string()[0];
                     let artist = metadata['xesam:albumArtist'].get_strv()[0];
                     
                     let output = displayFormat.replace("{artist}", artist).replace("{track}", title).replace("{album}", album);
-                    panelButtonText.set_text(output);
+                    button.set_text(output);
                 }
             }
             return true;
