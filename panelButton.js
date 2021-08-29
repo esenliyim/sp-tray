@@ -5,11 +5,6 @@ const { St, Clutter, GObject, GLib, Gio } = imports.gi;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const { Settings } = Me.imports.settings;
 
-const Gettext = imports.gettext;
-Gettext.bindtextdomain("sp-tray", Me.dir.get_child("locale").get_path());
-Gettext.textdomain("sp-tray");
-const _ = Gettext.gettext;
-
 //dbus constants
 const dest = "org.mpris.MediaPlayer2.spotify";
 const path = "/org/mpris/MediaPlayer2";
@@ -57,6 +52,7 @@ var SpTrayButton = GObject.registerClass(
         _initSettings() {
             settings = Settings.getSettings();
 
+            // the display on the system tray is instantly updated when the settings are changed
             settings.connect(`changed::paused`, this.updateText);
             settings.connect(`changed::off`, this.updateText);
             settings.connect(`changed::hidden-when-inactive`, this.updateText);
@@ -65,6 +61,7 @@ var SpTrayButton = GObject.registerClass(
 
         _initUi() {
             const box = new St.BoxLayout({ style_class: 'panel-status-menu-box' });
+            // the 'text' variable below is what's actually shown on the tray
             panelButtonText = new St.Label({
                 style_class: "taskbarPanelText",
                 text: settings.get_string('starting'),
@@ -79,8 +76,10 @@ var SpTrayButton = GObject.registerClass(
             this.ui.forEach(element => box.add_child(element));
             this.ui.set('box', box);
 
+            // listen to spotify status changes to update the tray display immediately. no busy waiting
             spotifyProxy.connect("g-properties-changed", this.updateText);
 
+            // launch the settings menu when the tray display is clicked
             this.connect('button-press-event', () => {
                 imports.misc.extensionUtils.openPrefs();
             });
@@ -90,12 +89,12 @@ var SpTrayButton = GObject.registerClass(
 
         destroy() {
             this.ui.forEach(element => element.destroy());
+            //TODO disconnects necessary?
             super.destroy();
         }
 
+        // update the text on the tray display
         updateText() {
-            global.log('anne');
-
             let status = typeof(spotifyProxy.PlaybackStatus);
 
             if (status !== 'string') {

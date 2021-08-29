@@ -1,46 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
 
-    <schema id="org.gnome.shell.extensions.sp-tray"
-        path="/org/gnome/shell/extensions/sp-tray/">
-    
-    <key type="s" name="starting">
-        <default>"⚙️⚙️⚙️"</default>
-        <summary>starting icon</summary>
-        <description>the default icon that's briefly displayed as the extension starts</description>
-    </key> 
+    <schema id="org.gnome.shell.extensions.sp-tray" path="/org/gnome/shell/extensions/sp-tray/">
 
-    <key type="s" name="paused">
-        <default>"⏸️"</default>
-        <summary>paused icon</summary>
-        <description>the display text to indicate playback is paused</description>
-    </key> 
+        <key type="s" name="starting">
+            <default>"⚙️⚙️⚙️"</default>
+            <summary>starting icon</summary>
+            <description>the default icon that's briefly displayed as the extension starts</description>
+        </key>
 
-    <key type="s" name="off">
-        <default>"💤️"</default>
-        <summary>off icon</summary>
-        <description>the display text to indicate spotify is not running</description>
-    </key> 
+        <key type="s" name="paused">
+            <default>"⏸️"</default>
+            <summary>paused icon</summary>
+            <description>the display text to indicate playback is paused</description>
+        </key>
 
-    <key type="s" name="display-format">
-        <default>"{artist} | {track}"</default>
-        <summary>how the track info is displayed</summary>
-    </key>
+        <key type="s" name="off">
+            <default>"💤️"</default>
+            <summary>off icon</summary>
+            <description>the display text to indicate spotify is not running</description>
+        </key>
 
-    <key type="b" name="hidden-when-inactive">
-        <default>true</default>
-        <summary>hide when spotify is not running?</summary>
-        <description>the variable that determines if the widget is hidden 
+        <key type="s" name="display-format">
+            <default>"{artist} | {track}"</default>
+            <summary>how the track info is displayed</summary>
+        </key>
+
+        <key type="b" name="hidden-when-inactive">
+            <default>true</default>
+            <summary>hide when spotify is not running?</summary>
+            <description>the variable that determines if the widget is hidden 
         when spotify is not running</description>
-    </key>
+        </key>
 
-    <key type="b" name="hidden-when-paused">
-        <default>false</default>
-        <summary>hide when playback is paused?</summary>
-        <description>the variable that determines if the widget is hidden 
+        <key type="b" name="hidden-when-paused">
+            <default>false</default>
+            <summary>hide when playback is paused?</summary>
+            <description>the variable that determines if the widget is hidden 
         when playback is paused</description>
-    </key>
+        </key>
 
     </schema>
-
 </schemalist>
