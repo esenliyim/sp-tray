@@ -1,44 +1,40 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Locale template file for sp-tray
+# Copyright (C) 2021 Emre Senliyim
+# This file is distributed under the same license as the sp-tray package.
+# Emre Senliyim <esenliyim@gmail.com>, 2021.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: sp-tray 1.0 \n"
+"Report-Msgid-Bugs-To: esenliyim@gmail.com \n"
 "POT-Creation-Date: 2020-06-03 17:42+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2021-08-29 \n"
+"Last-Translator: Emre Senliyim <esenliyim@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: prefs.ui:48
-msgid "Hide when Spotify isn't running?"
+msgid "str_formathint"
 msgstr ""
 
-#: prefs.ui:114
-msgid "Not Running"
+msgid "str_dispformat"
 msgstr ""
 
-#: prefs.ui:167
-msgid "Paused"
+msgid "str_inactive_hide_switch_label"
 msgstr ""
 
-#: prefs.ui:221
-msgid "Artist"
+msgid "str_inactive_icon_label"
 msgstr ""
 
-#: prefs.ui:274
-msgid "Track"
+msgid "str_paused_hide_switch_label"
 msgstr ""
 
-#: prefs.ui:327
-msgid "Separator"
+msgid "str_paused_icon_label"
+msgstr ""
+
+msgid "str_defaults_button_label"
 msgstr ""
 
 #: prefs.ui:327

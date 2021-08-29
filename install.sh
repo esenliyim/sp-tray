@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #consts
-EXT_NAME="sp-tray@esenliyim.com"
+EXT_NAME="sp-tray@sp-tray.esenliyim.github.com"
 EXT_PATH="$HOME/.local/share/gnome-shell/extensions/"
 SCRIPTPATH=`dirname $(realpath $0)`
 SCRIPTNAME=`basename $0`

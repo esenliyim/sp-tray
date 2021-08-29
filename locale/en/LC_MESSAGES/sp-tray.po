@@ -1,4 +1,4 @@
-# German translations for sp-tray package.
+# English translations for sp-tray package.
 # Copyright (C) 2021 Emre Senliyim
 # This file is distributed under the same license as the sp-tray package.
 # Emre Senliyim <esenliyim@gmail.com>, 2021.
@@ -18,23 +18,23 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "str_formathint"
-msgstr "Hier können Sie es mit einem Ausdruck definieren, wie die Metadaten angezeigt werden.\n"
-"Gültige Platzhalter sind {track}, {album}, und {artist}"
+msgstr "Here you can change the expression that defines how the metadata is displayed.\n"
+"Valid placeholders are {track}, {album}, and {artist}"
 
 msgid "str_dispformat"
-msgstr "Anzeigeformat"
+msgstr "Display format"
 
 msgid "str_inactive_hide_switch_label"
-msgstr "Widget ausblenden wenn Spotify inaktiv?"
+msgstr "Hide widget when Spotify is inactive?"
 
 msgid "str_inactive_icon_label"
-msgstr "Spotify ist inaktiv"
+msgstr "Spotify is inactive"
 
 msgid "str_paused_hide_switch_label"
-msgstr "Widget ausblenden wenn Wiedergabe pausiert?"
+msgstr "Hide widget when playback is paused?"
 
 msgid "str_paused_icon_label"
-msgstr "Pausiert"
+msgstr "Paused"
 
 msgid "str_defaults_button_label"
-msgstr "Alle zurücksetzen"
+msgstr "Restore defaults"

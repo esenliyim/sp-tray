@@ -1,15 +1,15 @@
-# Turkish translations for PACKAGE package.
-# Copyright (C) 2020 THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# Emre Senliyim <esenliyim@gmail.com>, 2020.
+# Turkish translations for sp-tray package.
+# Copyright (C) 2021 Emre Şenliyim
+# This file is distributed under the same license as the sp-tray package.
+# Emre Şenliyim <esenliyim@gmail.com>, 2021.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: sp-tray\n"
+"Report-Msgid-Bugs-To: esenliyim@gmail.com\n"
 "POT-Creation-Date: 2020-06-03 17:42+0200\n"
 "PO-Revision-Date: 2020-06-03 17:45+0200\n"
-"Last-Translator: Emre Senliyim <esenliyim@gmail.com>\n"
+"Last-Translator: Emre Şenliyim <esenliyim@gmail.com>\n"
 "Language-Team: Turkish\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -17,26 +17,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: prefs.ui:48
-msgid "Hide when Spotify isn't running?"
-msgstr "Spotify kapalıyken sakla?"
+msgid "str_formathint"
+msgstr "Şarkı bilgilerinin nasıl gösterileceğini burada ayarlayabilirsiniz.\n"
+"Geçerli semboller: {track}, {album} ve {artist}"
 
-#: prefs.ui:114
-msgid "Not Running"
+msgid "str_dispformat"
+msgstr "Gösterim formatı"
+
+msgid "str_inactive_hide_switch_label"
+msgstr "Spotify kapalıyken widget'ı gizle?"
+
+msgid "str_inactive_icon_label"
 msgstr "Spotify kapalı"
 
-#: prefs.ui:167
-msgid "Paused"
+msgid "str_paused_hide_switch_label"
+msgstr "Müzik duraklatıldığında widget'ı gizle?"
+
+msgid "str_paused_icon_label"
 msgstr "Duraklatıldı"
 
-#: prefs.ui:221
-msgid "Artist"
-msgstr "Sanatçı"
-
-#: prefs.ui:274
-msgid "Track"
-msgstr "Parça"
-
+<<<<<<< HEAD
 #: prefs.ui:327
 msgid "Separator"
 msgstr "Ayraç"
@@ -44,3 +44,7 @@ msgstr "Ayraç"
 #: prefs.ui:327
 msgid "Restore defaults"
 msgstr "Varsayılanlara dön"
+=======
+msgid "str_defaults_button_label"
+msgstr "Hepsini sıfırla"
+>>>>>>> multi-gtk
