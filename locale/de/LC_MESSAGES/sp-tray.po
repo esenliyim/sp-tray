@@ -1,7 +1,7 @@
-# German translations for PACKAGE package.
-# Copyright (C) 2020 THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# Emre Senliyim <esenliyim@gmail.com>, 2020.
+# German translations for sp-tray package.
+# Copyright (C) 2021 Emre Senliyim
+# This file is distributed under the same license as the sp-tray package.
+# Emre Senliyim <esenliyim@gmail.com>, 2021.
 #
 msgid ""
 msgstr ""
@@ -17,26 +17,24 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: prefs.ui:48
-msgid "Hide when Spotify isn't running?"
-msgstr "Widget verstecken wenn Spotify nicht läuft?"
+msgid "str_formathint"
+msgstr "Hier können Sie es mit einem Ausdruck definieren, wie die Metadaten angezeigt werden.\n"
+"Gültige Platzhalter sind {track}, {album}, und {artist}"
 
-#: prefs.ui:114
-msgid "Not Running"
-msgstr "Spotify läuft nicht"
+msgid "str_dispformat"
+msgstr "Anzeigeformat"
 
-#: prefs.ui:167
-msgid "Paused"
-msgstr "Pause"
+msgid "str_inactive_hide_switch_label"
+msgstr "Widget ausblenden wenn Spotify inaktiv?"
 
-#: prefs.ui:221
-msgid "Artist"
-msgstr "Künstler-Zeichen"
+msgid "str_inactive_icon_label"
+msgstr "Spotify ist inaktiv"
 
-#: prefs.ui:274
-msgid "Track"
-msgstr "Lied-Zeichen"
+msgid "str_paused_hide_switch_label"
+msgstr "Widget ausblenden wenn Wiedergabe pausiert?"
 
-#: prefs.ui:327
-msgid "Separator"
-msgstr "Separator"
+msgid "str_paused_icon_label"
+msgstr "Pausiert"
+
+msgid "str_defaults_button_label"
+msgstr "Alle zurücksetzen"

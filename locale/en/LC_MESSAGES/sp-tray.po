@@ -1,40 +1,40 @@
-# Turkish translations for sp-tray package.
-# Copyright (C) 2021 Emre Şenliyim
+# English translations for sp-tray package.
+# Copyright (C) 2021 Emre Senliyim
 # This file is distributed under the same license as the sp-tray package.
-# Emre Şenliyim <esenliyim@gmail.com>, 2021.
+# Emre Senliyim <esenliyim@gmail.com>, 2021.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: sp-tray\n"
-"Report-Msgid-Bugs-To: esenliyim@gmail.com\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-03 17:42+0200\n"
 "PO-Revision-Date: 2020-06-03 17:45+0200\n"
-"Last-Translator: Emre Şenliyim <esenliyim@gmail.com>\n"
-"Language-Team: Turkish\n"
-"Language: tr\n"
+"Last-Translator: Emre Senliyim <esenliyim@gmail.com>\n"
+"Language-Team: German\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "str_formathint"
-msgstr "Şarkı .\n"
+msgstr "Here you can change the expression that defines how the metadata is displayed.\n"
 "Valid placeholders are {track}, {album}, and {artist}"
 
 msgid "str_dispformat"
-msgstr "Gösterim formatı"
+msgstr "Display format"
 
 msgid "str_inactive_hide_switch_label"
-msgstr "Spotify kapalıyken widget'ı gizle?"
+msgstr "Hide widget when Spotify is inactive?"
 
 msgid "str_inactive_icon_label"
-msgstr "Spotify kapalı"
+msgstr "Spotify is inactive"
 
 msgid "str_paused_hide_switch_label"
-msgstr "Müzik duraklatıldığında widget'ı gizle?"
+msgstr "Hide widget when playback is paused?"
 
 msgid "str_paused_icon_label"
-msgstr "Duraklatıldı"
+msgstr "Paused"
 
 msgid "str_defaults_button_label"
-msgstr "Her şeyi sıfırla"
+msgstr "Restore defaults"
