@@ -2,7 +2,7 @@
 # sp-tray
 
 sp-tray is GNOME Shell extension that displays current track information in the system tray using Spotify's dbus interface without using the web API. Like this: 
-![tray](https://github.com/esenliyim/sp-tray/blob/master/tray.png)
+![tray](https://github.com/esenliyim/sp-tray/blob/master/example.png)
 
 ## Features
 
@@ -16,17 +16,12 @@ sp-tray is GNOME Shell extension that displays current track information in the 
 
 ## Installation 
 
-Preferably, you should install it from extensions.gnome.org
+Preferably, you should:
 
-Alternatively, you could clone this repo anywhere on your computer and run the installation script, which creates a symbolic link in `$HOME/.local/share/gnome-shell/extensions`
+[<img src="https://raw.githubusercontent.com/andyholmes/gnome-shell-extensions-badge/master/get-it-on-ego.svg?sanitize=true" alt="Get it on GNOME Extensions" height="100" align="middle">][extlink]
 
-### Gnome extensions:
 
-1. Go to LINK
-
-2. Install as you'd install any other extension
-
-### From GitHub:
+Alternatively, you could:
 
 1. Clone this repo anywhere on your computer
 
@@ -36,14 +31,14 @@ Alternatively, you could clone this repo anywhere on your computer and run the i
 
 ## Dependencies 
 
-* `ligbtop` as usual to load/install GNOME shell extensions.
+* `ligbtop` and gnome-tweaks as usual to load/install GNOME shell extensions.
 
 ## Translations 
 
 I have provided English, German and Turkish translations. If you'd like to contribute translations, please contact me. There are like 7 strings in total.
 
-## TODO
-
 ## License 
 
 GPLv2+
+
+[extlink]: https://extensions.gnome.org/extension/4472/spotify-tray/
