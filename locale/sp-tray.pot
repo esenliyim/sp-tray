@@ -36,7 +36,3 @@ msgstr ""
 
 msgid "str_defaults_button_label"
 msgstr ""
-
-#: prefs.ui:327
-msgid "Restore defaults"
-msgstr ""

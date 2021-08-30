@@ -23,7 +23,6 @@ const ExtensionUtils = imports.misc.extensionUtils;
 //dbus constants
 const dest = "org.mpris.MediaPlayer2.spotify";
 const path = "/org/mpris/MediaPlayer2";
-
 const spotifyDbus = `<node>
 <interface name="org.mpris.MediaPlayer2.Player">
     <property name="PlaybackStatus" type="s" access="read"/>
@@ -39,6 +38,7 @@ var SpTrayButton = GObject.registerClass(
             super._init(null, Me.metadata.name);
 
             this.ui = new Map();
+            this._settingSignals = [];
 
             this._initSettings();
             this._initDbus();
@@ -49,12 +49,13 @@ var SpTrayButton = GObject.registerClass(
 
         _initSettings() {
             this.settings = ExtensionUtils.getSettings();
-            
-             // the display on the system tray is instantly updated when the settings are changed
-            this.settings.connect(`changed::paused`, this.updateText.bind(this));
-            this.settings.connect(`changed::off`, this.updateText.bind(this));
-            this.settings.connect(`changed::hidden-when-inactive`, this.updateText.bind(this));
-            this.settings.connect(`changed::display-format`, this.updateText.bind(this));
+
+            // connect relevant settings to the button so that it can be instantly updated when they're changed
+            // store the connected signals in an array for easy disconnection later on
+            this._settingSignals.push(this.settings.connect(`changed::paused`, this.updateText.bind(this)));
+            this._settingSignals.push(this.settings.connect(`changed::off`, this.updateText.bind(this)));
+            this._settingSignals.push(this.settings.connect(`changed::hidden-when-inactive`, this.updateText.bind(this)));
+            this._settingSignals.push(this.settings.connect(`changed::display-format`, this.updateText.bind(this)));
         }
 
         _initUi() {
@@ -75,7 +76,7 @@ var SpTrayButton = GObject.registerClass(
             this.ui.set('box', box);
 
             // listen to spotify status changes to update the tray display immediately. no busy waiting
-            this.spotifyProxy.connect("g-properties-changed", this.updateText.bind(this));
+            this._settingSignals.push(this.spotifyProxy.connect("g-properties-changed", this.updateText.bind(this)));
 
             // launch the settings menu when the tray display is clicked
             this.connect('button-press-event', () => {
@@ -84,30 +85,26 @@ var SpTrayButton = GObject.registerClass(
 
             this.add_child(box);
         }
-        
+
         _initDbus() {
             let spotifyProxyWrapper = Gio.DBusProxy.makeProxyWrapper(spotifyDbus);
             this.spotifyProxy = spotifyProxyWrapper(Gio.DBus.session, dest, path);
         }
 
         destroy() {
-            //TODO disconnects foreach
-            this.settings.disconnect(`changed::paused`, this.updateText);
-            this.settings.disconnect(`changed::off`, this.updateText);
-            this.settings.disconnect(`changed::hidden-when-inactive`, this.updateText);
-            this.settings.disconnect(`changed::display-format`, this.updateText);
-            spotifyProxy.disconnect("g-properties-changed", this.updateText);
-            
+            // disconnect all signals
+            this._settingSignals.forEach(signal => this.settings.disconnect(signal));
+            // destroy all ui elements
             this.ui.forEach(element => element.destroy());
             super.destroy();
         }
 
         // update the text on the tray display
         updateText() {
-            let status = this.spotifyProxy.PlaybackStatus;
             let button = this.ui.get('label');
-
-            if (typeof(status) !== 'string') {
+            let status = this.spotifyProxy.PlaybackStatus;
+            
+            if (typeof (status) !== 'string') {
                 let hidden = this.settings.get_boolean("hidden-when-inactive");
                 if (hidden) {
                     button.visible = false;
@@ -133,7 +130,7 @@ var SpTrayButton = GObject.registerClass(
                     let title = metadata['xesam:title'].get_string()[0];
                     let album = metadata['xesam:album'].get_string()[0];
                     let artist = metadata['xesam:albumArtist'].get_strv()[0];
-                    
+
                     let output = displayFormat.replace("{artist}", artist).replace("{track}", title).replace("{album}", album);
                     button.set_text(output);
                 }

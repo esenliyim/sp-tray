@@ -8,8 +8,6 @@ sp-tray is GNOME Shell extension that displays current track information in the 
 
 - Shows the track, artist and album information, and allows you to customize how it's shown
 
-- Works on both Wayland and X11
-
 - It uses Spotify's exposed dbus interface to fetch metadata, doesn't use the web API
 
 - No premium account necessary
@@ -27,7 +25,7 @@ Alternatively, you could:
 
 2. Run the install script with `./<path_to_dir>/install.sh`
 
-2. On X11, restart gnome-shell and activate the extension via gnome-tweaks. On Wayland you might have to log out and back in.
+2. Restart gnome-shell (xorg) and activate the extension via gnome-tweaks. On Wayland you may have to log out and back in.
 
 ## Dependencies 
 

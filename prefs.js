@@ -20,6 +20,7 @@ const Gettext = imports.gettext;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 
+// to keep track of the registered scopeclass
 const registeredClass = [];
 
 // gtk4 does things quite a bit differently, so we gots to know what we're dealing with
@@ -29,41 +30,6 @@ function init() {
     // init translations
     Gettext.bindtextdomain("sp-tray", Me.dir.get_child("locale").get_path());
     Gettext.textdomain("sp-tray");
-    if (_isGtk4 && registeredClass.length == 0) {
-        let SpBuilderScope = GObject.registerClass({
-            Implements: [Gtk.BuilderScope],
-        }, class SpBuilderScope extends GObject.Object {
-
-            vfunc_create_closure(builder, handlerName, flags, connectObject) {
-                if (flags & Gtk.BuilderClosureFlags.SWAPPED) {
-                    throw new Error('Unsupported template signal flag "swapped"');
-                }
-                if (typeof this[handlerName] === 'undefined') {
-                    throw new Error(`${handlerName} is undefined`);
-                }
-                return this[handlerName].bind(connectObject || this);
-            }
-
-            on_defaults_clicked(connectObject) {
-                settings.reset("off");
-                settings.reset("paused");
-                settings.reset("display-format");
-            }
-
-            on_resetNotRunning_clicked(connectObject) {
-                settings.reset("off");
-            }
-
-            on_resetPaused_clicked(connectObject) {
-                settings.reset("paused");
-            }
-
-            on_resetFormat_clicked(connectObject) {
-                settings.reset("display-format");
-            }
-        });
-        registeredClass.push(SpBuilderScope);
-    }
 }
 
 function buildPrefsWidget() {
@@ -72,6 +38,42 @@ function buildPrefsWidget() {
     let builder = new Gtk.Builder();
     // use Gtk.BuilderScope to attach signal handlers to buttons on gtk 4+
     if (_isGtk4) {
+        // register a new scope class if it hasn't already been registered
+        if (registeredClass.length == 0) {
+            let SpBuilderScope = GObject.registerClass({
+                Implements: [Gtk.BuilderScope],
+            }, class SpBuilderScope extends GObject.Object {
+
+                vfunc_create_closure(builder, handlerName, flags, connectObject) {
+                    if (flags & Gtk.BuilderClosureFlags.SWAPPED) {
+                        throw new Error('Unsupported template signal flag "swapped"');
+                    }
+                    if (typeof this[handlerName] === 'undefined') {
+                        throw new Error(`${handlerName} is undefined`);
+                    }
+                    return this[handlerName].bind(connectObject || this);
+                }
+
+                on_defaults_clicked(connectObject) {
+                    settings.reset("off");
+                    settings.reset("paused");
+                    settings.reset("display-format");
+                }
+
+                on_resetNotRunning_clicked(connectObject) {
+                    settings.reset("off");
+                }
+
+                on_resetPaused_clicked(connectObject) {
+                    settings.reset("paused");
+                }
+
+                on_resetFormat_clicked(connectObject) {
+                    settings.reset("display-format");
+                }
+            });
+            registeredClass.push(SpBuilderScope);
+        }
         builder.set_scope(new registeredClass[0]());
     }
     builder.add_from_file(Me.dir.get_path() + '/prefs.xml');
