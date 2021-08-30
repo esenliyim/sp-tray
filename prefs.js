@@ -20,6 +20,8 @@ const Gettext = imports.gettext;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 
+const registeredClass = [];
+
 // gtk4 does things quite a bit differently, so we gots to know what we're dealing with
 const _isGtk4 = _checkIfGtk4();
 
@@ -27,15 +29,8 @@ function init() {
     // init translations
     Gettext.bindtextdomain("sp-tray", Me.dir.get_child("locale").get_path());
     Gettext.textdomain("sp-tray");
-}
-
-function buildPrefsWidget() {
-
-    let settings = ExtensionUtils.getSettings();
-    let builder = new Gtk.Builder();
-    // use Gtk.BuilderScope to attach signal handlers to buttons on gtk 4+
-    if (_isGtk4) {
-        const SpBuilderScope = GObject.registerClass({
+    if (_isGtk4 && registeredClass.length == 0) {
+        let SpBuilderScope = GObject.registerClass({
             Implements: [Gtk.BuilderScope],
         }, class SpBuilderScope extends GObject.Object {
 
@@ -67,7 +62,17 @@ function buildPrefsWidget() {
                 settings.reset("display-format");
             }
         });
-        builder.set_scope(new SpBuilderScope());
+        registeredClass.push(SpBuilderScope);
+    }
+}
+
+function buildPrefsWidget() {
+
+    let settings = ExtensionUtils.getSettings();
+    let builder = new Gtk.Builder();
+    // use Gtk.BuilderScope to attach signal handlers to buttons on gtk 4+
+    if (_isGtk4) {
+        builder.set_scope(new registeredClass[0]());
     }
     builder.add_from_file(Me.dir.get_path() + '/prefs.xml');
     let box = builder.get_object('prefs_widget');
