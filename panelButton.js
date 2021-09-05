@@ -107,7 +107,7 @@ var SpTrayButton = GObject.registerClass(
             if (typeof (status) !== 'string') {
                 let hidden = this.settings.get_boolean("hidden-when-inactive");
                 if (hidden) {
-                    button.visible = false;
+                    this.visible = false;
                 } else {
                     button.set_text(this.settings.get_string("off"));
                 }
