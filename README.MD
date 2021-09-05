@@ -29,7 +29,7 @@ Alternatively, you could:
 
 ## Dependencies 
 
-* `ligbtop` and gnome-tweaks as usual to load/install GNOME shell extensions.
+* `libgtop` and gnome-tweaks as usual to load/install GNOME shell extensions.
 
 ## Translations 
 
