@@ -1,0 +1,42 @@
+# Locale template file for sp-tray
+# Copyright (C) 2021 Emre Senliyim
+# This file is distributed under the same license as the sp-tray package.
+# Emre Senliyim <esenliyim@gmail.com>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: sp-tray 1.0\n"
+"Report-Msgid-Bugs-To: esenliyim@gmail.com\n"
+"POT-Creation-Date: 2020-06-03 17:42+0200\n"
+"PO-Revision-Date: 2021-09-18 15:01+0200\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language-Team: \n"
+"X-Generator: Poedit 3.0\n"
+"Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: nl\n"
+
+msgid "str_formathint"
+msgstr ""
+"Hier kunt u, middels een reguliere uitdrukking, aangeven hoe de metagegevens moeten worden getoond.\n"
+"Geldige plaatshouders zijn {track}, {album}, en {artist}"
+
+msgid "str_dispformat"
+msgstr "Weergave"
+
+msgid "str_inactive_hide_switch_label"
+msgstr "Widget verbergen als Spotify inactief is?"
+
+msgid "str_inactive_icon_label"
+msgstr "Spotify is niet actief"
+
+msgid "str_paused_hide_switch_label"
+msgstr "Widget verbergen als het afspelen onderbroken is?"
+
+msgid "str_paused_icon_label"
+msgstr "Onderbroken"
+
+msgid "str_defaults_button_label"
+msgstr "Standaardwaarden"
