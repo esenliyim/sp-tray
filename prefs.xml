@@ -175,6 +175,46 @@
                 </child>
 
                 <child>
+                    <object class="GtkSeparator">
+                        <property name="orientation">horizontal</property>
+                    </object>
+                </child>
+
+                <!-- position control -->
+                <child>
+                    <object class="GtkBox">
+                        <property name="spacing">12</property>
+                        <property name="margin-start">12</property>
+                        <child>
+                            <object class="GtkLabel">
+                                <property name="label" translatable="yes">Position in panel</property>
+                                <property name="hexpand">true</property>
+                                <property name="halign">1</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkComboBoxText" id="box_position">
+                                <property name="can_focus">True</property>
+                                <items>
+                                    <item translatable="yes" id="0">Left</item>
+                                    <item translatable="yes" id="1">Center</item>
+                                    <item translatable="yes" id="2">Right</item>
+                                </items>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkButton" id="resetPosition">
+                                <property name="label" translatable="yes">↺</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_resetPosition_clicked" swapped="no" />
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
+                <child>
                     <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -196,6 +236,7 @@
                         </child>
                     </object>
                 </child>
+                
             </object>
         </child>
     </object>

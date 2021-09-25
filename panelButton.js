@@ -15,6 +15,7 @@
 
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
+const Main = imports.ui.main;
 const { St, Clutter, GObject, GLib, Gio } = imports.gi;
 
 const Me = imports.misc.extensionUtils.getCurrentExtension();
@@ -56,6 +57,7 @@ var SpTrayButton = GObject.registerClass(
             this._settingSignals.push(this.settings.connect(`changed::off`, this.updateText.bind(this)));
             this._settingSignals.push(this.settings.connect(`changed::hidden-when-inactive`, this.updateText.bind(this)));
             this._settingSignals.push(this.settings.connect(`changed::display-format`, this.updateText.bind(this)));
+            this._settingSignals.push(this.settings.connect('changed::position', this._positionChanged.bind(this)));
         }
 
         _initUi() {
@@ -78,10 +80,8 @@ var SpTrayButton = GObject.registerClass(
             // listen to spotify status changes to update the tray display immediately. no busy waiting
             this._settingSignals.push(this.spotifyProxy.connect("g-properties-changed", this.updateText.bind(this)));
 
-            // launch the settings menu when the tray display is clicked
-            this.connect('button-press-event', () => {
-                imports.misc.extensionUtils.openPrefs();
-            });
+            // TODO signals array?
+            this._pressEvent = this.connect('button-press-event', this.showSpotify.bind(this));
 
             this.add_child(box);
         }
@@ -91,9 +91,19 @@ var SpTrayButton = GObject.registerClass(
             this.spotifyProxy = spotifyProxyWrapper(Gio.DBus.session, dest, path);
         }
 
+        _positionChanged() {
+            this.container.get_parent().remove_actor(this.container);
+
+            let positions = [Main.panel._leftBox, Main.panel._centerBox, Main.panel._rightBox];
+
+            let pos = this.settings.get_int('position');
+            positions[pos].insert_child_at_index(this.container, pos == 2 ? 0 : -1);
+        }
+
         destroy() {
             // disconnect all signals
             this._settingSignals.forEach(signal => this.settings.disconnect(signal));
+            this.disconnect(this._pressEvent);
             // destroy all ui elements
             this.ui.forEach(element => element.destroy());
             super.destroy();
@@ -103,7 +113,7 @@ var SpTrayButton = GObject.registerClass(
         updateText() {
             let button = this.ui.get('label');
             let status = this.spotifyProxy.PlaybackStatus;
-            
+
             if (typeof (status) !== 'string') {
                 let hidden = this.settings.get_boolean("hidden-when-inactive");
                 if (hidden) {
@@ -136,6 +146,32 @@ var SpTrayButton = GObject.registerClass(
                 }
             }
             return true;
+        }
+
+        // many thanks to mheine's implementation
+        showSpotify() {
+            if (this._spotiWin && this._spotiWin.has_focus()) { // spotify is up and focused
+                if (this._notSpotify) { // hide spotify and pull up the last active window if possible
+                    Main.activateWindow(this._notSpotify)
+                }
+            } else { // spotify is unfocused or the tray icon has never been clicked before
+                this._spotiWin = this._notSpotify = null;
+                let wins = global.get_window_actors(); // get all open windows
+                for (let win of wins) {
+                    if (typeof win.get_meta_window === 'function') {
+                        if (win.get_meta_window().get_wm_class() === 'Spotify') {
+                            this._spotiWin = win.get_meta_window(); // mark the spotify window
+                        } else if (win.get_meta_window().has_focus()) {
+                            this._notSpotify = win.get_meta_window(); // mark the window that was active when the button was pressed
+                        }
+
+                        if (this._spotiWin && this._notSpotify) {
+                            break;
+                        }
+                    }
+                }
+                Main.activateWindow(this._spotiWin); // pull up the spotify window
+            }
         }
     }
 )

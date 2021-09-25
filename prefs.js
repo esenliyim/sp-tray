@@ -68,6 +68,10 @@ function buildPrefsWidget() {
                     settings.reset("paused");
                 }
 
+                on_resetPosition_clicked(connectObject) {
+                    settings.reset("position");
+                }
+
                 on_resetFormat_clicked(connectObject) {
                     settings.reset("display-format");
                 }
@@ -85,6 +89,7 @@ function buildPrefsWidget() {
     settings.bind('hidden-when-inactive', builder.get_object('field_hideInactive'), 'active', Gio.SettingsBindFlags.DEFAULT);
     settings.bind('hidden-when-paused', builder.get_object('field_hidePaused'), 'active', Gio.SettingsBindFlags.DEFAULT);
     settings.bind('off', builder.get_object('field_notRunning'), 'text', Gio.SettingsBindFlags.DEFAULT);
+    settings.bind('position', builder.get_object('box_position'), 'active', Gio.SettingsBindFlags.DEFAULT);
 
     // use connect_signals_full to attach signal handlers to buttons on gtk <4
     if (!_isGtk4) {
@@ -106,6 +111,10 @@ function buildPrefsWidget() {
 
             on_resetFormat_clicked(w) {
                 settings.reset("display-format");
+            },
+
+            on_resetPosition_clicked(w) {
+                settings.reset("position");
             }
 
         };

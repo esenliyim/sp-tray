@@ -40,3 +40,15 @@ msgstr "Onderbroken"
 
 msgid "str_defaults_button_label"
 msgstr "Standaardwaarden"
+
+msgid "Position in panel"
+msgstr "Positie in paneel"
+
+msgid "Left"
+msgstr "Links"
+
+msgid "Center"
+msgstr "Midden"
+
+msgid "Right"
+msgstr "Rechts"

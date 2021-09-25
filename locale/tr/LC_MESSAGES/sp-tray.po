@@ -38,3 +38,15 @@ msgstr "Duraklatıldı"
 
 msgid "str_defaults_button_label"
 msgstr "Her şeyi sıfırla"
+
+msgid "Position in panel"
+msgstr "Paneldeki yer"
+
+msgid "Left"
+msgstr "Sol"
+
+msgid "Center"
+msgstr "Orta"
+
+msgid "Right"
+msgstr "Sağ"

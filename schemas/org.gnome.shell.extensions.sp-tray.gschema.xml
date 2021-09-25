@@ -49,6 +49,12 @@ along with this program.If not, see < http://www.gnu.org/licenses/>. -->
         when spotify is not running</description>
         </key>
 
+        <key type="i" name="position">
+            <default>2</default>
+            <summary>icon position in the tray</summary>
+            <description>0=left, 1=center, 2=right(default)</description>
+        </key>
+
         <key type="b" name="hidden-when-paused">
             <default>false</default>
             <summary>hide when playback is paused?</summary>

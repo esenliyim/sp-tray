@@ -36,3 +36,15 @@ msgstr ""
 
 msgid "str_defaults_button_label"
 msgstr ""
+
+msgid "Position in panel"
+msgstr ""
+
+msgid "Left"
+msgstr ""
+
+msgid "Center"
+msgstr ""
+
+msgid "Right"
+msgstr ""

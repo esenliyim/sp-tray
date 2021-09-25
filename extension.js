@@ -23,17 +23,35 @@ const { SpTrayButton } = Me.imports.panelButton;
 class SpTrayExtension {
     constructor() {
         this.extensionButton = null;
+        this.settings = imports.misc.extensionUtils.getSettings();
     }
 
     enable() {
         this.extensionButton = new SpTrayButton();
-        Main.panel.addToStatusArea('SpTray', this.extensionButton);
+        //this._settingSignal = this.settings.connect('changed::position', this._positionChanged.bind(this));
+        this._addToTray();
+    }
+
+    _addToTray() {
+        let pos = this.settings.get_int('position');
+        Main.panel.addToStatusArea('SpTray', this.extensionButton, pos == 2 ? 0 : -1, this._getPosition(pos));
     }
 
     disable() {
         this.extensionButton.destroy();
         this.extensionButton = null;
+        //this.settings.disconnect(this._settingSignal);
     }
+
+    _getPosition(pos) {
+        let positions = ['left' , 'center', 'right'];
+        return positions[pos];
+    }
+
+    // _positionChanged() {
+    //     this.extensionButton.get_parent().remove_actor(this.extensionButton);
+    //     this._addToTray();
+    // }
 }
 
 function init () {

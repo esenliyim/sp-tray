@@ -38,3 +38,15 @@ msgstr "Paused"
 
 msgid "str_defaults_button_label"
 msgstr "Restore defaults"
+
+msgid "Position in panel"
+msgstr "Position in panel"
+
+msgid "Left"
+msgstr "Left"
+
+msgid "Center"
+msgstr "Center"
+
+msgid "Right"
+msgstr "Right"
