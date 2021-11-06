@@ -132,6 +132,10 @@ var SpTrayButton = GObject.registerClass(
                         button.set_text(this.settings.get_string("paused"));
                     }
                 } else {
+                    if (!metadata['xesam:title'] || !metadata['xesam:album'] ||!metadata['xesam:albumArtist']) {
+                        this.visible = false;
+                        return true;
+                    }
                     if (!this.visible) {
                         this.visible = true;
                     }
