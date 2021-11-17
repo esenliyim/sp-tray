@@ -138,7 +138,7 @@ var SpTrayButton = GObject.registerClass(
                 } else {
                     // thanks benjamingwynn for this
                     // check if spotify is actually running and the metadata is "correct"
-                    if (metadata && !this.isReallySpotify(metadata)) {
+                    if (!metadata || !this.isReallySpotify(metadata)) {
                         this.visible = false;
                         return true;
                     }
