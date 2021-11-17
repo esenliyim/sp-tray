@@ -4,10 +4,11 @@
     "shell-version" : [
         "3.36",
 	    "3.38",
-        "40"
+        "40",
+        "41"
     ],
     "url" : "https://github.com/esenliyim/sp-tray",
     "uuid" : "sp-tray@sp-tray.esenliyim.github.com",
-    "version" : 6,
+    "version" : 8,
     "settings-schema" : "org.gnome.shell.extensions.sp-tray"
 }

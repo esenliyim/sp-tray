@@ -19,10 +19,10 @@ msgstr ""
 
 msgid "str_formathint"
 msgstr "Hier können Sie es mit einem Ausdruck definieren, wie die Metadaten angezeigt werden.\n"
-"Gültige Platzhalter sind {track}, {album}, und {artist}"
+"Gültige Platzhalter sind {track}, {artist}, {album} für Lieder & {track}, {album} für Podcasts"
 
 msgid "str_dispformat"
-msgstr "Anzeigeformat"
+msgstr "Anzeigeformat für Lieder"
 
 msgid "str_inactive_hide_switch_label"
 msgstr "Widget ausblenden wenn Spotify inaktiv?"
@@ -50,3 +50,15 @@ msgstr "Mitte"
 
 msgid "Right"
 msgstr "Rechts"
+
+msgid "str_artistlength"
+msgstr "Max. Länge des Künstler-Feldes"
+
+msgid "str_titlelength"
+msgstr "Max. Länge des Titel-Feldes"
+
+msgid "str_albumlength"
+msgstr "Max. Länge des Album-Feldes"
+
+msgid "str_podcastformat"
+msgstr "Anzeigeformat für Podcasts"

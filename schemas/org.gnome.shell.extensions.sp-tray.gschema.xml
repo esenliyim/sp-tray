@@ -42,6 +42,11 @@ along with this program.If not, see < http://www.gnu.org/licenses/>. -->
             <summary>how the track info is displayed</summary>
         </key>
 
+        <key type="s" name="podcast-format">
+            <default>"{album} | {track}"</default>
+            <summary>how the podcast info is displayed</summary>
+        </key>
+
         <key type="b" name="hidden-when-inactive">
             <default>true</default>
             <summary>hide when spotify is not running?</summary>
@@ -60,6 +65,21 @@ along with this program.If not, see < http://www.gnu.org/licenses/>. -->
             <summary>hide when playback is paused?</summary>
             <description>the variable that determines if the widget is hidden 
         when playback is paused</description>
+        </key>
+
+        <key type="i" name="title-max-length">
+            <default>35</default>
+            <summary>max length of title field</summary>
+        </key>
+
+        <key type="i" name="artist-max-length">
+            <default>35</default>
+            <summary>max length of artist field</summary>
+        </key>
+
+        <key type="i" name="album-max-length">
+            <default>35</default>
+            <summary>max length of album field</summary>
         </key>
 
     </schema>

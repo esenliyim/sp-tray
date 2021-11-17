@@ -75,6 +75,22 @@ function buildPrefsWidget() {
                 on_resetFormat_clicked(connectObject) {
                     settings.reset("display-format");
                 }
+
+                on_resetTitleLength_clicked(connectObject) {
+                    settings.reset("title-max-length");
+                }
+
+                on_resetArtistLength_clicked(connectObject) {
+                    settings.reset("artist-max-length");
+                }
+
+                on_resetAlbumLength_clicked(connectObject) {
+                    settings.reset("album-max-length");
+                }
+
+                on_resetPodcastFormat_clicked(connectObject) {
+                    settings.reset("podcast-format");
+                }
             });
             registeredClass.push(SpBuilderScope);
         }
@@ -85,6 +101,10 @@ function buildPrefsWidget() {
 
     // bind switches and text fields to their respective settings
     settings.bind('display-format', builder.get_object('field_format'), 'text', Gio.SettingsBindFlags.DEFAULT);
+    settings.bind('podcast-format', builder.get_object('podcast_format'), 'text', Gio.SettingsBindFlags.DEFAULT);
+    settings.bind('title-max-length', builder.get_object('title_length'), 'value', Gio.SettingsBindFlags.DEFAULT);
+    settings.bind('artist-max-length', builder.get_object('artist_length'), 'value', Gio.SettingsBindFlags.DEFAULT);
+    settings.bind('album-max-length', builder.get_object('album_length'), 'value', Gio.SettingsBindFlags.DEFAULT);
     settings.bind('paused', builder.get_object('field_paused'), 'text', Gio.SettingsBindFlags.DEFAULT);
     settings.bind('hidden-when-inactive', builder.get_object('field_hideInactive'), 'active', Gio.SettingsBindFlags.DEFAULT);
     settings.bind('hidden-when-paused', builder.get_object('field_hidePaused'), 'active', Gio.SettingsBindFlags.DEFAULT);
@@ -115,6 +135,22 @@ function buildPrefsWidget() {
 
             on_resetPosition_clicked(w) {
                 settings.reset("position");
+            },
+
+            on_resetTitleLength_clicked(w) {
+                settings.reset("title-max-length");
+            },
+
+            on_resetArtistLength_clicked(w) {
+                settings.reset("artist-max-length");
+            },
+
+            on_resetAlbumLength_clicked(w) {
+                settings.reset("album-max-length");
+            },
+
+            on_resetPodcastFormat_clicked(w) {
+                settings.reset("podcast-format");
             }
 
         };

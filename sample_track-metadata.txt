@@ -1,0 +1,51 @@
+method return time=1637156842.951571 sender=:1.319 -> destination=:1.322 serial=50 reply_serial=2
+   variant       array [
+         dict entry(
+            string "mpris:trackid"
+            variant                string "spotify:track:3Llikc7f9KKGYwbrEfAYtk"
+         )
+         dict entry(
+            string "mpris:length"
+            variant                uint64 548746000
+         )
+         dict entry(
+            string "mpris:artUrl"
+            variant                string "https://i.scdn.co/image/ab67616d0000b27361538881835cce6adf80181b"
+         )
+         dict entry(
+            string "xesam:album"
+            variant                string "Affinity"
+         )
+         dict entry(
+            string "xesam:albumArtist"
+            variant                array [
+                  string "Haken"
+               ]
+         )
+         dict entry(
+            string "xesam:artist"
+            variant                array [
+                  string "Haken"
+               ]
+         )
+         dict entry(
+            string "xesam:autoRating"
+            variant                double 0.4
+         )
+         dict entry(
+            string "xesam:discNumber"
+            variant                int32 1
+         )
+         dict entry(
+            string "xesam:title"
+            variant                string "1985"
+         )
+         dict entry(
+            string "xesam:trackNumber"
+            variant                int32 3
+         )
+         dict entry(
+            string "xesam:url"
+            variant                string "https://open.spotify.com/track/3Llikc7f9KKGYwbrEfAYtk"
+         )
+      ]

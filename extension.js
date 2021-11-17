@@ -17,18 +17,18 @@
 
 const Main = imports.ui.main;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
+const ExtUtil = imports.misc.extensionUtils;
 
 const { SpTrayButton } = Me.imports.panelButton;
 
 class SpTrayExtension {
     constructor() {
         this.extensionButton = null;
-        this.settings = imports.misc.extensionUtils.getSettings();
     }
 
     enable() {
+        this.settings = ExtUtil.getSettings();
         this.extensionButton = new SpTrayButton();
-        //this._settingSignal = this.settings.connect('changed::position', this._positionChanged.bind(this));
         this._addToTray();
     }
 
@@ -40,18 +40,12 @@ class SpTrayExtension {
     disable() {
         this.extensionButton.destroy();
         this.extensionButton = null;
-        //this.settings.disconnect(this._settingSignal);
     }
 
     _getPosition(pos) {
         let positions = ['left' , 'center', 'right'];
         return positions[pos];
     }
-
-    // _positionChanged() {
-    //     this.extensionButton.get_parent().remove_actor(this.extensionButton);
-    //     this._addToTray();
-    // }
 }
 
 function init () {

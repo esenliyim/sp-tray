@@ -1,0 +1,51 @@
+method return time=1637156971.473397 sender=:1.319 -> destination=:1.323 serial=88 reply_serial=2
+   variant       array [
+         dict entry(
+            string "mpris:trackid"
+            variant                string "spotify:episode:36NBGjvw0gLhhDRuJ6WBfp"
+         )
+         dict entry(
+            string "mpris:length"
+            variant                uint64 1784763000
+         )
+         dict entry(
+            string "mpris:artUrl"
+            variant                string "https://i.scdn.co/image/ab6765630000ba8a5424ac87118b295a59a1f61f"
+         )
+         dict entry(
+            string "xesam:album"
+            variant                string "Business Wars"
+         )
+         dict entry(
+            string "xesam:albumArtist"
+            variant                array [
+                  string ""
+               ]
+         )
+         dict entry(
+            string "xesam:artist"
+            variant                array [
+                  string ""
+               ]
+         )
+         dict entry(
+            string "xesam:autoRating"
+            variant                double 0
+         )
+         dict entry(
+            string "xesam:discNumber"
+            variant                int32 0
+         )
+         dict entry(
+            string "xesam:title"
+            variant                string "Crypto Wars | We're in the (Virtual) Money | 7"
+         )
+         dict entry(
+            string "xesam:trackNumber"
+            variant                int32 0
+         )
+         dict entry(
+            string "xesam:url"
+            variant                string "https://open.spotify.com/episode/36NBGjvw0gLhhDRuJ6WBfp"
+         )
+      ]

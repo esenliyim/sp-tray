@@ -48,3 +48,15 @@ msgstr ""
 
 msgid "Right"
 msgstr ""
+
+msgid "str_artistlength"
+msgstr ""
+
+msgid "str_titlelength"
+msgstr ""
+
+msgid "str_albumlength"
+msgstr ""
+
+msgid "str_podcastformat"
+msgstr ""

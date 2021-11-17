@@ -57,6 +57,10 @@ var SpTrayButton = GObject.registerClass(
             this._settingSignals.push(this.settings.connect(`changed::off`, this.updateText.bind(this)));
             this._settingSignals.push(this.settings.connect(`changed::hidden-when-inactive`, this.updateText.bind(this)));
             this._settingSignals.push(this.settings.connect(`changed::display-format`, this.updateText.bind(this)));
+            this._settingSignals.push(this.settings.connect(`changed::podcast-format`, this.updateText.bind(this)));
+            this._settingSignals.push(this.settings.connect(`changed::title-max-length`, this.updateText.bind(this)));
+            this._settingSignals.push(this.settings.connect(`changed::artist-max-length`, this.updateText.bind(this)));
+            this._settingSignals.push(this.settings.connect(`changed::album-max-length`, this.updateText.bind(this)));
             this._settingSignals.push(this.settings.connect('changed::position', this._positionChanged.bind(this)));
         }
 
@@ -132,16 +136,40 @@ var SpTrayButton = GObject.registerClass(
                         button.set_text(this.settings.get_string("paused"));
                     }
                 } else {
+                    // thanks benjamingwynn for this
+                    // check if spotify is actually running and the metadata is "correct"
+                    if (metadata && !this.isReallySpotify(metadata)) {
+                        this.visible = false;
+                        return true;
+                    }
                     if (!this.visible) {
                         this.visible = true;
                     }
-                    let displayFormat = this.settings.get_string("display-format");
 
-                    let title = metadata['xesam:title'].get_string()[0];
-                    let album = metadata['xesam:album'].get_string()[0];
-                    let artist = metadata['xesam:albumArtist'].get_strv()[0];
+                    let maxTitleLength = this.settings.get_int("title-max-length");
+                    let maxArtistLength = this.settings.get_int("artist-max-length");
+                    let maxAlbumLength = this.settings.get_int("album-max-length");
 
-                    let output = displayFormat.replace("{artist}", artist).replace("{track}", title).replace("{album}", album);
+                    let trackType = this._getTrackType(metadata['mpris:trackid'].get_string()[0]);
+                    let format = trackType == "track"
+                        ? this.settings.get_string("display-format")
+                        : this.settings.get_string("podcast-format");
+
+                    let title = metadata['xesam:title'].get_string()[0].substring(0, maxTitleLength);
+                    let album = metadata['xesam:album'].get_string()[0].substring(0, maxAlbumLength);
+                    let artist = metadata['xesam:albumArtist'].get_strv()[0].substring(0, maxArtistLength);
+
+                    let output = "";
+                    if (trackType == "track") { // it's a song
+                        output = format.replace("{artist}", artist).replace("{track}", title).replace("{album}", album);
+                    } else if(trackType == "episode") { // it's a podcast
+                        output = format.replace("{track}", title).replace("{album}", album);
+                    } else {
+                        log("unknown track type");
+                        this.visible = false;
+                        return true;
+                    }
+
                     button.set_text(output);
                 }
             }
@@ -172,6 +200,21 @@ var SpTrayButton = GObject.registerClass(
                 }
                 Main.activateWindow(this._spotiWin); // pull up the spotify window
             }
+        }
+
+        isReallySpotify(metadata) {
+            if (metadata['mpris:trackid']) {
+                let trackId = metadata['mpris:trackid'].get_string()[0];
+                return trackId.startsWith("spotify:")
+            } else {
+                log("this isn't spotify!?")
+                return false;
+            }
+        }
+
+        _getTrackType(trackid) {
+            let first = trackid.indexOf(":");
+            return trackid.substring(first + 1, trackid.indexOf(":", first + 1));
         }
     }
 )

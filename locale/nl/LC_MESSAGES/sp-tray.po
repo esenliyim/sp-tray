@@ -21,10 +21,10 @@ msgstr ""
 msgid "str_formathint"
 msgstr ""
 "Hier kunt u, middels een reguliere uitdrukking, aangeven hoe de metagegevens moeten worden getoond.\n"
-"Geldige plaatshouders zijn {track}, {album}, en {artist}"
+"Geldige plaatshouders zijn {track}, {album}, {artist} voor nummers; {track}, {album} voor podcasts"
 
 msgid "str_dispformat"
-msgstr "Weergave"
+msgstr "Weergaveformaat voor nummers"
 
 msgid "str_inactive_hide_switch_label"
 msgstr "Widget verbergen als Spotify inactief is?"
@@ -52,3 +52,15 @@ msgstr "Midden"
 
 msgid "Right"
 msgstr "Rechts"
+
+msgid "str_artistlength"
+msgstr "Maximale lengte van het artiestenveld"
+
+msgid "str_titlelength"
+msgstr "Maximale lengte van het titelveld"
+
+msgid "str_albumlength"
+msgstr "Maximale lengte van het albumveld"
+
+msgid "str_podcastformat"
+msgstr "Weergaveformaat voor nummers"

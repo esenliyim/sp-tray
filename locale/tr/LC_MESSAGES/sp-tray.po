@@ -19,10 +19,10 @@ msgstr ""
 
 msgid "str_formathint"
 msgstr "Şarkı bilgilerinin nasıl gösterileceğini burada ayarlayabilirsiniz.\n"
-"Geçerli semboller: {track}, {album} ve {artist}"
+"Geçerli semboller: şarkılar için {track}, {album} ve {artist}; podcastler için {track}, {album}"
 
 msgid "str_dispformat"
-msgstr "Gösterim formatı"
+msgstr "Şarkı gösterim formatı"
 
 msgid "str_inactive_hide_switch_label"
 msgstr "Spotify kapalıyken widget'ı gizle?"
@@ -50,3 +50,15 @@ msgstr "Orta"
 
 msgid "Right"
 msgstr "Sağ"
+
+msgid "str_artistlength"
+msgstr "Sanatçı alanı maks. uzunluğu"
+
+msgid "str_titlelength"
+msgstr "İsim alanı maks. uzunluğu"
+
+msgid "str_albumlength"
+msgstr "Albüm alanı maks. uzunluğu"
+
+msgid "str_podcastformat"
+msgstr "Podcast gösterim formatı"

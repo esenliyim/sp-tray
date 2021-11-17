@@ -1,6 +1,24 @@
 <?xml version="1.0"?>
 <interface domain="sp-tray">
 
+    <object class="GtkAdjustment" id="title-button-adj">
+        <property name="lower">5</property>
+        <property name="upper">200</property>
+        <property name="step_increment">1</property>
+    </object>
+
+    <object class="GtkAdjustment" id="artist-button-adj">
+        <property name="lower">5</property>
+        <property name="upper">200</property>
+        <property name="step_increment">1</property>
+    </object>
+
+    <object class="GtkAdjustment" id="album-button-adj">
+        <property name="lower">5</property>
+        <property name="upper">200</property>
+        <property name="step_increment">1</property>
+    </object>
+
     <object class="GtkBox" id="prefs_widget">
 
         <child>
@@ -55,6 +73,126 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <signal name="clicked" handler="on_resetFormat_clicked" swapped="no" />
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
+                <child>
+                    <object class="GtkBox">
+                        <property name="spacing">12</property>
+                        <property name="margin-start">12</property>
+                        <child>
+                            <object class="GtkLabel">
+                                <property name="label" translatable="yes">str_podcastformat</property>
+                                <property name="hexpand">true</property>
+                                <property name="halign">1</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkEntry" id="podcast_format">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="show_emoji_icon">True</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkButton" id="resetPodcastFormat">
+                                <property name="label" translatable="yes">↺</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_resetPodcastFormat_clicked" swapped="no" />
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
+                <child>
+                    <object class="GtkBox">
+                        <property name="spacing">12</property>
+                        <property name="margin-start">12</property>
+                        <child>
+                            <object class="GtkLabel">
+                                <property name="label" translatable="yes">str_titlelength</property>
+                                <property name="hexpand">true</property>
+                                <property name="halign">1</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkSpinButton" id="title_length">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="adjustment">title-button-adj</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkButton" id="resetTitleLength">
+                                <property name="label">↺</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_resetTitleLength_clicked" swapped="no" />
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
+                <child>
+                    <object class="GtkBox">
+                        <property name="spacing">12</property>
+                        <property name="margin-start">12</property>
+                        <child>
+                            <object class="GtkLabel">
+                                <property name="label" translatable="yes">str_artistlength</property>
+                                <property name="hexpand">true</property>
+                                <property name="halign">1</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkSpinButton" id="artist_length">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="adjustment">artist-button-adj</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkButton" id="resetArtistLength">
+                                <property name="label">↺</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_resetArtistLength_clicked" swapped="no" />
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
+                <child>
+                    <object class="GtkBox">
+                        <property name="spacing">12</property>
+                        <property name="margin-start">12</property>
+                        <child>
+                            <object class="GtkLabel">
+                                <property name="label" translatable="yes">str_albumlength</property>
+                                <property name="hexpand">true</property>
+                                <property name="halign">1</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkSpinButton" id="album_length">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="adjustment">album-button-adj</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkButton" id="resetAlbumLength">
+                                <property name="label">↺</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_resetAlbumLength_clicked" swapped="no" />
                             </object>
                         </child>
                     </object>
@@ -236,7 +374,7 @@
                         </child>
                     </object>
                 </child>
-                
+
             </object>
         </child>
     </object>

@@ -19,10 +19,10 @@ msgstr ""
 
 msgid "str_formathint"
 msgstr "Here you can change the expression that defines how the metadata is displayed.\n"
-"Valid placeholders are {track}, {album}, and {artist}"
+"Valid placeholders are: {track}, {album}, and {artist} for songs; {track}, {album} for podcasts"
 
 msgid "str_dispformat"
-msgstr "Display format"
+msgstr "Display format for songs"
 
 msgid "str_inactive_hide_switch_label"
 msgstr "Hide widget when Spotify is inactive?"
@@ -50,3 +50,15 @@ msgstr "Center"
 
 msgid "Right"
 msgstr "Right"
+
+msgid "str_artistlength"
+msgstr "Max. artist field length"
+
+msgid "str_titlelength"
+msgstr "Max. title field length"
+
+msgid "str_albumlength"
+msgstr "Max. album field length"
+
+msgid "str_podcastformat"
+msgstr "Display format for podcasts"
