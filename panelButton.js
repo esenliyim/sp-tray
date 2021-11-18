@@ -56,6 +56,7 @@ var SpTrayButton = GObject.registerClass(
             this._settingSignals.push(this.settings.connect(`changed::paused`, this.updateText.bind(this)));
             this._settingSignals.push(this.settings.connect(`changed::off`, this.updateText.bind(this)));
             this._settingSignals.push(this.settings.connect(`changed::hidden-when-inactive`, this.updateText.bind(this)));
+            this._settingSignals.push(this.settings.connect(`changed::hidden-when-paused`, this.updateText.bind(this)));
             this._settingSignals.push(this.settings.connect(`changed::display-format`, this.updateText.bind(this)));
             this._settingSignals.push(this.settings.connect(`changed::podcast-format`, this.updateText.bind(this)));
             this._settingSignals.push(this.settings.connect(`changed::title-max-length`, this.updateText.bind(this)));
@@ -118,21 +119,30 @@ var SpTrayButton = GObject.registerClass(
             let button = this.ui.get('label');
             let status = this.spotifyProxy.PlaybackStatus;
 
-            if (typeof (status) !== 'string') {
-                let hidden = this.settings.get_boolean("hidden-when-inactive");
-                if (hidden) {
-                    this.visible = false;
+            if (!status) { // spotify is inactive
+                if (this.settings.get_boolean("hidden-when-inactive")) {
+                    if (this.visible) {
+                        this.visible = false;
+                    }
                 } else {
+                    if (!this.visible) {
+                        this.visible = true;
+                    }
                     button.set_text(this.settings.get_string("off"));
                 }
-            } else {
+            } else { //spotify is active and returning dbus thingamajigs
                 let metadata = this.spotifyProxy.Metadata;
 
                 if (status == "Paused") {
                     let hidden = this.settings.get_boolean("hidden-when-paused");
                     if (hidden) {
-                        this.visible = false;
+                        if (this.visible) {
+                            this.visible = false;
+                        }
                     } else {
+                        if (!this.visible) {
+                            this.visible = true;
+                        }
                         button.set_text(this.settings.get_string("paused"));
                     }
                 } else {

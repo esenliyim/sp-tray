@@ -16,25 +16,25 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "str_formathint"
+msgid "Valid placeholders: {track}, {album}, and {artist} for songs; {track}, {album} for podcasts"
 msgstr ""
 
-msgid "str_dispformat"
+msgid "Display format for songs"
 msgstr ""
 
-msgid "str_inactive_hide_switch_label"
+msgid "Hide widget when Spotify is inactive?"
 msgstr ""
 
-msgid "str_inactive_icon_label"
+msgid "Spotify is inactive"
 msgstr ""
 
-msgid "str_paused_hide_switch_label"
+msgid "Hide widget when playback is paused?"
 msgstr ""
 
-msgid "str_paused_icon_label"
+msgid "Paused"
 msgstr ""
 
-msgid "str_defaults_button_label"
+msgid "Restore defaults"
 msgstr ""
 
 msgid "Position in panel"
@@ -49,14 +49,14 @@ msgstr ""
 msgid "Right"
 msgstr ""
 
-msgid "str_artistlength"
+msgid "Max. artist field length"
 msgstr ""
 
-msgid "str_titlelength"
+msgid "Max. title field length"
 msgstr ""
 
-msgid "str_albumlength"
+msgid "Max. album field length"
 msgstr ""
 
-msgid "str_podcastformat"
+msgid "Display format for podcasts"
 msgstr ""

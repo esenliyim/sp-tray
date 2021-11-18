@@ -17,26 +17,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "str_formathint"
-msgstr "Şarkı bilgilerinin nasıl gösterileceğini burada ayarlayabilirsiniz.\n"
-"Geçerli semboller: şarkılar için {track}, {album} ve {artist}; podcastler için {track}, {album}"
+msgid "Valid placeholders: {track}, {album}, and {artist} for songs; {track}, {album} for podcasts"
+msgstr "Geçerli semboller: şarkılar için {track}, {album} ve {artist}; podcastler için {track}, {album}"
 
-msgid "str_dispformat"
+msgid "Display format for songs"
 msgstr "Şarkı gösterim formatı"
 
-msgid "str_inactive_hide_switch_label"
+msgid "Hide widget when Spotify is inactive?"
 msgstr "Spotify kapalıyken widget'ı gizle?"
 
-msgid "str_inactive_icon_label"
+msgid "Spotify is inactive"
 msgstr "Spotify kapalı"
 
-msgid "str_paused_hide_switch_label"
+msgid "Hide widget when playback is paused?"
 msgstr "Müzik duraklatıldığında widget'ı gizle?"
 
-msgid "str_paused_icon_label"
+msgid "Paused"
 msgstr "Duraklatıldı"
 
-msgid "str_defaults_button_label"
+msgid "Restore defaults"
 msgstr "Her şeyi sıfırla"
 
 msgid "Position in panel"
@@ -51,14 +50,14 @@ msgstr "Orta"
 msgid "Right"
 msgstr "Sağ"
 
-msgid "str_artistlength"
+msgid "Max. artist field length"
 msgstr "Sanatçı alanı maks. uzunluğu"
 
-msgid "str_titlelength"
+msgid "Max. title field length"
 msgstr "İsim alanı maks. uzunluğu"
 
-msgid "str_albumlength"
+msgid "Max. album field length"
 msgstr "Albüm alanı maks. uzunluğu"
 
-msgid "str_podcastformat"
+msgid "Display format for podcasts"
 msgstr "Podcast gösterim formatı"

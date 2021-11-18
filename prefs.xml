@@ -40,7 +40,7 @@
                         <property name="margin-start">12</property>
                         <child>
                             <object class="GtkLabel">
-                                <property name="label" translatable="yes">str_formathint</property>
+                                <property name="label" translatable="yes">Valid placeholders: {track}, {album}, and {artist} for songs; {track}, {album} for podcasts</property>
                                 <property name="hexpand">true</property>
                                 <property name="halign">1</property>
                             </object>
@@ -54,7 +54,7 @@
                         <property name="margin-start">12</property>
                         <child>
                             <object class="GtkLabel">
-                                <property name="label" translatable="yes">str_dispformat</property>
+                                <property name="label" translatable="yes">Display format for songs</property>
                                 <property name="hexpand">true</property>
                                 <property name="halign">1</property>
                             </object>
@@ -84,7 +84,7 @@
                         <property name="margin-start">12</property>
                         <child>
                             <object class="GtkLabel">
-                                <property name="label" translatable="yes">str_podcastformat</property>
+                                <property name="label" translatable="yes">Display format for podcasts</property>
                                 <property name="hexpand">true</property>
                                 <property name="halign">1</property>
                             </object>
@@ -114,7 +114,7 @@
                         <property name="margin-start">12</property>
                         <child>
                             <object class="GtkLabel">
-                                <property name="label" translatable="yes">str_titlelength</property>
+                                <property name="label" translatable="yes">Max. title field length</property>
                                 <property name="hexpand">true</property>
                                 <property name="halign">1</property>
                             </object>
@@ -144,7 +144,7 @@
                         <property name="margin-start">12</property>
                         <child>
                             <object class="GtkLabel">
-                                <property name="label" translatable="yes">str_artistlength</property>
+                                <property name="label" translatable="yes">Max. artist field length</property>
                                 <property name="hexpand">true</property>
                                 <property name="halign">1</property>
                             </object>
@@ -174,7 +174,7 @@
                         <property name="margin-start">12</property>
                         <child>
                             <object class="GtkLabel">
-                                <property name="label" translatable="yes">str_albumlength</property>
+                                <property name="label" translatable="yes">Max. album field length</property>
                                 <property name="hexpand">true</property>
                                 <property name="halign">1</property>
                             </object>
@@ -211,7 +211,7 @@
                         <property name="spacing">12</property>
                         <child>
                             <object class="GtkLabel">
-                                <property translatable="yes" name="label">str_inactive_hide_switch_label</property>
+                                <property translatable="yes" name="label">Hide widget when Spotify is inactive?</property>
                                 <property name="hexpand">true</property>
                                 <property name="halign">1</property>
                             </object>
@@ -230,7 +230,7 @@
                         <property name="margin-start">12</property>
                         <child>
                             <object class="GtkLabel">
-                                <property name="label" translatable="yes">str_inactive_icon_label</property>
+                                <property name="label" translatable="yes">Spotify is inactive</property>
                                 <property name="hexpand">true</property>
                                 <property name="halign">1</property>
                             </object>
@@ -268,7 +268,7 @@
                         <property name="spacing">12</property>
                         <child>
                             <object class="GtkLabel">
-                                <property translatable="yes" name="label">str_paused_hide_switch_label</property>
+                                <property translatable="yes" name="label">Hide widget when playback is paused?</property>
                                 <property name="hexpand">true</property>
                                 <property name="halign">1</property>
                             </object>
@@ -287,7 +287,7 @@
                         <property name="margin-start">12</property>
                         <child>
                             <object class="GtkLabel">
-                                <property name="label" translatable="yes">str_paused_icon_label</property>
+                                <property name="label" translatable="yes">Paused</property>
                                 <property name="hexpand">true</property>
                                 <property name="halign">1</property>
                             </object>
@@ -360,7 +360,7 @@
 
                         <child>
                             <object class="GtkButton" id="resetButton">
-                                <property name="label" translatable="yes">str_defaults_button_label</property>
+                                <property name="label" translatable="yes">Restore defaults</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>

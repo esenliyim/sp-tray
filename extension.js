@@ -40,6 +40,7 @@ class SpTrayExtension {
     disable() {
         this.extensionButton.destroy();
         this.extensionButton = null;
+        this.settings = null;
     }
 
     _getPosition(pos) {
