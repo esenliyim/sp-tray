@@ -155,9 +155,20 @@ var SpTrayButton = GObject.registerClass(
                         ? this.settings.get_string("display-format")
                         : this.settings.get_string("podcast-format");
 
-                    let title = metadata['xesam:title'].get_string()[0].substring(0, maxTitleLength);
-                    let album = metadata['xesam:album'].get_string()[0].substring(0, maxAlbumLength);
-                    let artist = metadata['xesam:albumArtist'].get_strv()[0].substring(0, maxArtistLength);
+                    let title = metadata['xesam:title'].get_string()[0];
+                    if (title.length > maxTitleLength) {
+                    	title = title.slice(0,maxTitleLength) + "...";
+                    }
+                    
+                    let album = metadata['xesam:album'].get_string()[0];
+                    if (album.length > maxAlbumLength) {
+                    	album = album.slice(0,maxAlbumLength) + "...";
+                    }
+                    	
+                    let artist = metadata['xesam:albumArtist'].get_strv()[0];
+                    if (artist.length > maxArtistLength) {
+                    	artist = artist.slice(0,maxArtistLength) + "...";
+                    }
 
                     let output = "";
                     if (trackType == "track") { // it's a song
