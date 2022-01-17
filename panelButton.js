@@ -175,7 +175,7 @@ var SpTrayButton = GObject.registerClass(
                     	album = album.slice(0,maxAlbumLength) + "...";
                     }
                     	
-                    let artist = metadata['xesam:albumArtist'].get_strv()[0];
+                    let artist = metadata['xesam:artist'].get_strv()[0];
                     if (artist.length > maxArtistLength) {
                     	artist = artist.slice(0,maxArtistLength) + "...";
                     }
