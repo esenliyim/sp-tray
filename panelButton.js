@@ -69,7 +69,6 @@ var SpTrayButton = GObject.registerClass(
             const box = new St.BoxLayout({ style_class: 'panel-status-menu-box' });
             // the 'text' variable below is what's actually shown on the tray
             let panelButtonText = new St.Label({
-                style_class: "taskbarPanelText",
                 text: this.settings.get_string('starting'),
                 y_align: Clutter.ActorAlign.CENTER
             });
