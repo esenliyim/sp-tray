@@ -132,7 +132,6 @@ var SpTrayButton = GObject.registerClass(
                 }
             } else { //spotify is active and returning dbus thingamajigs
                 let metadata = this.spotifyProxy.Metadata;
-
                 if (status == "Paused") {
                     let hidden = this.settings.get_boolean("hidden-when-paused");
                     if (hidden) {
@@ -161,7 +160,7 @@ var SpTrayButton = GObject.registerClass(
                     let maxAlbumLength = this.settings.get_int("album-max-length");
 
                     let trackType = this._getTrackType(metadata['mpris:trackid'].get_string()[0]);
-                    let format = trackType == "track"
+                    let format = trackType == "track" || trackType == "local"
                         ? this.settings.get_string("display-format")
                         : this.settings.get_string("podcast-format");
 
@@ -171,6 +170,7 @@ var SpTrayButton = GObject.registerClass(
                     }
                     
                     let album = metadata['xesam:album'].get_string()[0];
+
                     if (album.length > maxAlbumLength) {
                     	album = album.slice(0,maxAlbumLength) + "...";
                     }
@@ -181,8 +181,8 @@ var SpTrayButton = GObject.registerClass(
                     }
 
                     let output = "";
-                    if (trackType == "track") { // it's a song
-                        output = format.replace("{artist}", artist).replace("{track}", title).replace("{album}", album);
+                    if (trackType == "track" || trackType == "local") { // it's a song or local user song
+                      output = format.replace("{artist}", artist).replace("{track}", title).replace("{album}", album);
                     } else if(trackType == "episode") { // it's a podcast
                         output = format.replace("{track}", title).replace("{album}", album);
                     } else {
