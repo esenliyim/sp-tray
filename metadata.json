@@ -1,14 +1,14 @@
 {
     "description" : "Adds a button to the panel that shows currently playing song on Spotify",
-    "name" : "spotify-tray-mod-label",
+    "name" : "spotify-tray",
     "shell-version" : [
         "3.36",
 	    "3.38",
         "40",
         "41"
     ],
-    "url" : "https://github.com/kiltzx/sp-tray",
-    "uuid" : "sp-tray-mod@sp-tray.esenliyim.github.com",
+    "url" : "https://github.com/esenliyim/sp-tray",
+    "uuid" : "sp-tray@sp-tray.esenliyim.github.com",
     "version" : 10,
     "settings-schema" : "org.gnome.shell.extensions.sp-tray"
 }
