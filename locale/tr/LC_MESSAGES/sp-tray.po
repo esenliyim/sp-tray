@@ -61,3 +61,15 @@ msgstr "Albüm alanı maks. uzunluğu"
 
 msgid "Display format for podcasts"
 msgstr "Podcast gösterim formatı"
+
+msgid "Show Spotify logo"
+msgstr "Spotify logosu"
+
+msgid "Don't show"
+msgstr "Gösterme"
+
+msgid "Left of label"
+msgstr "Sol tarafta"
+
+msgid "Right of label"
+msgstr "Sağ tarafta"

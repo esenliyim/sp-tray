@@ -62,3 +62,15 @@ msgstr "Maximale lengte van het albumveld"
 
 msgid "Display format for podcasts"
 msgstr "Weergaveformaat voor nummers"
+
+msgid "Show Spotify logo"
+msgstr "Spotify-logo weergeven"
+
+msgid "Don't show"
+msgstr "Niet laten zien"
+
+msgid "Left of label"
+msgstr "Aan de linkerkant"
+
+msgid "Right of label"
+msgstr "Aan de rechterkant"

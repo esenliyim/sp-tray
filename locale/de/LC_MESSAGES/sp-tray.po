@@ -61,3 +61,15 @@ msgstr "Max. Länge des Album-Feldes"
 
 msgid "Display format for podcasts"
 msgstr "Anzeigeformat für Podcasts"
+
+msgid "Show Spotify logo"
+msgstr "Spotify-Logo anzeigen"
+
+msgid "Don't show"
+msgstr "Nicht anzeigen"
+
+msgid "Left of label"
+msgstr "Linke Seite vom Schild"
+
+msgid "Right of label"
+msgstr "Rechte Seite vom Schild"

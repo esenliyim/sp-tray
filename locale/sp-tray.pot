@@ -60,3 +60,15 @@ msgstr ""
 
 msgid "Display format for podcasts"
 msgstr ""
+
+msgid "Show Spotify logo"
+msgstr ""
+
+msgid "Don't show"
+msgstr ""
+
+msgid "Left of label"
+msgstr ""
+
+msgid "Right of label"
+msgstr ""

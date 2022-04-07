@@ -91,6 +91,10 @@ function buildPrefsWidget() {
                 on_resetPodcastFormat_clicked(connectObject) {
                     settings.reset("podcast-format");
                 }
+
+                on_resetLogo_clicked(connectObject) {
+                    settings.reset("logo-position");
+                }
             });
             registeredClass.push(SpBuilderScope);
         }
@@ -110,6 +114,7 @@ function buildPrefsWidget() {
     settings.bind('hidden-when-paused', builder.get_object('field_hidePaused'), 'active', Gio.SettingsBindFlags.DEFAULT);
     settings.bind('off', builder.get_object('field_notRunning'), 'text', Gio.SettingsBindFlags.DEFAULT);
     settings.bind('position', builder.get_object('box_position'), 'active', Gio.SettingsBindFlags.DEFAULT);
+    settings.bind('logo-position', builder.get_object('logo_position'), 'active', Gio.SettingsBindFlags.DEFAULT);
 
     // use connect_signals_full to attach signal handlers to buttons on gtk <4
     if (!_isGtk4) {
@@ -151,7 +156,11 @@ function buildPrefsWidget() {
 
             on_resetPodcastFormat_clicked(w) {
                 settings.reset("podcast-format");
-            }
+            },
+
+            on_resetLogo_clicked(w) {
+                settings.reset("logo-position");
+            },
 
         };
 
