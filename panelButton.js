@@ -320,7 +320,7 @@ var SpTrayButton = GObject.registerClass(
         isReallySpotify(metadata) {
             if (metadata["mpris:trackid"]) {
                 let trackId = metadata["mpris:trackid"].get_string()[0];
-                return trackId.startsWith("spotify:");
+                return trackId.startsWith("spotify:") || trackId.startsWith("/com/spotify")
             } else {
                 log("this isn't spotify!?");
                 return false;
@@ -328,8 +328,16 @@ var SpTrayButton = GObject.registerClass(
         }
 
         _getTrackType(trackid) {
-            let first = trackid.indexOf(":");
-            return trackid.substring(first + 1, trackid.indexOf(":", first + 1));
+            let trackType = "";
+            
+            if (trackid.startsWith("spotify:")) {
+                let first = trackid.indexOf(":");
+                trackType = trackid.substring(first + 1, trackid.indexOf(":", first + 1));
+            }
+            else if (trackid.startsWith("/com/spotify")) {
+                trackType = trackid.split("/")[3];
+            }
+            return trackType;    
         }
     }
 );
