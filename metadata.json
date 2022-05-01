@@ -1,5 +1,5 @@
 {
-    "description" : "Adds a button to the panel that shows currently playing song on Spotify",
+    "description" : "Adds a button to the panel that shows currently playing track on Spotify",
     "name" : "spotify-tray",
     "shell-version" : [
         "3.36",
@@ -10,6 +10,6 @@
     ],
     "url" : "https://github.com/esenliyim/sp-tray",
     "uuid" : "sp-tray@sp-tray.esenliyim.github.com",
-    "version" : 12,
+    "version" : 13,
     "settings-schema" : "org.gnome.shell.extensions.sp-tray"
 }

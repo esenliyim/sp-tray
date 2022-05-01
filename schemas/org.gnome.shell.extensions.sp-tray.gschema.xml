@@ -83,7 +83,7 @@ along with this program.If not, see < http://www.gnu.org/licenses/>. -->
         </key>
 
         <key type="i" name="logo-position">
-            <default>1</default>
+            <default>0</default>
             <summary>relative position of spotify's logo</summary>
             <range min="0" max="2" />
         </key>

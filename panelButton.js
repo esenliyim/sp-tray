@@ -318,11 +318,12 @@ var SpTrayButton = GObject.registerClass(
         }
 
         isReallySpotify(metadata) {
+            // There must be a 'trackid' field in the dbus reply, and it must start with either 'spotify:' or '/com/spotify'
             if (metadata["mpris:trackid"]) {
                 let trackId = metadata["mpris:trackid"].get_string()[0];
                 return trackId.startsWith("spotify:") || trackId.startsWith("/com/spotify")
             } else {
-                log("this isn't spotify!?");
+                // it's not spotify
                 return false;
             }
         }
