@@ -321,7 +321,7 @@ var SpTrayButton = GObject.registerClass(
             // There must be a 'trackid' field in the dbus reply, and it must start with either 'spotify:' or '/com/spotify'
             if (metadata["mpris:trackid"]) {
                 let trackId = metadata["mpris:trackid"].get_string()[0];
-                return trackId.startsWith("spotify:") || trackId.startsWith("/com/spotify")
+                return trackId.includes("spotify")
             } else {
                 // it's not spotify
                 return false;
@@ -337,6 +337,9 @@ var SpTrayButton = GObject.registerClass(
             }
             else if (trackid.startsWith("/com/spotify")) {
                 trackType = trackid.split("/")[3];
+            }
+            else if (trackid.startsWith("/org/ncspot")) {
+                trackType = trackid.split("/")[4];
             }
             return trackType;    
         }
