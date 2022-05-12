@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="spotify-tray">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/spotify-tray.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

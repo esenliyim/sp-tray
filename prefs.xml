@@ -320,14 +320,14 @@
                         <property name="margin-start">12</property>
                         <child>
                             <object class="GtkLabel">
-                                <property name="label" translatable="yes">Paused</property>
+                                <property name="label" translatable="yes">Paused ({metadata} to include metadata)</property>
                                 <property name="hexpand">true</property>
                                 <property name="halign">1</property>
                             </object>
                         </child>
                         <child>
                             <object class="GtkEntry" id="field_paused">
-                                <property name="max_length">4</property>
+                                <property name="max_length">16</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="show_emoji_icon">True</property>

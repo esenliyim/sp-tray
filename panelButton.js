@@ -16,7 +16,7 @@
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const Main = imports.ui.main;
-const { St, Clutter, GObject, GLib, Gio } = imports.gi;
+const {St, Clutter, GObject, GLib, Gio} = imports.gi;
 
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const ExtensionUtils = imports.misc.extensionUtils;
@@ -31,9 +31,32 @@ const spotifyDbus = `<node>
 </interface>
 </node>`;
 
+const supportedClients = [
+    {
+        name: "spotify version <1.84",
+        pattern: "spotify:",
+        idExtractor: (trackid) => (trackid.split(":")[2])
+        // idExtractor: (trackid) => {
+        //     let first = trackid.indexOf(":");
+        //     return trackid.substring(first + 1, trackid.indexOf(":", first + 1));
+        // }
+    },
+    {
+        name: "spotify version >1.84",
+        pattern: "/com/spotify",
+        idExtractor: (trackid) => (trackid.split("/")[3])
+    },
+    {
+        name: "ncspot",
+        pattern: "/org/ncspot",
+        idExtractor: (trackid) => (trackid.split("/")[4])
+    },
+]
+
 var SpTrayButton = GObject.registerClass(
-    { GTypeName: "SpTrayButton" },
+    {GTypeName: "SpTrayButton"},
     class SpTrayButton extends PanelMenu.Button {
+
         _init() {
             super._init(null, Me.metadata.name);
 
@@ -46,6 +69,7 @@ var SpTrayButton = GObject.registerClass(
             this._initUi();
 
             this.updateText();
+
         }
 
         _initSettings() {
@@ -112,9 +136,9 @@ var SpTrayButton = GObject.registerClass(
         }
 
         _initUi() {
-            const box = new St.BoxLayout({ style_class: "panel-status-menu-box" });
+            const box = new St.BoxLayout({style_class: "panel-status-menu-box"});
             this.ui.set("box", box);
-            
+
             this.ui.set("label", new St.Label({
                 text: this.settings.get_string("starting"),
                 y_align: Clutter.ActorAlign.CENTER,
@@ -202,7 +226,7 @@ var SpTrayButton = GObject.registerClass(
 
             if (!status) {
                 // spotify is inactive
-                if (this.settings.get_boolean("hidden-when-inactive")) {
+                if (this.settings.get_boolean("hidden-when-inactive") && this.visible) {
                     if (this.visible) {
                         this.visible = false;
                     }
@@ -214,78 +238,96 @@ var SpTrayButton = GObject.registerClass(
                 }
             } else {
                 //spotify is active and returning dbus thingamajigs
-                let metadata = this.spotifyProxy.Metadata;
-                if (status == "Paused") {
+                const metadata = this.spotifyProxy.Metadata;
+                const client = this.getSpotifyClient(metadata);
+                if (!metadata || !client) {
+                    this.visible = false;
+                    return true;
+                }
+                let text = '';
+                if (status === "Paused") {
                     let hidden = this.settings.get_boolean("hidden-when-paused");
                     if (hidden) {
                         if (this.visible) {
                             this.visible = false;
                         }
+                        return true;
                     } else {
                         if (!this.visible) {
                             this.visible = true;
                         }
-                        button.set_text(this.settings.get_string("paused"));
+                        text = this.settings.get_string("paused");
+                        if (text.includes("{metadata}")) {
+                            text = text.replace("{metadata}", this._makeTrackData(client, metadata))
+                        }
                     }
                 } else {
                     // thanks benjamingwynn for this
                     // check if spotify is actually running and the metadata is "correct"
-                    if (!metadata || !this.isReallySpotify(metadata)) {
-                        this.visible = false;
-                        return true;
-                    }
                     if (!this.visible) {
                         this.visible = true;
                     }
-
-                    let maxTitleLength = this.settings.get_int("title-max-length");
-                    let maxArtistLength = this.settings.get_int("artist-max-length");
-                    let maxAlbumLength = this.settings.get_int("album-max-length");
-
-                    let trackType = this._getTrackType(
-                        metadata["mpris:trackid"].get_string()[0]
-                    );
-                    let format =
-                        trackType == "track" || trackType == "local"
-                            ? this.settings.get_string("display-format")
-                            : this.settings.get_string("podcast-format");
-
-                    let title = metadata["xesam:title"].get_string()[0];
-                    if (title.length > maxTitleLength) {
-                        title = title.slice(0, maxTitleLength) + "...";
-                    }
-
-                    let album = metadata["xesam:album"].get_string()[0];
-
-                    if (album.length > maxAlbumLength) {
-                        album = album.slice(0, maxAlbumLength) + "...";
-                    }
-
-                    let artist = metadata["xesam:artist"].get_strv()[0];
-                    if (artist.length > maxArtistLength) {
-                        artist = artist.slice(0, maxArtistLength) + "...";
-                    }
-
-                    let output = "";
-                    if (trackType == "track" || trackType == "local") {
-                        // it's a song or local user song
-                        output = format
-                            .replace("{artist}", artist)
-                            .replace("{track}", title)
-                            .replace("{album}", album);
-                    } else if (trackType == "episode") {
-                        // it's a podcast
-                        output = format.replace("{track}", title).replace("{album}", album);
-                    } else {
-                        log("unknown track type");
-                        this.visible = false;
-                        return true;
-                    }
-
-                    button.set_text(output);
+                    text = this._makeTrackData(client, metadata)
                 }
+                button.set_text(text);
             }
             return true;
+        }
+
+        _makeTrackData(client, metadata) {
+
+            const trackType = client.idExtractor(metadata["mpris:trackid"].get_string()[0])
+            let format = this._getFormat(trackType);
+
+            if (!format) {
+                log("unknown track type");
+                this.visible = false;
+                return true;
+            }
+
+            return this._generateText(format, metadata)
+        }
+
+        _getFormat(trackType) {
+            switch (trackType) {
+                case "track":
+                case "local":
+                    return this.settings.get_string("display-format")
+                case "episode":
+                    return this.settings.get_string("podcast-format")
+                default:
+                    return null;
+            }
+        }
+
+        _generateText(format, metadata) {
+
+            let maxTitleLength = this.settings.get_int("title-max-length");
+            let maxArtistLength = this.settings.get_int("artist-max-length");
+            let maxAlbumLength = this.settings.get_int("album-max-length");
+
+            let title = metadata["xesam:title"].get_string()[0];
+            if (title.length > maxTitleLength) {
+                title = title.slice(0, maxTitleLength) + "...";
+            }
+
+            let album = metadata["xesam:album"].get_string()[0];
+
+            if (album.length > maxAlbumLength) {
+                album = album.slice(0, maxAlbumLength) + "...";
+            }
+
+            // As of May 2022 podcasts return a blank string for this field, but I'm leaving this in, in case that
+            // changes in the future and the artist field starts returning something
+            let artist = metadata["xesam:artist"].get_strv()[0];
+            if (artist.length > maxArtistLength) {
+                artist = artist.slice(0, maxArtistLength) + "...";
+            }
+            return format
+                .replace("{artist}", artist)
+                .replace("{track}", title)
+                .replace("{album}", album)
+                .trim()
         }
 
         // many thanks to mheine's implementation
@@ -317,28 +359,14 @@ var SpTrayButton = GObject.registerClass(
             }
         }
 
-        isReallySpotify(metadata) {
+        getSpotifyClient(metadata) {
             // There must be a 'trackid' field in the dbus reply, and it must start with either 'spotify:' or '/com/spotify'
-            if (metadata["mpris:trackid"]) {
-                let trackId = metadata["mpris:trackid"].get_string()[0];
-                return trackId.startsWith("spotify:") || trackId.startsWith("/com/spotify")
-            } else {
-                // it's not spotify
-                return false;
+            if (!metadata["mpris:trackid"]) {
+                return null;
             }
-        }
-
-        _getTrackType(trackid) {
-            let trackType = "";
-            
-            if (trackid.startsWith("spotify:")) {
-                let first = trackid.indexOf(":");
-                trackType = trackid.substring(first + 1, trackid.indexOf(":", first + 1));
-            }
-            else if (trackid.startsWith("/com/spotify")) {
-                trackType = trackid.split("/")[3];
-            }
-            return trackType;    
+            const trackId = metadata["mpris:trackid"].get_string()[0];
+            const client = supportedClients.filter(client => (trackId.startsWith(client.pattern)));
+            return client.length > 0 ? client[0] : null;
         }
     }
 );
