@@ -36,10 +36,6 @@ const supportedClients = [
         name: "spotify version <1.84",
         pattern: "spotify:",
         idExtractor: (trackid) => (trackid.split(":")[2])
-        // idExtractor: (trackid) => {
-        //     let first = trackid.indexOf(":");
-        //     return trackid.substring(first + 1, trackid.indexOf(":", first + 1));
-        // }
     },
     {
         name: "spotify version >1.84",

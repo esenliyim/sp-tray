@@ -32,8 +32,8 @@ msgstr "Spotify kapalı"
 msgid "Hide widget when playback is paused?"
 msgstr "Müzik duraklatıldığında widget'ı gizle?"
 
-msgid "Paused"
-msgstr "Duraklatıldı"
+msgid "Paused ({metadata} to include metadata)"
+msgstr "Duraklatıldı (parça bilgisi için {metadata})"
 
 msgid "Restore defaults"
 msgstr "Her şeyi sıfırla"

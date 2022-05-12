@@ -32,8 +32,8 @@ msgstr "Spotify ist inaktiv"
 msgid "Hide widget when playback is paused?"
 msgstr "Widget ausblenden wenn Wiedergabe pausiert?"
 
-msgid "Paused"
-msgstr "Pausiert"
+msgid "Paused ({metadata} to include metadata)"
+msgstr "Pausiert ({metadata} für Metadaten)"
 
 msgid "Restore defaults"
 msgstr "Alle zurücksetzen"
