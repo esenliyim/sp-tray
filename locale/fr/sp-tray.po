@@ -1,0 +1,75 @@
+# German translations for sp-tray package.
+# Copyright (C) 2021 Emre Senliyim
+# This file is distributed under the same license as the sp-tray package.
+# Emre Senliyim <esenliyim@gmail.com>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-06-03 17:42+0200\n"
+"PO-Revision-Date: 2020-06-03 17:45+0200\n"
+"Last-Translator: whiterqbbit\n"
+"Language-Team: french\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Valid placeholders: {track}, {album}, and {artist} for songs; {track}, {album} for podcasts"
+msgstr "Champs valides: {track}, {album}, {artist} pour les musiques; {track}, {album} pour les podcasts"
+
+msgid "Display format for songs"
+msgstr "Format d'affichage des chansons"
+
+msgid "Hide widget when Spotify is inactive?"
+msgstr "Masquer le widget quand Spotify est inactif ?"
+
+msgid "Spotify is inactive"
+msgstr "Spotify est inactif"
+
+msgid "Hide widget when playback is paused?"
+msgstr "Masquer le widget quand Spotify est en pause ?"
+
+msgid "Paused ({metadata} to include metadata)"
+msgstr "En pause ({metadata} pour inclure les métadonnées)"
+
+msgid "Restore defaults"
+msgstr "Restaurer les paramètres par défaut"
+
+msgid "Position in panel"
+msgstr "Position sur le panneau"
+
+msgid "Left"
+msgstr "Gauche"
+
+msgid "Center"
+msgstr "Milieu"
+
+msgid "Right"
+msgstr "Droite"
+
+msgid "Max. artist field length"
+msgstr "Longueur maximale du champ artiste"
+
+msgid "Max. title field length"
+msgstr "Longueur maximale du champ titre"
+
+msgid "Max. album field length"
+msgstr "Longueur maximale du champ album"
+
+msgid "Display format for podcasts"
+msgstr "Format d'affichage des podcasts"
+
+msgid "Show Spotify logo"
+msgstr "Affichage du logo Spotify"
+
+msgid "Don't show"
+msgstr "Ne pas afficher"
+
+msgid "Left of label"
+msgstr "À gauche"
+
+msgid "Right of label"
+msgstr "À droite"
