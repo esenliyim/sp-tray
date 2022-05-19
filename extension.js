@@ -13,7 +13,7 @@
 //     You should have received a copy of the GNU General Public License
 // along with this program.If not, see < http://www.gnu.org/licenses/>.
 
-'use strict';
+"use strict";
 
 const Main = imports.ui.main;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
@@ -33,8 +33,13 @@ class SpTrayExtension {
     }
 
     _addToTray() {
-        let pos = this.settings.get_int('position');
-        Main.panel.addToStatusArea('SpTray', this.extensionButton, pos == 2 ? 0 : -1, this._getPosition(pos));
+        let pos = this.settings.get_int("position");
+        Main.panel.addToStatusArea(
+            "SpTray",
+            this.extensionButton,
+            pos == 2 ? 0 : -1,
+            this._getPosition(pos)
+        );
     }
 
     disable() {
@@ -44,11 +49,11 @@ class SpTrayExtension {
     }
 
     _getPosition(pos) {
-        let positions = ['left' , 'center', 'right'];
+        let positions = ["left", "center", "right"];
         return positions[pos];
     }
 }
 
-function init () {
+function init() {
     return new SpTrayExtension();
 }

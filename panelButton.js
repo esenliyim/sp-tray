@@ -16,7 +16,7 @@
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const Main = imports.ui.main;
-const {St, Clutter, GObject, GLib, Gio} = imports.gi;
+const { St, Clutter, GObject, GLib, Gio } = imports.gi;
 
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const ExtensionUtils = imports.misc.extensionUtils;
@@ -35,24 +35,23 @@ const supportedClients = [
     {
         name: "spotify version <1.84",
         pattern: "spotify:",
-        idExtractor: (trackid) => (trackid.split(":")[2])
+        idExtractor: (trackid) => trackid.split(":")[2]
     },
     {
         name: "spotify version >1.84",
         pattern: "/com/spotify",
-        idExtractor: (trackid) => (trackid.split("/")[3])
+        idExtractor: (trackid) => trackid.split("/")[3]
     },
     {
         name: "ncspot",
         pattern: "/org/ncspot",
-        idExtractor: (trackid) => (trackid.split("/")[4])
-    },
-]
+        idExtractor: (trackid) => trackid.split("/")[4]
+    }
+];
 
 var SpTrayButton = GObject.registerClass(
-    {GTypeName: "SpTrayButton"},
+    { GTypeName: "SpTrayButton" },
     class SpTrayButton extends PanelMenu.Button {
-
         _init() {
             super._init(null, Me.metadata.name);
 
@@ -65,7 +64,6 @@ var SpTrayButton = GObject.registerClass(
             this._initUi();
 
             this.updateText();
-
         }
 
         _initSettings() {
@@ -73,8 +71,18 @@ var SpTrayButton = GObject.registerClass(
 
             // connect relevant settings to the button so that it can be instantly updated when they're changed
             // store the connected signals in an array for easy disconnection later on
-            this._settingSignals.push(this.settings.connect(`changed::paused`, this.updateText.bind(this)));
-            this._settingSignals.push(this.settings.connect(`changed::off`, this.updateText.bind(this)));
+            this._settingSignals.push(
+                this.settings.connect(
+                    `changed::paused`,
+                    this.updateText.bind(this)
+                )
+            );
+            this._settingSignals.push(
+                this.settings.connect(
+                    `changed::off`,
+                    this.updateText.bind(this)
+                )
+            );
             this._settingSignals.push(
                 this.settings.connect(
                     `changed::hidden-when-inactive`,
@@ -132,18 +140,26 @@ var SpTrayButton = GObject.registerClass(
         }
 
         _initUi() {
-            const box = new St.BoxLayout({style_class: "panel-status-menu-box"});
+            const box = new St.BoxLayout({
+                style_class: "panel-status-menu-box"
+            });
             this.ui.set("box", box);
 
-            this.ui.set("label", new St.Label({
-                text: this.settings.get_string("starting"),
-                y_align: Clutter.ActorAlign.CENTER,
-            }));
-            this.ui.set("icon", new St.Icon({
-                icon_name: "spotify",
-                style_class: "system-status-icon",
-            }))
-            this._handleLogoDisplay()
+            this.ui.set(
+                "label",
+                new St.Label({
+                    text: this.settings.get_string("starting"),
+                    y_align: Clutter.ActorAlign.CENTER
+                })
+            );
+            this.ui.set(
+                "icon",
+                new St.Icon({
+                    icon_name: "spotify",
+                    style_class: "system-status-icon"
+                })
+            );
+            this._handleLogoDisplay();
 
             // listen to spotify status changes to update the tray display immediately. no busy waiting
             this._settingSignals.push(
@@ -154,37 +170,44 @@ var SpTrayButton = GObject.registerClass(
             );
 
             // TODO signals array?
-            this._signals.push(this._pressEvent = this.connect(
-                "button-press-event",
-                this.showSpotify.bind(this)
-            ));
+            this._signals.push(
+                (this._pressEvent = this.connect(
+                    "button-press-event",
+                    this.showSpotify.bind(this)
+                ))
+            );
 
             this.add_child(box);
         }
 
         _initDbus() {
-            let spotifyProxyWrapper = Gio.DBusProxy.makeProxyWrapper(spotifyDbus);
-            this.spotifyProxy = spotifyProxyWrapper(Gio.DBus.session, dest, path);
+            let spotifyProxyWrapper =
+                Gio.DBusProxy.makeProxyWrapper(spotifyDbus);
+            this.spotifyProxy = spotifyProxyWrapper(
+                Gio.DBus.session,
+                dest,
+                path
+            );
         }
 
         // if the spotify logo is to be shown, insert it where appropriate (sounded better in my head)
         _handleLogoDisplay() {
-            let box = this.ui.get("box")
+            let box = this.ui.get("box");
             switch (this.settings.get_int("logo-position")) {
                 case 0:
-                    box.remove_all_children()
-                    box.add_child(this.ui.get("label"))
-                    break
+                    box.remove_all_children();
+                    box.add_child(this.ui.get("label"));
+                    break;
                 case 1:
-                    box.remove_all_children()
-                    box.add_child(this.ui.get("icon"))
-                    box.add_child(this.ui.get("label"))
-                    break
+                    box.remove_all_children();
+                    box.add_child(this.ui.get("icon"));
+                    box.add_child(this.ui.get("label"));
+                    break;
                 case 2:
-                    box.remove_all_children()
-                    box.add_child(this.ui.get("label"))
-                    box.add_child(this.ui.get("icon"))
-                    break
+                    box.remove_all_children();
+                    box.add_child(this.ui.get("label"));
+                    box.add_child(this.ui.get("icon"));
+                    break;
             }
         }
 
@@ -195,11 +218,14 @@ var SpTrayButton = GObject.registerClass(
             let positions = [
                 Main.panel._leftBox,
                 Main.panel._centerBox,
-                Main.panel._rightBox,
+                Main.panel._rightBox
             ];
 
             let pos = this.settings.get_int("position");
-            positions[pos].insert_child_at_index(this.container, pos == 2 ? 0 : -1);
+            positions[pos].insert_child_at_index(
+                this.container,
+                pos == 2 ? 0 : -1
+            );
         }
 
         destroy() {
@@ -207,9 +233,7 @@ var SpTrayButton = GObject.registerClass(
             this._settingSignals.forEach((signal) =>
                 this.settings.disconnect(signal)
             );
-            this._signals.forEach((signal) =>
-                this.settings.disconnect(signal)
-            );
+            this._signals.forEach((signal) => this.settings.disconnect(signal));
             // destroy all ui elements
             this.ui.forEach((element) => element.destroy());
             super.destroy();
@@ -222,7 +246,10 @@ var SpTrayButton = GObject.registerClass(
 
             if (!status) {
                 // spotify is inactive
-                if (this.settings.get_boolean("hidden-when-inactive") && this.visible) {
+                if (
+                    this.settings.get_boolean("hidden-when-inactive") &&
+                    this.visible
+                ) {
                     if (this.visible) {
                         this.visible = false;
                     }
@@ -240,9 +267,10 @@ var SpTrayButton = GObject.registerClass(
                     this.visible = false;
                     return true;
                 }
-                let text = '';
+                let text = "";
                 if (status === "Paused") {
-                    let hidden = this.settings.get_boolean("hidden-when-paused");
+                    let hidden =
+                        this.settings.get_boolean("hidden-when-paused");
                     if (hidden) {
                         if (this.visible) {
                             this.visible = false;
@@ -254,7 +282,10 @@ var SpTrayButton = GObject.registerClass(
                         }
                         text = this.settings.get_string("paused");
                         if (text.includes("{metadata}")) {
-                            text = text.replace("{metadata}", this._makeTrackData(client, metadata))
+                            text = text.replace(
+                                "{metadata}",
+                                this._makeTrackData(client, metadata)
+                            );
                         }
                     }
                 } else {
@@ -263,7 +294,7 @@ var SpTrayButton = GObject.registerClass(
                     if (!this.visible) {
                         this.visible = true;
                     }
-                    text = this._makeTrackData(client, metadata)
+                    text = this._makeTrackData(client, metadata);
                 }
                 button.set_text(text);
             }
@@ -271,8 +302,9 @@ var SpTrayButton = GObject.registerClass(
         }
 
         _makeTrackData(client, metadata) {
-
-            const trackType = client.idExtractor(metadata["mpris:trackid"].get_string()[0])
+            const trackType = client.idExtractor(
+                metadata["mpris:trackid"].get_string()[0]
+            );
             let format = this._getFormat(trackType);
 
             if (!format) {
@@ -281,23 +313,22 @@ var SpTrayButton = GObject.registerClass(
                 return true;
             }
 
-            return this._generateText(format, metadata)
+            return this._generateText(format, metadata);
         }
 
         _getFormat(trackType) {
             switch (trackType) {
                 case "track":
                 case "local":
-                    return this.settings.get_string("display-format")
+                    return this.settings.get_string("display-format");
                 case "episode":
-                    return this.settings.get_string("podcast-format")
+                    return this.settings.get_string("podcast-format");
                 default:
                     return null;
             }
         }
 
         _generateText(format, metadata) {
-
             let maxTitleLength = this.settings.get_int("title-max-length");
             let maxArtistLength = this.settings.get_int("artist-max-length");
             let maxAlbumLength = this.settings.get_int("album-max-length");
@@ -323,7 +354,7 @@ var SpTrayButton = GObject.registerClass(
                 .replace("{artist}", artist)
                 .replace("{track}", title)
                 .replace("{album}", album)
-                .trim()
+                .trim();
         }
 
         // many thanks to mheine's implementation
@@ -340,7 +371,9 @@ var SpTrayButton = GObject.registerClass(
                 let wins = global.get_window_actors(); // get all open windows
                 for (let win of wins) {
                     if (typeof win.get_meta_window === "function") {
-                        if (win.get_meta_window().get_wm_class() === "Spotify") {
+                        if (
+                            win.get_meta_window().get_wm_class() === "Spotify"
+                        ) {
                             this._spotiWin = win.get_meta_window(); // mark the spotify window
                         } else if (win.get_meta_window().has_focus()) {
                             this._notSpotify = win.get_meta_window(); // mark the window that was active when the button was pressed
@@ -361,7 +394,9 @@ var SpTrayButton = GObject.registerClass(
                 return null;
             }
             const trackId = metadata["mpris:trackid"].get_string()[0];
-            const client = supportedClients.filter(client => (trackId.startsWith(client.pattern)));
+            const client = supportedClients.filter((client) =>
+                trackId.startsWith(client.pattern)
+            );
             return client.length > 0 ? client[0] : null;
         }
     }
