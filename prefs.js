@@ -33,97 +33,159 @@ function init() {
 }
 
 function buildPrefsWidget() {
-
     let settings = ExtensionUtils.getSettings();
     let builder = new Gtk.Builder();
     // use Gtk.BuilderScope to attach signal handlers to buttons on gtk 4+
     if (_isGtk4) {
         // register a new scope class if it hasn't already been registered
         if (registeredClass.length == 0) {
-            let SpBuilderScope = GObject.registerClass({
-                Implements: [Gtk.BuilderScope],
-            }, class SpBuilderScope extends GObject.Object {
-
-                vfunc_create_closure(builder, handlerName, flags, connectObject) {
-                    if (flags & Gtk.BuilderClosureFlags.SWAPPED) {
-                        throw new Error('Unsupported template signal flag "swapped"');
+            let SpBuilderScope = GObject.registerClass(
+                {
+                    Implements: [Gtk.BuilderScope]
+                },
+                class SpBuilderScope extends GObject.Object {
+                    vfunc_create_closure(
+                        builder,
+                        handlerName,
+                        flags,
+                        connectObject
+                    ) {
+                        if (flags & Gtk.BuilderClosureFlags.SWAPPED) {
+                            throw new Error(
+                                'Unsupported template signal flag "swapped"'
+                            );
+                        }
+                        if (typeof this[handlerName] === "undefined") {
+                            throw new Error(`${handlerName} is undefined`);
+                        }
+                        return this[handlerName].bind(connectObject || this);
                     }
-                    if (typeof this[handlerName] === 'undefined') {
-                        throw new Error(`${handlerName} is undefined`);
+
+                    on_defaults_clicked(connectObject) {
+                        settings.reset("off");
+                        settings.reset("paused");
+                        settings.reset("display-format");
                     }
-                    return this[handlerName].bind(connectObject || this);
-                }
 
-                on_defaults_clicked(connectObject) {
-                    settings.reset("off");
-                    settings.reset("paused");
-                    settings.reset("display-format");
-                }
+                    on_resetNotRunning_clicked(connectObject) {
+                        settings.reset("off");
+                    }
 
-                on_resetNotRunning_clicked(connectObject) {
-                    settings.reset("off");
-                }
+                    on_resetPaused_clicked(connectObject) {
+                        settings.reset("paused");
+                    }
 
-                on_resetPaused_clicked(connectObject) {
-                    settings.reset("paused");
-                }
+                    on_resetPosition_clicked(connectObject) {
+                        settings.reset("position");
+                    }
 
-                on_resetPosition_clicked(connectObject) {
-                    settings.reset("position");
-                }
+                    on_resetFormat_clicked(connectObject) {
+                        settings.reset("display-format");
+                    }
 
-                on_resetFormat_clicked(connectObject) {
-                    settings.reset("display-format");
-                }
+                    on_resetTitleLength_clicked(connectObject) {
+                        settings.reset("title-max-length");
+                    }
 
-                on_resetTitleLength_clicked(connectObject) {
-                    settings.reset("title-max-length");
-                }
+                    on_resetArtistLength_clicked(connectObject) {
+                        settings.reset("artist-max-length");
+                    }
 
-                on_resetArtistLength_clicked(connectObject) {
-                    settings.reset("artist-max-length");
-                }
+                    on_resetAlbumLength_clicked(connectObject) {
+                        settings.reset("album-max-length");
+                    }
 
-                on_resetAlbumLength_clicked(connectObject) {
-                    settings.reset("album-max-length");
-                }
+                    on_resetPodcastFormat_clicked(connectObject) {
+                        settings.reset("podcast-format");
+                    }
 
-                on_resetPodcastFormat_clicked(connectObject) {
-                    settings.reset("podcast-format");
+                    on_resetLogo_clicked(connectObject) {
+                        settings.reset("logo-position");
+                    }
                 }
-
-                on_resetLogo_clicked(connectObject) {
-                    settings.reset("logo-position");
-                }
-            });
+            );
             registeredClass.push(SpBuilderScope);
         }
         builder.set_scope(new registeredClass[0]());
     }
-    builder.add_from_file(Me.dir.get_path() + '/prefs.xml');
-    let box = builder.get_object('prefs_widget');
+    builder.add_from_file(Me.dir.get_path() + "/prefs.xml");
+    let box = builder.get_object("prefs_widget");
 
     // bind switches and text fields to their respective settings
-    settings.bind('display-format', builder.get_object('field_format'), 'text', Gio.SettingsBindFlags.DEFAULT);
-    settings.bind('podcast-format', builder.get_object('podcast_format'), 'text', Gio.SettingsBindFlags.DEFAULT);
-    settings.bind('title-max-length', builder.get_object('title_length'), 'value', Gio.SettingsBindFlags.DEFAULT);
-    settings.bind('artist-max-length', builder.get_object('artist_length'), 'value', Gio.SettingsBindFlags.DEFAULT);
-    settings.bind('album-max-length', builder.get_object('album_length'), 'value', Gio.SettingsBindFlags.DEFAULT);
-    settings.bind('paused', builder.get_object('field_paused'), 'text', Gio.SettingsBindFlags.DEFAULT);
-    settings.bind('hidden-when-inactive', builder.get_object('field_hideInactive'), 'active', Gio.SettingsBindFlags.DEFAULT);
-    settings.bind('hidden-when-paused', builder.get_object('field_hidePaused'), 'active', Gio.SettingsBindFlags.DEFAULT);
-    settings.bind('off', builder.get_object('field_notRunning'), 'text', Gio.SettingsBindFlags.DEFAULT);
-    settings.bind('position', builder.get_object('box_position'), 'active', Gio.SettingsBindFlags.DEFAULT);
-    settings.bind('logo-position', builder.get_object('logo_position'), 'active', Gio.SettingsBindFlags.DEFAULT);
+    settings.bind(
+        "display-format",
+        builder.get_object("field_format"),
+        "text",
+        Gio.SettingsBindFlags.DEFAULT
+    );
+    settings.bind(
+        "podcast-format",
+        builder.get_object("podcast_format"),
+        "text",
+        Gio.SettingsBindFlags.DEFAULT
+    );
+    settings.bind(
+        "title-max-length",
+        builder.get_object("title_length"),
+        "value",
+        Gio.SettingsBindFlags.DEFAULT
+    );
+    settings.bind(
+        "artist-max-length",
+        builder.get_object("artist_length"),
+        "value",
+        Gio.SettingsBindFlags.DEFAULT
+    );
+    settings.bind(
+        "album-max-length",
+        builder.get_object("album_length"),
+        "value",
+        Gio.SettingsBindFlags.DEFAULT
+    );
+    settings.bind(
+        "paused",
+        builder.get_object("field_paused"),
+        "text",
+        Gio.SettingsBindFlags.DEFAULT
+    );
+    settings.bind(
+        "hidden-when-inactive",
+        builder.get_object("field_hideInactive"),
+        "active",
+        Gio.SettingsBindFlags.DEFAULT
+    );
+    settings.bind(
+        "hidden-when-paused",
+        builder.get_object("field_hidePaused"),
+        "active",
+        Gio.SettingsBindFlags.DEFAULT
+    );
+    settings.bind(
+        "off",
+        builder.get_object("field_notRunning"),
+        "text",
+        Gio.SettingsBindFlags.DEFAULT
+    );
+    settings.bind(
+        "position",
+        builder.get_object("box_position"),
+        "active",
+        Gio.SettingsBindFlags.DEFAULT
+    );
+    settings.bind(
+        "logo-position",
+        builder.get_object("logo_position"),
+        "active",
+        Gio.SettingsBindFlags.DEFAULT
+    );
 
     // use connect_signals_full to attach signal handlers to buttons on gtk <4
     if (!_isGtk4) {
         let SignalHandler = {
-
             on_defaults_clicked(w) {
                 settings.reset("off");
                 settings.reset("paused");
-                settings.reset('display-format');
+                settings.reset("display-format");
             },
 
             on_resetNotRunning_clicked(w) {
@@ -160,8 +222,7 @@ function buildPrefsWidget() {
 
             on_resetLogo_clicked(w) {
                 settings.reset("logo-position");
-            },
-
+            }
         };
 
         builder.connect_signals_full((builder, object, signal, handler) => {
@@ -175,5 +236,7 @@ function buildPrefsWidget() {
 }
 
 function _checkIfGtk4() {
-    return Number.parseInt(imports.misc.config.PACKAGE_VERSION.split('.')) >= 40;
+    return (
+        Number.parseInt(imports.misc.config.PACKAGE_VERSION.split(".")) >= 40
+    );
 }
