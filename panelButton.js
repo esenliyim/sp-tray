@@ -19,6 +19,7 @@ const Main = imports.ui.main;
 const { St, Clutter, GObject, GLib, Gio } = imports.gi;
 
 const Me = imports.misc.extensionUtils.getCurrentExtension();
+const { SpTrayDbus } = Me.imports.dbus;
 const ExtensionUtils = imports.misc.extensionUtils;
 
 //dbus constants
@@ -35,18 +36,18 @@ const supportedClients = [
     {
         name: "spotify version <1.84",
         pattern: "spotify:",
-        idExtractor: (trackid) => trackid.split(":")[2]
+        idExtractor: (trackid) => trackid.split(":")[2],
     },
     {
         name: "spotify version >1.84",
         pattern: "/com/spotify",
-        idExtractor: (trackid) => trackid.split("/")[3]
+        idExtractor: (trackid) => trackid.split("/")[3],
     },
     {
         name: "ncspot",
         pattern: "/org/ncspot",
-        idExtractor: (trackid) => trackid.split("/")[4]
-    }
+        idExtractor: (trackid) => trackid.split("/")[4],
+    },
 ];
 
 var SpTrayButton = GObject.registerClass(
@@ -63,7 +64,7 @@ var SpTrayButton = GObject.registerClass(
             this._initDbus();
             this._initUi();
 
-            this.updateText();
+            // this.updateText();
         }
 
         _initSettings() {
@@ -72,76 +73,43 @@ var SpTrayButton = GObject.registerClass(
             // connect relevant settings to the button so that it can be instantly updated when they're changed
             // store the connected signals in an array for easy disconnection later on
             this._settingSignals.push(
-                this.settings.connect(
-                    `changed::paused`,
-                    this.updateText.bind(this)
-                )
+                this.settings.connect(`changed::paused`, this.updateText.bind(this)),
             );
             this._settingSignals.push(
-                this.settings.connect(
-                    `changed::off`,
-                    this.updateText.bind(this)
-                )
+                this.settings.connect(`changed::off`, this.updateText.bind(this)),
             );
             this._settingSignals.push(
-                this.settings.connect(
-                    `changed::hidden-when-inactive`,
-                    this.updateText.bind(this)
-                )
+                this.settings.connect(`changed::hidden-when-inactive`, this.updateText.bind(this)),
             );
             this._settingSignals.push(
-                this.settings.connect(
-                    `changed::hidden-when-paused`,
-                    this.updateText.bind(this)
-                )
+                this.settings.connect(`changed::hidden-when-paused`, this.updateText.bind(this)),
             );
             this._settingSignals.push(
-                this.settings.connect(
-                    `changed::display-format`,
-                    this.updateText.bind(this)
-                )
+                this.settings.connect(`changed::display-format`, this.updateText.bind(this)),
             );
             this._settingSignals.push(
-                this.settings.connect(
-                    `changed::podcast-format`,
-                    this.updateText.bind(this)
-                )
+                this.settings.connect(`changed::podcast-format`, this.updateText.bind(this)),
             );
             this._settingSignals.push(
-                this.settings.connect(
-                    `changed::title-max-length`,
-                    this.updateText.bind(this)
-                )
+                this.settings.connect(`changed::title-max-length`, this.updateText.bind(this)),
             );
             this._settingSignals.push(
-                this.settings.connect(
-                    `changed::artist-max-length`,
-                    this.updateText.bind(this)
-                )
+                this.settings.connect(`changed::artist-max-length`, this.updateText.bind(this)),
             );
             this._settingSignals.push(
-                this.settings.connect(
-                    `changed::album-max-length`,
-                    this.updateText.bind(this)
-                )
+                this.settings.connect(`changed::album-max-length`, this.updateText.bind(this)),
             );
             this._settingSignals.push(
-                this.settings.connect(
-                    "changed::position",
-                    this._positionChanged.bind(this)
-                )
+                this.settings.connect("changed::position", this._positionChanged.bind(this)),
             );
             this._settingSignals.push(
-                this.settings.connect(
-                    "changed::logo-position",
-                    this._handleLogoDisplay.bind(this)
-                )
+                this.settings.connect("changed::logo-position", this._handleLogoDisplay.bind(this)),
             );
         }
 
         _initUi() {
             const box = new St.BoxLayout({
-                style_class: "panel-status-menu-box"
+                style_class: "panel-status-menu-box",
             });
             this.ui.set("box", box);
 
@@ -149,45 +117,32 @@ var SpTrayButton = GObject.registerClass(
                 "label",
                 new St.Label({
                     text: this.settings.get_string("starting"),
-                    y_align: Clutter.ActorAlign.CENTER
-                })
+                    y_align: Clutter.ActorAlign.CENTER,
+                }),
             );
             this.ui.set(
                 "icon",
                 new St.Icon({
                     icon_name: "spotify",
-                    style_class: "system-status-icon"
-                })
+                    style_class: "system-status-icon",
+                }),
             );
             this._handleLogoDisplay();
 
-            // listen to spotify status changes to update the tray display immediately. no busy waiting
-            this._settingSignals.push(
-                this.spotifyProxy.connect(
-                    "g-properties-changed",
-                    this.updateText.bind(this)
-                )
-            );
-
-            // TODO signals array?
             this._signals.push(
                 (this._pressEvent = this.connect(
                     "button-press-event",
-                    this.showSpotify.bind(this)
-                ))
+                    this.showSpotify.bind(this),
+                )),
             );
 
             this.add_child(box);
         }
 
         _initDbus() {
-            let spotifyProxyWrapper =
-                Gio.DBusProxy.makeProxyWrapper(spotifyDbus);
-            this.spotifyProxy = spotifyProxyWrapper(
-                Gio.DBus.session,
-                dest,
-                path
-            );
+            // let spotifyProxyWrapper = Gio.DBusProxy.makeProxyWrapper(spotifyDbus);
+            // this.spotifyProxy = spotifyProxyWrapper(Gio.DBus.session, dest, path);
+            this.dbus = new SpTrayDbus(this);
         }
 
         // if the spotify logo is to be shown, insert it where appropriate (sounded better in my head)
@@ -215,97 +170,110 @@ var SpTrayButton = GObject.registerClass(
         _positionChanged() {
             this.container.get_parent().remove_actor(this.container);
 
-            let positions = [
-                Main.panel._leftBox,
-                Main.panel._centerBox,
-                Main.panel._rightBox
-            ];
+            let positions = [Main.panel._leftBox, Main.panel._centerBox, Main.panel._rightBox];
 
             let pos = this.settings.get_int("position");
-            positions[pos].insert_child_at_index(
-                this.container,
-                pos == 2 ? 0 : -1
-            );
+            positions[pos].insert_child_at_index(this.container, pos === 2 ? 0 : -1);
         }
 
         destroy() {
             // disconnect all signals
-            this._settingSignals.forEach((signal) =>
-                this.settings.disconnect(signal)
-            );
+            this._settingSignals.forEach((signal) => this.settings.disconnect(signal));
             this._signals.forEach((signal) => this.settings.disconnect(signal));
             // destroy all ui elements
             this.ui.forEach((element) => element.destroy());
             super.destroy();
         }
 
-        // update the text on the tray display
-        updateText() {
-            let button = this.ui.get("label");
-            let status = this.spotifyProxy.PlaybackStatus;
-
-            if (!status) {
-                // spotify is inactive
-                if (
-                    this.settings.get_boolean("hidden-when-inactive") &&
-                    this.visible
-                ) {
-                    if (this.visible) {
-                        this.visible = false;
-                    }
-                } else {
-                    if (!this.visible) {
-                        this.visible = true;
-                    }
-                    button.set_text(this.settings.get_string("off"));
-                }
-            } else {
-                //spotify is active and returning dbus thingamajigs
-                const metadata = this.spotifyProxy.Metadata;
-                const client = this.getSpotifyClient(metadata);
-                if (!metadata || !client) {
+        showPaused(metadata) {
+            const hidden = this.settings.get_boolean("hidden-when-paused");
+            if (hidden) {
+                if (this.visible) {
                     this.visible = false;
-                    return true;
                 }
-                let text = "";
-                if (status === "Paused") {
-                    let hidden =
-                        this.settings.get_boolean("hidden-when-paused");
-                    if (hidden) {
-                        if (this.visible) {
-                            this.visible = false;
-                        }
-                        return true;
-                    } else {
-                        if (!this.visible) {
-                            this.visible = true;
-                        }
-                        text = this.settings.get_string("paused");
-                        if (text.includes("{metadata}")) {
-                            text = text.replace(
-                                "{metadata}",
-                                this._makeTrackData(client, metadata)
-                            );
-                        }
-                    }
-                } else {
-                    // thanks benjamingwynn for this
-                    // check if spotify is actually running and the metadata is "correct"
-                    if (!this.visible) {
-                        this.visible = true;
-                    }
-                    text = this._makeTrackData(client, metadata);
+                return;
+            } else {
+                if (!this.visible) {
+                    this.visible = true;
                 }
+                let text = this.settings.get_string("paused");
+                if (text.includes("{metadata}")) {
+                    text = text.replace("{metadata}", this._makeTrackData(metadata));
+                }
+                const button = this.ui.get("label");
                 button.set_text(text);
             }
-            return true;
         }
 
-        _makeTrackData(client, metadata) {
-            const trackType = client.idExtractor(
-                metadata["mpris:trackid"].get_string()[0]
-            );
-            let format = this._getFormat(trackType);
+        showPlaying(metadata) {
+            const button = this.ui.get("label");
+            if (!this.visible) {
+                this.visible = true;
+            }
+            button.set_text(this._makeTrackData(metadata));
+        }
+
+        showInactive() {
+            if (this.settings.get_boolean("hidden-when-inactive") && this.visible) {
+                if (this.visible) {
+                    this.visible = false;
+                }
+            } else {
+                const button = this.ui.get("label");
+                if (!this.visible) {
+                    this.visible = true;
+                }
+                button.set_text(this.settings.get_string("off"));
+            }
+        }
+
+        // update the text on the tray display
+        updateText() {
+            if (!this.dbus.spotifyIsActive) {
+                this.showInactive();
+            }
+            const metadata = this.dbus.extractMetadataInformation();
+            if (this.dbus.isPlaying()) {
+                this.showPlaying(metadata);
+                return;
+            }
+            this.showPaused(metadata);
+            // let button = this.ui.get("label");
+            // let status = this.spotifyProxy.PlaybackStatus;
+            // if (!status) {
+            //     // spotify is inactive
+            //     if (this.settings.get_boolean("hidden-when-inactive") && this.visible) {
+            //         if (this.visible) {
+            //             this.visible = false;
+            //         }
+            //     } else {
+            //         if (!this.visible) {
+            //             this.visible = true;
+            //         }
+            //         button.set_text(this.settings.get_string("off"));
+            //     }
+            // } else {
+            //     //spotify is active and returning dbus thingamajigs
+            //     const metadata = this.spotifyProxy.Metadata;
+            //     const client = this.getSpotifyClient(metadata);
+            //     if (!metadata || !client) {
+            //         this.visible = false;
+            //         return true;
+            //     }
+            //     let text = "";
+            //     if (status === "Paused") {
+            //     } else {
+            //         // thanks benjamingwynn for this
+            //         // check if spotify is actually running and the metadata is "correct"
+            //
+            //     }
+            //     button.set_text(text);
+            // }
+            // return true;
+        }
+
+        _makeTrackData(metadata) {
+            let format = this._getFormat(metadata.trackType);
 
             if (!format) {
                 log("unknown track type");
@@ -333,27 +301,23 @@ var SpTrayButton = GObject.registerClass(
             let maxArtistLength = this.settings.get_int("artist-max-length");
             let maxAlbumLength = this.settings.get_int("album-max-length");
 
-            let title = metadata["xesam:title"].get_string()[0];
-            if (title.length > maxTitleLength) {
-                title = title.slice(0, maxTitleLength) + "...";
+            if (metadata.title.length > maxTitleLength) {
+                metadata.title = metadata.title.slice(0, maxTitleLength) + "...";
             }
 
-            let album = metadata["xesam:album"].get_string()[0];
-
-            if (album.length > maxAlbumLength) {
-                album = album.slice(0, maxAlbumLength) + "...";
+            if (metadata.album.length > maxAlbumLength) {
+                metadata.album = metadata.album.slice(0, maxAlbumLength) + "...";
             }
 
             // As of May 2022 podcasts return a blank string for this field, but I'm leaving this in, in case that
             // changes in the future and the artist field starts returning something
-            let artist = metadata["xesam:artist"].get_strv()[0];
-            if (artist.length > maxArtistLength) {
-                artist = artist.slice(0, maxArtistLength) + "...";
+            if (metadata.artist.length > maxArtistLength) {
+                metadata.artist = metadata.artist.slice(0, maxArtistLength) + "...";
             }
             return format
-                .replace("{artist}", artist)
-                .replace("{track}", title)
-                .replace("{album}", album)
+                .replace("{artist}", metadata.artist)
+                .replace("{track}", metadata.title)
+                .replace("{album}", metadata.album)
                 .trim();
         }
 
@@ -371,9 +335,7 @@ var SpTrayButton = GObject.registerClass(
                 let wins = global.get_window_actors(); // get all open windows
                 for (let win of wins) {
                     if (typeof win.get_meta_window === "function") {
-                        if (
-                            win.get_meta_window().get_wm_class() === "Spotify"
-                        ) {
+                        if (win.get_meta_window().get_wm_class() === "Spotify") {
                             this._spotiWin = win.get_meta_window(); // mark the spotify window
                         } else if (win.get_meta_window().has_focus()) {
                             this._notSpotify = win.get_meta_window(); // mark the window that was active when the button was pressed
@@ -394,10 +356,8 @@ var SpTrayButton = GObject.registerClass(
                 return null;
             }
             const trackId = metadata["mpris:trackid"].get_string()[0];
-            const client = supportedClients.filter((client) =>
-                trackId.startsWith(client.pattern)
-            );
+            const client = supportedClients.filter((client) => trackId.startsWith(client.pattern));
             return client.length > 0 ? client[0] : null;
         }
-    }
+    },
 );

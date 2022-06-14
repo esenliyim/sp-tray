@@ -38,22 +38,15 @@ function buildPrefsWidget() {
     // use Gtk.BuilderScope to attach signal handlers to buttons on gtk 4+
     if (_isGtk4) {
         // register a new scope class if it hasn't already been registered
-        if (registeredClass.length == 0) {
+        if (registeredClass.length === 0) {
             let SpBuilderScope = GObject.registerClass(
                 {
-                    Implements: [Gtk.BuilderScope]
+                    Implements: [Gtk.BuilderScope],
                 },
                 class SpBuilderScope extends GObject.Object {
-                    vfunc_create_closure(
-                        builder,
-                        handlerName,
-                        flags,
-                        connectObject
-                    ) {
+                    vfunc_create_closure(builder, handlerName, flags, connectObject) {
                         if (flags & Gtk.BuilderClosureFlags.SWAPPED) {
-                            throw new Error(
-                                'Unsupported template signal flag "swapped"'
-                            );
+                            throw new Error('Unsupported template signal flag "swapped"');
                         }
                         if (typeof this[handlerName] === "undefined") {
                             throw new Error(`${handlerName} is undefined`);
@@ -102,7 +95,7 @@ function buildPrefsWidget() {
                     on_resetLogo_clicked(connectObject) {
                         settings.reset("logo-position");
                     }
-                }
+                },
             );
             registeredClass.push(SpBuilderScope);
         }
@@ -116,67 +109,67 @@ function buildPrefsWidget() {
         "display-format",
         builder.get_object("field_format"),
         "text",
-        Gio.SettingsBindFlags.DEFAULT
+        Gio.SettingsBindFlags.DEFAULT,
     );
     settings.bind(
         "podcast-format",
         builder.get_object("podcast_format"),
         "text",
-        Gio.SettingsBindFlags.DEFAULT
+        Gio.SettingsBindFlags.DEFAULT,
     );
     settings.bind(
         "title-max-length",
         builder.get_object("title_length"),
         "value",
-        Gio.SettingsBindFlags.DEFAULT
+        Gio.SettingsBindFlags.DEFAULT,
     );
     settings.bind(
         "artist-max-length",
         builder.get_object("artist_length"),
         "value",
-        Gio.SettingsBindFlags.DEFAULT
+        Gio.SettingsBindFlags.DEFAULT,
     );
     settings.bind(
         "album-max-length",
         builder.get_object("album_length"),
         "value",
-        Gio.SettingsBindFlags.DEFAULT
+        Gio.SettingsBindFlags.DEFAULT,
     );
     settings.bind(
         "paused",
         builder.get_object("field_paused"),
         "text",
-        Gio.SettingsBindFlags.DEFAULT
+        Gio.SettingsBindFlags.DEFAULT,
     );
     settings.bind(
         "hidden-when-inactive",
         builder.get_object("field_hideInactive"),
         "active",
-        Gio.SettingsBindFlags.DEFAULT
+        Gio.SettingsBindFlags.DEFAULT,
     );
     settings.bind(
         "hidden-when-paused",
         builder.get_object("field_hidePaused"),
         "active",
-        Gio.SettingsBindFlags.DEFAULT
+        Gio.SettingsBindFlags.DEFAULT,
     );
     settings.bind(
         "off",
         builder.get_object("field_notRunning"),
         "text",
-        Gio.SettingsBindFlags.DEFAULT
+        Gio.SettingsBindFlags.DEFAULT,
     );
     settings.bind(
         "position",
         builder.get_object("box_position"),
         "active",
-        Gio.SettingsBindFlags.DEFAULT
+        Gio.SettingsBindFlags.DEFAULT,
     );
     settings.bind(
         "logo-position",
         builder.get_object("logo_position"),
         "active",
-        Gio.SettingsBindFlags.DEFAULT
+        Gio.SettingsBindFlags.DEFAULT,
     );
 
     // use connect_signals_full to attach signal handlers to buttons on gtk <4
@@ -222,7 +215,7 @@ function buildPrefsWidget() {
 
             on_resetLogo_clicked(w) {
                 settings.reset("logo-position");
-            }
+            },
         };
 
         builder.connect_signals_full((builder, object, signal, handler) => {
@@ -236,7 +229,5 @@ function buildPrefsWidget() {
 }
 
 function _checkIfGtk4() {
-    return (
-        Number.parseInt(imports.misc.config.PACKAGE_VERSION.split(".")) >= 40
-    );
+    return Number.parseInt(imports.misc.config.PACKAGE_VERSION.split(".")) >= 40;
 }

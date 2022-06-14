@@ -1,13 +1,17 @@
 module.exports = {
     singleQuote: false,
     tabWidth: 4,
-    trailingComma: "none",
+    trailingComma: "all",
+    bracketSpacing: true,
+    arrowParens: "always",
+    printWidth: 100,
+    semi: true,
     overrides: [
         {
             files: ["*.md", "*.MD"],
             options: {
-                tabWidth: 2
-            }
-        }
-    ]
+                tabWidth: 2,
+            },
+        },
+    ],
 };

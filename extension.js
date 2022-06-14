@@ -37,7 +37,7 @@ class SpTrayExtension {
         Main.panel.addToStatusArea(
             "SpTray",
             this.extensionButton,
-            pos == 2 ? 0 : -1,
+            pos === 2 ? 0 : -1,
             this._getPosition(pos)
         );
     }
