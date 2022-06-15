@@ -94,13 +94,7 @@ var SpTrayButton = GObject.registerClass(
                     y_align: Clutter.ActorAlign.CENTER,
                 }),
             );
-            this.makeIcon();
-            const gicon = new St.Icon({
-                icon_name: "spotify",
-                style_class: "system-status-icon",
-                fallback_icon_name: "com.spotify.Client", // icon name for flatpak, TODO do snap
-            });
-            this.ui.set("icon", gicon);
+            this.ui.set("icon", this.makeIcon());
             this._handleLogoDisplay();
 
             this._signals.push(
@@ -111,6 +105,29 @@ var SpTrayButton = GObject.registerClass(
             );
 
             this.add_child(box);
+        }
+
+        /**
+         * Currently supports 3 builds: 1) native builds where the app icon is where everything else is 2) Snap packages 3) Flatpak packages
+         * First checks for Snap. If there's no file associated with it, sets the icon to the native build's icon, with the Flatpak icon path
+         * as fallback
+         */
+        makeIcon() {
+            const [ok, snapContents] = GLib.file_get_contents("/var/lib/snapd/desktop/applications/spotify_spotify.desktop");
+            if (ok) {
+                // There's a snap build of Spotify installed
+                const matched = String.fromCharCode(...snapContents).match(/Icon=(.*)\n/m);
+                const gicon = Gio.icon_new_for_string(matched[1]);
+                return new St.Icon({
+                    gicon,
+                    style_class: "system-status-icon",
+                })
+            }
+            return new St.Icon({
+                icon_name: "spotify",
+                style_class: "system-status-icon",
+                fallback_icon_name: "com.spotify.Client", // icon name for flatpak, in case it's not a native build
+            });
         }
 
         _initDbus() {
