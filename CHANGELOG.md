@@ -1,5 +1,16 @@
 Here be the notable changes to the extension's function.
 
+## Version 15 | 2022-06-15
+
+Added:
+
+- Option to show loop and shuffle status.
+
+Changed:
+
+- Extended the character limits for inactive and paused texts.
+- Support for different clients was improved. Now it (probably) shows correct text when clients are launched and closed. 
+
 ## Version 14 | 2022-05-12
 
 Added:

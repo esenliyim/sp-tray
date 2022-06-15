@@ -64,7 +64,7 @@ var SpTrayButton = GObject.registerClass(
             this._initDbus();
             this._initUi();
 
-            // this.updateText();
+            this.updateText();
         }
 
         _initSettings() {
@@ -140,8 +140,6 @@ var SpTrayButton = GObject.registerClass(
         }
 
         _initDbus() {
-            // let spotifyProxyWrapper = Gio.DBusProxy.makeProxyWrapper(spotifyDbus);
-            // this.spotifyProxy = spotifyProxyWrapper(Gio.DBus.session, dest, path);
             this.dbus = new SpTrayDbus(this);
         }
 
@@ -182,20 +180,16 @@ var SpTrayButton = GObject.registerClass(
             this._signals.forEach((signal) => this.settings.disconnect(signal));
             // destroy all ui elements
             this.ui.forEach((element) => element.destroy());
+            this.dbus.destroy();
             super.destroy();
         }
 
         showPaused(metadata) {
-            const hidden = this.settings.get_boolean("hidden-when-paused");
-            if (hidden) {
-                if (this.visible) {
-                    this.visible = false;
-                }
+            if (this.settings.get_boolean("hidden-when-paused")) {
+                this.visible = false;
                 return;
             } else {
-                if (!this.visible) {
-                    this.visible = true;
-                }
+                this.visible = true;
                 let text = this.settings.get_string("paused");
                 if (text.includes("{metadata}")) {
                     text = text.replace("{metadata}", this._makeTrackData(metadata));
@@ -207,78 +201,51 @@ var SpTrayButton = GObject.registerClass(
 
         showPlaying(metadata) {
             const button = this.ui.get("label");
-            if (!this.visible) {
-                this.visible = true;
-            }
+            this.visible = true;
             button.set_text(this._makeTrackData(metadata));
         }
 
         showInactive() {
-            if (this.settings.get_boolean("hidden-when-inactive") && this.visible) {
-                if (this.visible) {
-                    this.visible = false;
-                }
+            if (this.settings.get_boolean("hidden-when-inactive")) {
+                this.visible = false;
             } else {
+                this.visible = true;
                 const button = this.ui.get("label");
-                if (!this.visible) {
-                    this.visible = true;
-                }
                 button.set_text(this.settings.get_string("off"));
             }
         }
 
+        showStopped() {
+            const button = this.ui.get("label");
+            this.visible = true;
+            button.set_text("⏹️");
+        }
+
         // update the text on the tray display
         updateText() {
-            if (!this.dbus.spotifyIsActive) {
+            if (!this.dbus.spotifyIsActive()) {
                 this.showInactive();
-            }
-            const metadata = this.dbus.extractMetadataInformation();
-            if (this.dbus.isPlaying()) {
-                this.showPlaying(metadata);
                 return;
             }
-            this.showPaused(metadata);
-            // let button = this.ui.get("label");
-            // let status = this.spotifyProxy.PlaybackStatus;
-            // if (!status) {
-            //     // spotify is inactive
-            //     if (this.settings.get_boolean("hidden-when-inactive") && this.visible) {
-            //         if (this.visible) {
-            //             this.visible = false;
-            //         }
-            //     } else {
-            //         if (!this.visible) {
-            //             this.visible = true;
-            //         }
-            //         button.set_text(this.settings.get_string("off"));
-            //     }
-            // } else {
-            //     //spotify is active and returning dbus thingamajigs
-            //     const metadata = this.spotifyProxy.Metadata;
-            //     const client = this.getSpotifyClient(metadata);
-            //     if (!metadata || !client) {
-            //         this.visible = false;
-            //         return true;
-            //     }
-            //     let text = "";
-            //     if (status === "Paused") {
-            //     } else {
-            //         // thanks benjamingwynn for this
-            //         // check if spotify is actually running and the metadata is "correct"
-            //
-            //     }
-            //     button.set_text(text);
-            // }
-            // return true;
+            switch (this.dbus.getPlaybackStatus()) {
+                case "Playing":
+                    this.showPlaying(this.dbus.extractMetadataInformation());
+                    return;
+                case "Paused":
+                    this.showPaused(this.dbus.extractMetadataInformation());
+                    return;
+                case "Stopped":
+                default:
+                    this.showStopped();
+                    return;
+            }
         }
 
         _makeTrackData(metadata) {
             let format = this._getFormat(metadata.trackType);
 
             if (!format) {
-                log("unknown track type");
-                this.visible = false;
-                return true;
+                return "";
             }
 
             return this._generateText(format, metadata);
@@ -314,11 +281,35 @@ var SpTrayButton = GObject.registerClass(
             if (metadata.artist.length > maxArtistLength) {
                 metadata.artist = metadata.artist.slice(0, maxArtistLength) + "...";
             }
+            this.getPlaybackControl();
             return format
                 .replace("{artist}", metadata.artist)
                 .replace("{track}", metadata.title)
                 .replace("{album}", metadata.album)
+                .replace("{pbctr}", this.getPlaybackControl())
                 .trim();
+        }
+
+        getPlaybackControl() {
+            const controls = this.dbus.getPlaybackControl();
+            let text = "";
+            if (!controls) {
+                return text;
+            }
+            if (controls.shuffle) {
+                text += "🔀 ";
+            }
+            switch (controls.loop) {
+                case "Playlist":
+                    text += "🔁 ";
+                    break;
+                case "Track":
+                    text += "🔂 ";
+                    break;
+                default:
+                    break;
+            }
+            return text;
         }
 
         // many thanks to mheine's implementation
@@ -348,16 +339,6 @@ var SpTrayButton = GObject.registerClass(
                 }
                 Main.activateWindow(this._spotiWin); // pull up the spotify window
             }
-        }
-
-        getSpotifyClient(metadata) {
-            // There must be a 'trackid' field in the dbus reply, and it must start with either 'spotify:' or '/com/spotify'
-            if (!metadata["mpris:trackid"]) {
-                return null;
-            }
-            const trackId = metadata["mpris:trackid"].get_string()[0];
-            const client = supportedClients.filter((client) => trackId.startsWith(client.pattern));
-            return client.length > 0 ? client[0] : null;
         }
     },
 );

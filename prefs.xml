@@ -270,7 +270,7 @@
                         </child>
                         <child>
                             <object class="GtkEntry" id="field_notRunning">
-                                <property name="max_length">20</property>
+                                <property name="max_length">25</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="show_emoji_icon">True</property>
@@ -327,7 +327,7 @@
                         </child>
                         <child>
                             <object class="GtkEntry" id="field_paused">
-                                <property name="max_length">20</property>
+                                <property name="max_length">25</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="show_emoji_icon">True</property>

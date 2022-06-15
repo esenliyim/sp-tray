@@ -1,16 +1,21 @@
 const { GLib, Gio } = imports.gi;
 
 //dbus constants
-const dest = "org.mpris.MediaPlayer2.spotify";
 const path = "/org/mpris/MediaPlayer2";
 const interfaceName = "org.mpris.MediaPlayer2.Player";
 const spotifyDbus = `<node>
 <interface name="org.mpris.MediaPlayer2.Player">
     <property name="PlaybackStatus" type="s" access="read"/>
     <property name="Metadata" type="a{sv}" access="read"/>
+    <property name="Shuffle" type="b" access="read"/>
+    <property name="LoopStatus" type="s" access="read"/>
 </interface>
 </node>`;
 
+/**
+ * This be the "list" of supported clients. At init, the extensions starts watching the session bus for each
+ * supported client.
+ */
 const supportedClients = [
     {
         name: "Spotify",
@@ -68,16 +73,13 @@ var SpTrayDbus = class SpTrayDbus {
         if (this.activeClient && this.proxy) {
             this.proxy.disconnect(this.activeClient.signal);
         }
-        this.proxy.disconnect(this.activeClient);
         for (const client in supportedClients) {
             Gio.bus_unwatch_name(client.watchId);
         }
-        this.watchIds.map((id) => {
-            Gio.bus_unwatch_name(id);
-        });
     }
 
     startWatching() {
+        // Start the watch for the supported clients.
         supportedClients.forEach((client) => {
             client.watchId = Gio.bus_watch_name(
                 Gio.BusType.SESSION,
@@ -89,51 +91,48 @@ var SpTrayDbus = class SpTrayDbus {
         });
     }
 
+    /**
+     * When a supported Spotify client's name appears on the session bus, create a proxy for it.
+     * This overrides the current proxy if there is one. Meaning the proxy is always for the most recently
+     * appeared client.
+     */
     async onClientAppeared(client) {
         log(`${client.name} appeared on DBus.`);
         this.makeProxyForClient(client);
-        if (this.shouldCorrectMetadata()) {
+        // This is necessary because the proxy's property cache might be initialized with incomplete values,
+        // which needs to be updated after a short delay
+        if (!this.proxy.Metadata || this.proxy.Metadata["mpris:trackid"].unpack() === "") {
             log(`Bad metadata, querying again.`);
             try {
                 this.correctMetadata();
             } catch (error) {
                 logError(error);
+                this.panelButton.updateText();
             }
-        }
-        this.panelButton.updateText();
-    }
-
-    shouldCorrectMetadata() {
-        try {
-            const md = this.extractMetadataInformation();
-            if (!md) {
-                return true;
-            }
-            return this.shouldRetry(md);
-        } catch (error) {
-            logError(error);
+        } else {
+            this.panelButton.updateText();
         }
     }
 
+    /**
+     * Attempt to correct the proxy's incomplete Metadata cache
+     * Makes 5 attempts at 100ms intervals. Sets the panelButton text if succeeds.
+     */
     async correctMetadata() {
         const maxAttempts = 5;
         let attempt = 1;
         do {
             const resp = this.queryMetadata();
             const unpacked = resp.deepUnpack();
-            const newMetadata = {
-                trackId: unpacked["mpris:trackid"].unpack(),
-                title: unpacked["xesam:title"].unpack(),
-                artist: unpacked["xesam:artist"].get_strv()[0],
-                album: unpacked["xesam:album"].unpack(),
-            };
-            if (!this.shouldRetry(newMetadata)) {
+            if (unpacked["mpris:trackid"].unpack() !== "") {
                 log(`Got good metadata on attempt ${attempt}`);
                 try {
                     this.proxy.set_cached_property("Metadata", resp);
                 } catch (error) {
                     logError(error);
+                    return;
                 }
+                this.panelButton.updateText();
                 return;
             } else {
                 try {
@@ -144,19 +143,17 @@ var SpTrayDbus = class SpTrayDbus {
                 attempt++;
             }
         } while (attempt <= maxAttempts);
+        this.panelButton.showStopped();
     }
 
-    shouldRetry(metadata) {
-        // Metadata is considered bad iif trackType set AND at least one of artist-title-album is missing
-        return (
-            metadata.trackType !== "" &&
-            (metadata.title === "" || metadata.album === "" || !("artist" in metadata))
-        );
-    }
-
+    /**
+     * Explicitly query the metadata property via DBus, instead of using the proxy cache.
+     */
     queryMetadata() {
+        // For some reason the "Get" DBus method returns weird stuff. Had to go with GetAll and
+        // pull Metadata out of it instead
         const reply = Gio.DBus.session.call_sync(
-            dest,
+            this.activeClient.dest,
             path,
             "org.freedesktop.DBus.Properties",
             "GetAll",
@@ -169,6 +166,11 @@ var SpTrayDbus = class SpTrayDbus {
         return reply.deepUnpack()[0]["Metadata"];
     }
 
+    /**
+     * Create a proxy for a supported client, and connect the listen signal.
+     * Overrides the existing proxy, if there is one. Sets the currently active client to the most recently
+     * appeared.
+     */
     makeProxyForClient(client) {
         if (this.activeClient && this.activeClient.name === client.name) {
             return;
@@ -187,26 +189,20 @@ var SpTrayDbus = class SpTrayDbus {
             "g-properties-changed",
             (proxy, changed, invalidated) => {
                 const props = changed.deepUnpack();
-                if (!("PlaybackStatus" in props || "Metadata" in props)) {
-                    // Playback status or metadata hasn't changed, nothing to do
-                    // This happens when the shuffle or loop setting or whatever is changed, for example.
-                    // Not relevant to us
-                    return;
-                }
-                if (invalidated.length !== 0) {
-                    // TODO figure out how it works between onVanished and this
+                // TODO simplify this mess
+                if (
+                    !(
+                        "PlaybackStatus" in props ||
+                        "Metadata" in props ||
+                        "LoopStatus" in props ||
+                        "Shuffle" in props
+                    )
+                ) {
+                    // None of the extension-relevant properties changed, nothing to do
                     return;
                 }
                 this.panelButton.updateText();
                 return;
-                if (
-                    Object.keys(props).includes("PlaybackStatus") &&
-                    props["PlaybackStatus"].unpack() === "Paused"
-                ) {
-                    this.panelButton.showPaused(this.extractMetadataInformation());
-                    return;
-                }
-                this.panelButton.showPlaying(this.extractMetadataInformation());
             },
         );
         client.isOnline = true;
@@ -216,6 +212,10 @@ var SpTrayDbus = class SpTrayDbus {
         this.activeClient = client;
     }
 
+    /**
+     * Runs when a client's name vanished from the session bus. Marks the vanished client as inactive.
+     * If the vanished client was the currently active one, looks for a replacement.
+     */
     onClientVanished(client) {
         client.isOnline = false;
         // Nothing to do if the client that vanished wasn't the one we were watching
@@ -223,28 +223,34 @@ var SpTrayDbus = class SpTrayDbus {
             log(`${client.name} vanished from DBus.`);
             return;
         }
-        log(`disconnecting ${client.signal}`);
         this.proxy.disconnect(client.signal);
+        this.activeClient = null;
         log(`${client.name} vanished from DBus, looking for another client.`);
         const otherClient = this.checkForOnlineClients();
-        if (otherClient) {
+        if (!otherClient) {
+            log("No other Spotify clients online.");
             this.proxy = null;
         } else {
-            this.makeProxyForClient(client);
+            log(`${otherClient.name} is still online. Making it the primary.`);
+            this.makeProxyForClient(otherClient);
         }
+        this.panelButton.updateText();
     }
 
+    // Checks if any other supported client is online
     checkForOnlineClients() {
         for (const client of supportedClients) {
             if (client.isOnline) {
-                log(`${client.name} is still online. Making it the primary.`);
                 return client;
             }
         }
-        log("No other Spotify clients online.");
         return null;
     }
 
+    /**
+     * Creates a metadata object that contains relevant information
+     * @returns title, artist, album and trackType. Artist is blank when it's a podcast.
+     */
     extractMetadataInformation() {
         if (!this.proxy.Metadata || !this.proxy.Metadata["mpris:trackid"]) {
             return null;
@@ -264,10 +270,20 @@ var SpTrayDbus = class SpTrayDbus {
     }
 
     spotifyIsActive() {
-        return this.proxy !== null
+        return this.proxy !== null;
     }
 
-    isPlaying() {
-        return this.proxy.PlaybackStatus === "Playing"
+    getPlaybackStatus() {
+        return this.proxy.PlaybackStatus;
+    }
+
+    getPlaybackControl() {
+        if (!this.proxy || !this.proxy.Shuffle || !this.proxy.LoopStatus) {
+            return null;
+        }
+        return {
+            shuffle: this.proxy.Shuffle,
+            loop: this.proxy.LoopStatus,
+        };
     }
 };
