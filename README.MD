@@ -41,7 +41,7 @@ Alternatively, you could:
 
 - English, German and Turkish translations are provided by me. If you'd like to contribute translations, please contact me.
 
-- If you'd like to request support for your favorite 3rd party Spotify client, feel free to submit a feature request. I'll see what I can do, but no promisesd.
+- If you'd like to request support for your favorite 3rd party Spotify client, feel free to submit a feature request. I'll see what I can do, but no promises.
 
 ## License
 

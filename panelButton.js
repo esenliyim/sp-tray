@@ -16,11 +16,13 @@
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const Main = imports.ui.main;
-const { St, Clutter, GObject, Gio } = imports.gi;
+const { St, Clutter, GObject, Gio, GLib } = imports.gi;
 
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const { SpTrayDbus } = Me.imports.dbus;
 const ExtensionUtils = imports.misc.extensionUtils;
+
+const SPOTIFY_SNAP_ICON_PATH = "/home/emre/Pictures/example.png";
 
 var SpTrayButton = GObject.registerClass(
     { GTypeName: "SpTrayButton" },
@@ -92,16 +94,13 @@ var SpTrayButton = GObject.registerClass(
                     y_align: Clutter.ActorAlign.CENTER,
                 }),
             );
+            this.makeIcon();
             const gicon = new St.Icon({
                 icon_name: "spotify",
                 style_class: "system-status-icon",
-                fallback_icon_name: "com.spotify.Client" // icon name for flatpak, TODO do snap
+                fallback_icon_name: "com.spotify.Client", // icon name for flatpak, TODO do snap
             });
-            // gicon.set_fallback_icon_name("com.spotify.Client");
-            this.ui.set(
-                "icon",
-                gicon,
-            );
+            this.ui.set("icon", gicon);
             this._handleLogoDisplay();
 
             this._signals.push(
