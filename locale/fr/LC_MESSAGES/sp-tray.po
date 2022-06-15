@@ -20,6 +20,9 @@ msgstr ""
 msgid "Valid placeholders: {track}, {album}, and {artist} for songs; {track}, {album} for podcasts"
 msgstr "Champs valides: {track}, {album}, {artist} pour les musiques; {track}, {album} pour les podcasts"
 
+msgid "Use {pbctr} to show playback modes"
+msgstr "{pbctr} pour afficher les modes de lecture"
+
 msgid "Display format for songs"
 msgstr "Format d'affichage des chansons"
 

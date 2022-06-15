@@ -54,6 +54,20 @@
                         <property name="margin-start">12</property>
                         <child>
                             <object class="GtkLabel">
+                                <property name="label" translatable="yes">Use {pbctr} to show playback modes</property>
+                                <property name="hexpand">true</property>
+                                <property name="halign">1</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
+                <child>
+                    <object class="GtkBox">
+                        <property name="spacing">12</property>
+                        <property name="margin-start">12</property>
+                        <child>
+                            <object class="GtkLabel">
                                 <property name="label" translatable="yes">Display format for songs</property>
                                 <property name="hexpand">true</property>
                                 <property name="halign">1</property>

@@ -19,6 +19,9 @@ msgstr ""
 msgid "Valid placeholders: {track}, {album}, and {artist} for songs; {track}, {album} for podcasts"
 msgstr ""
 
+msgid "Use {pbctr} to show playback modes"
+msgstr ""
+
 msgid "Display format for songs"
 msgstr ""
 

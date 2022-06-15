@@ -16,39 +16,11 @@
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const Main = imports.ui.main;
-const { St, Clutter, GObject, GLib, Gio } = imports.gi;
+const { St, Clutter, GObject, Gio } = imports.gi;
 
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const { SpTrayDbus } = Me.imports.dbus;
 const ExtensionUtils = imports.misc.extensionUtils;
-
-//dbus constants
-const dest = "org.mpris.MediaPlayer2.spotify";
-const path = "/org/mpris/MediaPlayer2";
-const spotifyDbus = `<node>
-<interface name="org.mpris.MediaPlayer2.Player">
-    <property name="PlaybackStatus" type="s" access="read"/>
-    <property name="Metadata" type="a{sv}" access="read"/>
-</interface>
-</node>`;
-
-const supportedClients = [
-    {
-        name: "spotify version <1.84",
-        pattern: "spotify:",
-        idExtractor: (trackid) => trackid.split(":")[2],
-    },
-    {
-        name: "spotify version >1.84",
-        pattern: "/com/spotify",
-        idExtractor: (trackid) => trackid.split("/")[3],
-    },
-    {
-        name: "ncspot",
-        pattern: "/org/ncspot",
-        idExtractor: (trackid) => trackid.split("/")[4],
-    },
-];
 
 var SpTrayButton = GObject.registerClass(
     { GTypeName: "SpTrayButton" },
@@ -120,12 +92,15 @@ var SpTrayButton = GObject.registerClass(
                     y_align: Clutter.ActorAlign.CENTER,
                 }),
             );
+            const gicon = new St.Icon({
+                icon_name: "spotify",
+                style_class: "system-status-icon",
+                fallback_icon_name: "com.spotify.Client" // icon name for flatpak, TODO do snap
+            });
+            // gicon.set_fallback_icon_name("com.spotify.Client");
             this.ui.set(
                 "icon",
-                new St.Icon({
-                    icon_name: "spotify",
-                    style_class: "system-status-icon",
-                }),
+                gicon,
             );
             this._handleLogoDisplay();
 

@@ -21,6 +21,9 @@ msgstr ""
 msgid "Valid placeholders: {track}, {album}, and {artist} for songs; {track}, {album} for podcasts"
 msgstr "Geldige plaatshouders: {track}, {album}, {artist} voor nummers; {track}, {album} voor podcasts"
 
+msgid "Use {pbctr} to show playback modes"
+msgstr "{pbctr} om afspeelmodi te weergeven"
+
 msgid "Display format for songs"
 msgstr "Weergaveformaat voor nummers"
 

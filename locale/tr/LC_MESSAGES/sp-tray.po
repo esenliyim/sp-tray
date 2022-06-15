@@ -20,6 +20,9 @@ msgstr ""
 msgid "Valid placeholders: {track}, {album}, and {artist} for songs; {track}, {album} for podcasts"
 msgstr "Geçerli semboller: şarkılar için {track}, {album} ve {artist}; podcastler için {track}, {album}"
 
+msgid "Use {pbctr} to show playback modes"
+msgstr "Oynatma modları için {pbctr}"
+
 msgid "Display format for songs"
 msgstr "Şarkı gösterim formatı"
 
