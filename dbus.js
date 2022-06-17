@@ -52,20 +52,21 @@ const supportedClients = [
     },
 ];
 
-Promise.timeout = function (priority = GLib.PRIORITY_DEFAULT, interval = 100) {
-    return new Promise((resolve) =>
-        GLib.timeout_add(priority, interval, () => {
-            resolve();
-            return GLib.SOURCE_REMOVE;
-        }),
-    );
-};
+// Promise.timeout = function (priority = GLib.PRIORITY_DEFAULT, interval = 100) {
+//     return new Promise((resolve) =>
+//         GLib.timeout_add(priority, interval, () => {
+//             resolve();
+//             return GLib.SOURCE_REMOVE;
+//         }),
+//     );
+// };
 
 var SpTrayDbus = class SpTrayDbus {
     constructor(panelButton) {
         this.proxy = null;
         this.panelButton = panelButton;
         this.activeClient = null;
+        this.timeouts = [];
         this.startWatching();
     }
 
@@ -78,6 +79,18 @@ var SpTrayDbus = class SpTrayDbus {
                 Gio.bus_unwatch_name(client.watchId);
             }
         }
+        for (const to of this.timeouts) {
+            GLib.Source.remove(to);
+        }
+    }
+
+    timeout() {
+        return new Promise((resolve) =>
+        GLib.timeout_add(priority, interval, () => {
+            resolve();
+            return GLib.SOURCE_REMOVE;
+        }),
+    );
     }
 
     startWatching() {
@@ -155,7 +168,7 @@ var SpTrayDbus = class SpTrayDbus {
                 return;
             } else {
                 try {
-                    await Promise.timeout();
+                    this.timeouts.push(await this.timeout());
                 } catch (e) {
                     logError(e);
                 }

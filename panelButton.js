@@ -22,8 +22,6 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 const { SpTrayDbus } = Me.imports.dbus;
 const ExtensionUtils = imports.misc.extensionUtils;
 
-const SPOTIFY_SNAP_ICON_PATH = "/home/emre/Pictures/example.png";
-
 var SpTrayButton = GObject.registerClass(
     { GTypeName: "SpTrayButton" },
     class SpTrayButton extends PanelMenu.Button {
