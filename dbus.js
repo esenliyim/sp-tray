@@ -52,15 +52,6 @@ const supportedClients = [
     },
 ];
 
-// Promise.timeout = function (priority = GLib.PRIORITY_DEFAULT, interval = 100) {
-//     return new Promise((resolve) =>
-//         GLib.timeout_add(priority, interval, () => {
-//             resolve();
-//             return GLib.SOURCE_REMOVE;
-//         }),
-//     );
-// };
-
 var SpTrayDbus = class SpTrayDbus {
     constructor(panelButton) {
         this.proxy = null;
