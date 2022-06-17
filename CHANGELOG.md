@@ -1,10 +1,12 @@
 Here be the notable changes to the extension's function.
 
-## Version 15 | 2022-06-15
+## Version 15 | 2022-06-17
 
 Added:
 
 - Option to show loop and shuffle status.
+- A stopped playback indicator.
+- Option to change all of the above.
 
 Changed:
 

@@ -57,7 +57,11 @@ function buildPrefsWidget() {
                     on_defaults_clicked(connectObject) {
                         settings.reset("off");
                         settings.reset("paused");
+                        settings.reset("stopped");
                         settings.reset("display-format");
+                        settings.reset("shuffle");
+                        settings.reset("loop-playlist");
+                        settings.reset("loop-track");
                     }
 
                     on_resetNotRunning_clicked(connectObject) {
@@ -66,6 +70,10 @@ function buildPrefsWidget() {
 
                     on_resetPaused_clicked(connectObject) {
                         settings.reset("paused");
+                    }
+
+                    on_resetStopped_clicked(connectObject) {
+                        settings.reset("stopped");
                     }
 
                     on_resetPosition_clicked(connectObject) {
@@ -94,6 +102,18 @@ function buildPrefsWidget() {
 
                     on_resetLogo_clicked(connectObject) {
                         settings.reset("logo-position");
+                    }
+
+                    on_resetShuffle_clicked(connectObject) {
+                        settings.reset("shuffle");
+                    }
+
+                    on_resetLoopTrack_clicked(connectObject) {
+                        settings.reset("loop-track");
+                    }
+
+                    on_resetLoopPlaylist_clicked(connectObject) {
+                        settings.reset("loop-playlist");
                     }
                 },
             );
@@ -142,6 +162,12 @@ function buildPrefsWidget() {
         Gio.SettingsBindFlags.DEFAULT,
     );
     settings.bind(
+        "stopped",
+        builder.get_object("field_stopped"),
+        "text",
+        Gio.SettingsBindFlags.DEFAULT,
+    );
+    settings.bind(
         "hidden-when-inactive",
         builder.get_object("field_hideInactive"),
         "active",
@@ -150,6 +176,12 @@ function buildPrefsWidget() {
     settings.bind(
         "hidden-when-paused",
         builder.get_object("field_hidePaused"),
+        "active",
+        Gio.SettingsBindFlags.DEFAULT,
+    );
+    settings.bind(
+        "hidden-when-stopped",
+        builder.get_object("field_hideStopped"),
         "active",
         Gio.SettingsBindFlags.DEFAULT,
     );
@@ -171,6 +203,24 @@ function buildPrefsWidget() {
         "active",
         Gio.SettingsBindFlags.DEFAULT,
     );
+    settings.bind(
+        "shuffle",
+        builder.get_object("shuffle"),
+        "text",
+        Gio.SettingsBindFlags.DEFAULT,
+    );
+    settings.bind(
+        "loop-track",
+        builder.get_object("loopTrack"),
+        "text",
+        Gio.SettingsBindFlags.DEFAULT,
+    );
+    settings.bind(
+        "loop-playlist",
+        builder.get_object("loopPlaylist"),
+        "text",
+        Gio.SettingsBindFlags.DEFAULT,
+    );
 
     // use connect_signals_full to attach signal handlers to buttons on gtk <4
     if (!_isGtk4) {
@@ -178,7 +228,11 @@ function buildPrefsWidget() {
             on_defaults_clicked(w) {
                 settings.reset("off");
                 settings.reset("paused");
+                settings.reset("stopped");
                 settings.reset("display-format");
+                settings.reset("loop-playlist");
+                settings.reset("loop-track");
+                settings.reset("shuffle");
             },
 
             on_resetNotRunning_clicked(w) {
@@ -187,6 +241,10 @@ function buildPrefsWidget() {
 
             on_resetPaused_clicked(w) {
                 settings.reset("paused");
+            },
+
+            on_resetStopped_clicked(w) {
+                settings.reset("stopped");
             },
 
             on_resetFormat_clicked(w) {
@@ -215,6 +273,18 @@ function buildPrefsWidget() {
 
             on_resetLogo_clicked(w) {
                 settings.reset("logo-position");
+            },
+
+            on_resetShuffle_clicked(w) {
+                settings.reset("shuffle");
+            },
+
+            on_resetLoopPlaylist_clicked(w) {
+                settings.reset("loop-playlist");
+            },
+
+            on_resetLoopTrack_clicked(w) {
+                settings.reset("loop-track");
             },
         };
 

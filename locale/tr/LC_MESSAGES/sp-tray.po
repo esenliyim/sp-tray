@@ -76,3 +76,21 @@ msgstr "Sol tarafta"
 
 msgid "Right of label"
 msgstr "Sağ tarafta"
+
+msgid "Hide widget when playback is stopped?"
+msgstr "Müzik durdurulduğunda widget'ı gizle?"
+
+msgid "Stopped"
+msgstr "Durduruldu"
+
+msgid "Loop and shuffle indicators"
+msgstr "Tekrar ve karışık oynatma işaretleri"
+
+msgid "Shuffle"
+msgstr "Karışık oynatma"
+
+msgid "Loop track"
+msgstr "Tek şarkı tekrarlama"
+
+msgid "Loop playlist"
+msgstr "Playlist tekrarlama"

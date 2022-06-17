@@ -50,6 +50,9 @@ var SpTrayButton = GObject.registerClass(
                 this.settings.connect(`changed::paused`, this.updateText.bind(this)),
             );
             this._settingSignals.push(
+                this.settings.connect(`changed::stopped`, this.updateText.bind(this)),
+            );
+            this._settingSignals.push(
                 this.settings.connect(`changed::off`, this.updateText.bind(this)),
             );
             this._settingSignals.push(
@@ -57,6 +60,9 @@ var SpTrayButton = GObject.registerClass(
             );
             this._settingSignals.push(
                 this.settings.connect(`changed::hidden-when-paused`, this.updateText.bind(this)),
+            );
+            this._settingSignals.push(
+                this.settings.connect(`changed::hidden-when-stopped`, this.updateText.bind(this)),
             );
             this._settingSignals.push(
                 this.settings.connect(`changed::display-format`, this.updateText.bind(this)),
@@ -79,6 +85,15 @@ var SpTrayButton = GObject.registerClass(
             this._settingSignals.push(
                 this.settings.connect("changed::logo-position", this._handleLogoDisplay.bind(this)),
             );
+            this._settingSignals.push(
+                this.settings.connect("changed::shuffle", this.updateText.bind(this)),
+            );
+            this._settingSignals.push(
+                this.settings.connect("changed::loop-track", this.updateText.bind(this)),
+            );
+            this._settingSignals.push(
+                this.settings.connect("changed::loop-playlist", this.updateText.bind(this)),
+            );
         }
 
         _initUi() {
@@ -97,37 +112,46 @@ var SpTrayButton = GObject.registerClass(
             this.ui.set("icon", this.makeIcon());
             this._handleLogoDisplay();
 
-            this._signals.push(
-                (this._pressEvent = this.connect(
-                    "button-press-event",
-                    this.showSpotify.bind(this),
-                )),
-            );
+            this._signals.push(this.connect("button-press-event", this.showSpotify.bind(this)));
 
             this.add_child(box);
         }
 
         /**
-         * Currently supports 3 builds: 1) native builds where the app icon is where everything else is 2) Snap packages 3) Flatpak packages
+         * Currently supports 3 builds: 1) native builds where the app icon is where every other app's is 2) Snap packages 3) Flatpak packages
          * First checks for Snap. If there's no file associated with it, sets the icon to the native build's icon, with the Flatpak icon path
          * as fallback
          */
         makeIcon() {
-            const [ok, snapContents] = GLib.file_get_contents("/var/lib/snapd/desktop/applications/spotify_spotify.desktop");
-            if (ok) {
+            const snapFileContents = this.readSnapFile();
+            if (snapFileContents) {
                 // There's a snap build of Spotify installed
-                const matched = String.fromCharCode(...snapContents).match(/Icon=(.*)\n/m);
-                const gicon = Gio.icon_new_for_string(matched[1]);
+                const gicon = Gio.icon_new_for_string(snapFileContents);
                 return new St.Icon({
                     gicon,
                     style_class: "system-status-icon",
-                })
+                });
             }
             return new St.Icon({
                 icon_name: "spotify",
                 style_class: "system-status-icon",
                 fallback_icon_name: "com.spotify.Client", // icon name for flatpak, in case it's not a native build
             });
+        }
+
+        readSnapFile() {
+            try {
+                const [ok, contents] = GLib.file_get_contents(
+                    "/var/lib/snapd/desktop/applications/spotify_spotify.desktop",
+                );
+                if (!ok) {
+                    return false;
+                }
+                const matched = String.fromCharCode(...contents).match(/Icon=(.*)\n/m);
+                return matched ? matched[1] : false;
+            } catch (error) {
+                return false;
+            }
         }
 
         _initDbus() {
@@ -167,10 +191,14 @@ var SpTrayButton = GObject.registerClass(
 
         destroy() {
             // disconnect all signals
-            this._settingSignals.forEach((signal) => this.settings.disconnect(signal));
-            this._signals.forEach((signal) => this.settings.disconnect(signal));
+            this._settingSignals.forEach((signal) => {
+                this.settings.disconnect(signal);
+            });
+            this._signals.forEach((signal) => {
+                this.disconnect(signal);
+            });
             // destroy all ui elements
-            this.ui.forEach((element) => element.destroy());
+            this.ui.get("box").destroy();
             this.dbus.destroy();
             super.destroy();
         }
@@ -208,8 +236,12 @@ var SpTrayButton = GObject.registerClass(
 
         showStopped() {
             const button = this.ui.get("label");
+            if (this.settings.get_boolean("hidden-when-stopped")) {
+                this.visible = false;
+                return;
+            }
             this.visible = true;
-            button.set_text("⏹️");
+            button.set_text(this.settings.get_string("stopped"));
         }
 
         // update the text on the tray display
@@ -288,14 +320,14 @@ var SpTrayButton = GObject.registerClass(
                 return text;
             }
             if (controls.shuffle) {
-                text += "🔀 ";
+                text += `${this.settings.get_string("shuffle")} `;
             }
             switch (controls.loop) {
                 case "Playlist":
-                    text += "🔁 ";
+                    text += `${this.settings.get_string("loop-playlist")} `;
                     break;
                 case "Track":
-                    text += "🔂 ";
+                    text += `${this.settings.get_string("loop-track")} `;
                     break;
                 default:
                     break;

@@ -74,7 +74,9 @@ var SpTrayDbus = class SpTrayDbus {
             this.proxy.disconnect(this.activeClient.signal);
         }
         for (const client in supportedClients) {
-            Gio.bus_unwatch_name(client.watchId);
+            if (client.watchId) {
+                Gio.bus_unwatch_name(client.watchId);
+            }
         }
     }
 
@@ -101,7 +103,12 @@ var SpTrayDbus = class SpTrayDbus {
         this.makeProxyForClient(client);
         // This is necessary because the proxy's property cache might be initialized with incomplete values,
         // which needs to be updated after a short delay
-        if (!this.proxy.Metadata || this.proxy.Metadata["mpris:trackid"].unpack() === "") {
+        try {
+            this.shouldRetry(this.proxy.Metadata)
+        } catch (error) {
+            logError(error)
+        }
+        if (!this.proxy.Metadata || this.shouldRetry(this.proxy.Metadata)) {
             log(`Bad metadata, querying again.`);
             try {
                 this.correctMetadata();
@@ -114,6 +121,15 @@ var SpTrayDbus = class SpTrayDbus {
         }
     }
 
+    shouldRetry(metadata) {
+        // Don't check artist field, because it will be null/undefined for podcasts
+        return (
+            metadata["mpris:trackid"].unpack() == "" ||
+            metadata["xesam:album"].unpack() == "" ||
+            metadata["xesam:title"].unpack() == ""
+        );
+    }
+
     /**
      * Attempt to correct the proxy's incomplete Metadata cache
      * Makes 5 attempts at 100ms intervals. Sets the panelButton text if succeeds.
@@ -124,8 +140,11 @@ var SpTrayDbus = class SpTrayDbus {
         do {
             const resp = this.queryMetadata();
             const unpacked = resp.deepUnpack();
-            if (unpacked["mpris:trackid"].unpack() !== "") {
+            if (!this.shouldRetry(unpacked)) {
                 log(`Got good metadata on attempt ${attempt}`);
+                // for (const [k, v] of Object.entries(unpacked)) {
+                //     log(`k ${k}, v ${v.unpack()}`);
+                // }
                 try {
                     this.proxy.set_cached_property("Metadata", resp);
                 } catch (error) {
@@ -255,18 +274,22 @@ var SpTrayDbus = class SpTrayDbus {
         if (!this.proxy.Metadata || !this.proxy.Metadata["mpris:trackid"]) {
             return null;
         }
-        const trackId = this.proxy.Metadata["mpris:trackid"].get_string()[0];
+        return {
+            trackType: this.getTrackType(this.proxy.Metadata["mpris:trackid"].get_string()[0]),
+            title: this.proxy.Metadata["xesam:title"].unpack(),
+            album: this.proxy.Metadata["xesam:album"].unpack(),
+            artist: this.proxy.Metadata["xesam:artist"].get_strv()[0],
+        };
+    }
+
+    getTrackType(trackId) {
         for (const version of this.activeClient.versions) {
             if (!trackId.startsWith(version.pattern)) {
                 continue;
             }
-            return {
-                trackType: version.idExtractor(trackId),
-                title: this.proxy.Metadata["xesam:title"].unpack(),
-                album: this.proxy.Metadata["xesam:album"].unpack(),
-                artist: this.proxy.Metadata["xesam:artist"].get_strv()[0],
-            };
+            return version.idExtractor(trackId);
         }
+        return null;
     }
 
     spotifyIsActive() {

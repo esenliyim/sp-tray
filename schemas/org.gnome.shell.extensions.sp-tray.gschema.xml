@@ -31,6 +31,12 @@ along with this program.If not, see < http://www.gnu.org/licenses/>. -->
             <description>the display text to indicate playback is paused</description>
         </key>
 
+        <key type="s" name="stopped">
+            <default>"⏹️"</default>
+            <summary>stopped icon</summary>
+            <description>the display text to indicate playback is stopped</description>
+        </key>
+
         <key type="s" name="off">
             <default>"💤️"</default>
             <summary>off icon</summary>
@@ -67,6 +73,11 @@ along with this program.If not, see < http://www.gnu.org/licenses/>. -->
         when playback is paused</description>
         </key>
 
+        <key type="b" name="hidden-when-stopped">
+            <default>true</default>
+            <summary>hide when playback is stopped?</summary>
+        </key>
+
         <key type="i" name="title-max-length">
             <default>35</default>
             <summary>max length of title field</summary>
@@ -86,6 +97,21 @@ along with this program.If not, see < http://www.gnu.org/licenses/>. -->
             <default>0</default>
             <summary>relative position of spotify's logo</summary>
             <range min="0" max="2" />
+        </key>
+
+        <key type="s" name="shuffle">
+            <default>"🔀️"</default>
+            <summary>the icon that shows playback is in shuffle mode</summary>
+        </key>
+
+        <key type="s" name="loop-track">
+            <default>"🔂"</default>
+            <summary>the icon that shows playback is in track loop mode</summary>
+        </key>
+
+        <key type="s" name="loop-playlist">
+            <default>"🔁"</default>
+            <summary>the icon that shows playback is in playlist loop mode</summary>
         </key>
 
     </schema>

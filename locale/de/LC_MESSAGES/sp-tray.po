@@ -76,3 +76,21 @@ msgstr "Linke Seite vom Schild"
 
 msgid "Right of label"
 msgstr "Rechte Seite vom Schild"
+
+msgid "Hide widget when playback is stopped?"
+msgstr "Widget ausblenden wenn Wiedergabe gestoppt?"
+
+msgid "Stopped"
+msgstr "Gestoppt"
+
+msgid "Loop and shuffle indicators"
+msgstr "Zufällige Wiedergabe- und Wiederholungsanzeigen"
+
+msgid "Shuffle"
+msgstr "Shuffle-Modus"
+
+msgid "Loop track"
+msgstr "Song-Wiederholungsmodus"
+
+msgid "Loop playlist"
+msgstr "Playlist-Wiederholungsmodus"

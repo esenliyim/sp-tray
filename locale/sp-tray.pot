@@ -75,3 +75,21 @@ msgstr ""
 
 msgid "Right of label"
 msgstr ""
+
+msgid "Hide widget when playback is stopped?"
+msgstr ""
+
+msgid "Stopped"
+msgstr ""
+
+msgid "Loop and shuffle indicators"
+msgstr ""
+
+msgid "Shuffle"
+msgstr ""
+
+msgid "Loop track"
+msgstr ""
+
+msgid "Loop playlist"
+msgstr ""
