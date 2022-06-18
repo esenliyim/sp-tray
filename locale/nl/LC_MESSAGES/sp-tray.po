@@ -1,40 +1,45 @@
 # Locale template file for sp-tray
 # Copyright (C) 2021 Emre Senliyim
 # This file is distributed under the same license as the sp-tray package.
-# Emre Senliyim <esenliyim@gmail.com>, 2021.
 #
+# Emre Senliyim <esenliyim@gmail.com>, 2021.
+# Heimen Stoffels <vistausss@fastmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: sp-tray 1.0\n"
 "Report-Msgid-Bugs-To: esenliyim@gmail.com\n"
 "POT-Creation-Date: 2020-06-03 17:42+0200\n"
-"PO-Revision-Date: 2021-09-18 15:01+0200\n"
+"PO-Revision-Date: 2022-06-18 14:51+0200\n"
+"Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language-Team: \n"
-"X-Generator: Poedit 3.0\n"
-"Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: nl\n"
+"X-Generator: Lokalize 22.04.2\n"
 
-msgid "Valid placeholders: {track}, {album}, and {artist} for songs; {track}, {album} for podcasts"
-msgstr "Geldige plaatshouders: {track}, {album}, {artist} voor nummers; {track}, {album} voor podcasts"
+msgid ""
+"Valid placeholders: {track}, {album}, and {artist} for songs; {track}, "
+"{album} for podcasts"
+msgstr ""
+"Geldige aanduidingen: {track}, {album}, {artist} voor nummers; {track}, "
+"{album} voor podcasts"
 
 msgid "Use {pbctr} to show playback modes"
 msgstr "{pbctr} om afspeelmodi te weergeven"
 
 msgid "Display format for songs"
-msgstr "Weergaveformaat voor nummers"
+msgstr "Weergaveformaat van nummers"
 
 msgid "Hide widget when Spotify is inactive?"
 msgstr "Widget verbergen als Spotify inactief is?"
 
 msgid "Spotify is inactive"
-msgstr "Spotify is niet actief"
+msgstr "Spotify is inactief"
 
 msgid "Hide widget when playback is paused?"
-msgstr "Widget verbergen als het afspelen onderbroken is?"
+msgstr "Widget verbergen als het afspelen gepauzeerd is?"
 
 msgid "Paused ({metadata} to include metadata)"
 msgstr "Onderbroken ({metadata} voor metadata)"
@@ -43,7 +48,7 @@ msgid "Restore defaults"
 msgstr "Standaardwaarden"
 
 msgid "Position in panel"
-msgstr "Positie in paneel"
+msgstr "Positie op bovenbalk"
 
 msgid "Left"
 msgstr "Links"
@@ -64,16 +69,35 @@ msgid "Max. album field length"
 msgstr "Maximale lengte van het albumveld"
 
 msgid "Display format for podcasts"
-msgstr "Weergaveformaat voor nummers"
+msgstr "Weergaveformaat van podcasts"
 
 msgid "Show Spotify logo"
-msgstr "Spotify-logo weergeven"
+msgstr "Spotify-logo tonen"
 
 msgid "Don't show"
-msgstr "Niet laten zien"
+msgstr "Verbergen"
 
 msgid "Left of label"
-msgstr "Aan de linkerkant"
+msgstr "Links van label"
 
 msgid "Right of label"
-msgstr "Aan de rechterkant"
+msgstr "Rechts van label"
+
+#| msgid "Hide widget when playback is paused?"
+msgid "Hide widget when playback is stopped?"
+msgstr "Widget verbergen als het afspelen gestopt is?"
+
+msgid "Stopped"
+msgstr "Gestopt"
+
+msgid "Loop and shuffle indicators"
+msgstr "Indicators voor herhalen en willekeurig afspelen"
+
+msgid "Shuffle"
+msgstr "Willekeurig"
+
+msgid "Loop track"
+msgstr "Nummer herhalen"
+
+msgid "Loop playlist"
+msgstr "Afspeellijst herhalen"
