@@ -1,5 +1,15 @@
 Here be the notable changes to the extension's function.
 
+## Version 16 | 2022-06-22
+
+Added:
+
+- new Dutch translations
+
+Changed:
+
+- some of the old Dutch translations
+
 ## Version 15 | 2022-06-17
 
 Added:

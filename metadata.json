@@ -10,6 +10,6 @@
     ],
     "url": "https://github.com/esenliyim/sp-tray",
     "uuid": "sp-tray@sp-tray.esenliyim.github.com",
-    "version": 15,
+    "version": 16,
     "settings-schema": "org.gnome.shell.extensions.sp-tray"
 }
