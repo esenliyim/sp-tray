@@ -77,7 +77,7 @@ var SpTrayDbus = class SpTrayDbus {
 
     timeout() {
         return new Promise((resolve) =>
-        GLib.timeout_add(priority, interval, () => {
+        GLib.timeout_add(GLib.PRIORITY_DEFAULT, 100, () => {
             resolve();
             return GLib.SOURCE_REMOVE;
         }),
