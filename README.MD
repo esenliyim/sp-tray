@@ -35,6 +35,16 @@ Alternatively, you could:
 
 - `libgtop` and gnome-tweaks as usual to load/install GNOME shell extensions.
 
+## Reporting issues & bugs
+
+Along with a quick description of the issue/bug, please also include:
+
+- Your gnome-shell version
+
+- Your spotify version
+
+- Which package manager you got it from (Snap, Flatpak, AUR, whatever)
+
 ## Notes
 
 - I haven't tested it with any shell version older than 3.36 because I can't be bothered. If you have tested it and can confirm that it works, let me know.
