@@ -9,6 +9,8 @@ Screenshot:
 
 - Shows the title, artist, album information, as well as playback modes. Allows you to customize how it's all shown. Can set separate display formats for podcasts and songs.
 
+- Can show metadata either as a static label, or as a configurable, horizontally scrolling marquee
+
 - Can choose which part of the top panel it will live in
 
 - Uses Spotify's exposed dbus interface to fetch metadata, doesn't use the web API or require a premium account

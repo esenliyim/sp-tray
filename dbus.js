@@ -77,11 +77,11 @@ var SpTrayDbus = class SpTrayDbus {
 
     timeout() {
         return new Promise((resolve) =>
-        GLib.timeout_add(GLib.PRIORITY_DEFAULT, 100, () => {
-            resolve();
-            return GLib.SOURCE_REMOVE;
-        }),
-    );
+            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 100, () => {
+                resolve();
+                return GLib.SOURCE_REMOVE;
+            }),
+        );
     }
 
     startWatching() {
@@ -108,9 +108,9 @@ var SpTrayDbus = class SpTrayDbus {
         // This is necessary because the proxy's property cache might be initialized with incomplete values,
         // which needs to be updated after a short delay
         try {
-            this.shouldRetry(this.proxy.Metadata)
+            this.shouldRetry(this.proxy.Metadata);
         } catch (error) {
-            logError(error)
+            logError(error);
         }
         if (!this.proxy.Metadata || this.shouldRetry(this.proxy.Metadata)) {
             log(`Bad metadata, querying again.`);
@@ -118,10 +118,10 @@ var SpTrayDbus = class SpTrayDbus {
                 this.correctMetadata();
             } catch (error) {
                 logError(error);
-                this.panelButton.updateText();
+                this.panelButton.updateLabel(true);
             }
         } else {
-            this.panelButton.updateText();
+            this.panelButton.updateLabel(true);
         }
     }
 
@@ -146,16 +146,14 @@ var SpTrayDbus = class SpTrayDbus {
             const unpacked = resp.deepUnpack();
             if (!this.shouldRetry(unpacked)) {
                 log(`Got good metadata on attempt ${attempt}`);
-                // for (const [k, v] of Object.entries(unpacked)) {
-                //     log(`k ${k}, v ${v.unpack()}`);
-                // }
+                
                 try {
                     this.proxy.set_cached_property("Metadata", resp);
                 } catch (error) {
                     logError(error);
                     return;
                 }
-                this.panelButton.updateText();
+                this.panelButton.updateLabel(true);
                 return;
             } else {
                 try {
@@ -224,7 +222,7 @@ var SpTrayDbus = class SpTrayDbus {
                     // None of the extension-relevant properties changed, nothing to do
                     return;
                 }
-                this.panelButton.updateText();
+                this.panelButton.updateLabel("Metadata" in props);
                 return;
             },
         );
@@ -257,7 +255,7 @@ var SpTrayDbus = class SpTrayDbus {
             log(`${otherClient.name} is still online. Making it the primary.`);
             this.makeProxyForClient(otherClient);
         }
-        this.panelButton.updateText();
+        this.panelButton.updateLabel(true);
     }
 
     // Checks if any other supported client is online
@@ -283,6 +281,7 @@ var SpTrayDbus = class SpTrayDbus {
             title: this.proxy.Metadata["xesam:title"].unpack(),
             album: this.proxy.Metadata["xesam:album"].unpack(),
             artist: this.proxy.Metadata["xesam:artist"].get_strv()[0],
+            url: this.proxy.Metadata["xesam:url"].unpack(),
         };
     }
 

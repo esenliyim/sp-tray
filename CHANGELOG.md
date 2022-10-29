@@ -1,5 +1,15 @@
 Here be the notable changes to the extension's function.
 
+## Version 17 | 2022-10-29
+
+Added:
+
+- now able to display track metadata as a configurable, horizontally scrolling marquee.
+
+Changed:
+
+- now showing metadata when paused is toggle with a switch instead of doing it with a placeholder string like a caveman
+
 ## Version 16 | 2022-06-22
 
 Added:

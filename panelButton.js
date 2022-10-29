@@ -20,7 +20,20 @@ const { St, Clutter, GObject, Gio, GLib } = imports.gi;
 
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const { SpTrayDbus } = Me.imports.dbus;
+const { settingsFields } = Me.imports.settingsFields;
 const ExtensionUtils = imports.misc.extensionUtils;
+
+const marqueeTextGenerator = function* (label) {
+    const length = this.settings.get_int("marquee-length");
+    const separator = this.settings.get_string("marquee-tail");
+
+    const text = (label + separator).split("");
+
+    while (true) {
+        yield text.join("").slice(0, length);
+        text.push(text.shift());
+    }
+};
 
 var SpTrayButton = GObject.registerClass(
     { GTypeName: "SpTrayButton" },
@@ -31,12 +44,13 @@ var SpTrayButton = GObject.registerClass(
             this.ui = new Map();
             this._settingSignals = [];
             this._signals = [];
+            this.marqueeTimeoutId = null;
 
             this._initSettings();
             this._initDbus();
             this._initUi();
 
-            this.updateText();
+            this.updateLabel(true);
         }
 
         _initSettings() {
@@ -44,54 +58,23 @@ var SpTrayButton = GObject.registerClass(
 
             // connect relevant settings to the button so that it can be instantly updated when they're changed
             // store the connected signals in an array for easy disconnection later on
-            this._settingSignals.push(
-                this.settings.connect(`changed::paused`, this.updateText.bind(this)),
-            );
-            this._settingSignals.push(
-                this.settings.connect(`changed::stopped`, this.updateText.bind(this)),
-            );
-            this._settingSignals.push(
-                this.settings.connect(`changed::off`, this.updateText.bind(this)),
-            );
-            this._settingSignals.push(
-                this.settings.connect(`changed::hidden-when-inactive`, this.updateText.bind(this)),
-            );
-            this._settingSignals.push(
-                this.settings.connect(`changed::hidden-when-paused`, this.updateText.bind(this)),
-            );
-            this._settingSignals.push(
-                this.settings.connect(`changed::hidden-when-stopped`, this.updateText.bind(this)),
-            );
-            this._settingSignals.push(
-                this.settings.connect(`changed::display-format`, this.updateText.bind(this)),
-            );
-            this._settingSignals.push(
-                this.settings.connect(`changed::podcast-format`, this.updateText.bind(this)),
-            );
-            this._settingSignals.push(
-                this.settings.connect(`changed::title-max-length`, this.updateText.bind(this)),
-            );
-            this._settingSignals.push(
-                this.settings.connect(`changed::artist-max-length`, this.updateText.bind(this)),
-            );
-            this._settingSignals.push(
-                this.settings.connect(`changed::album-max-length`, this.updateText.bind(this)),
-            );
-            this._settingSignals.push(
-                this.settings.connect("changed::position", this._positionChanged.bind(this)),
-            );
-            this._settingSignals.push(
-                this.settings.connect("changed::logo-position", this._handleLogoDisplay.bind(this)),
-            );
-            this._settingSignals.push(
-                this.settings.connect("changed::shuffle", this.updateText.bind(this)),
-            );
-            this._settingSignals.push(
-                this.settings.connect("changed::loop-track", this.updateText.bind(this)),
-            );
-            this._settingSignals.push(
-                this.settings.connect("changed::loop-playlist", this.updateText.bind(this)),
-            );
+            settingsFields.forEach((field) => {
+                if (field.changeCallback) {
+                    this._settingSignals.push(
+                        this.settings.connect(
+                            `changed::${field.setting}`,
+                            this[field.changeCallback].bind(this),
+                        ),
+                    );
+                } else {
+                    this._settingSignals.push(
+                        this.settings.connect(
+                            `changed::${field.setting}`,
+                            this.updateLabel.bind(this, field.restartsAnimation),
+                        ),
+                    );
+                }
+            });
         }
 
         _initUi() {
@@ -104,6 +87,15 @@ var SpTrayButton = GObject.registerClass(
                 "label",
                 new St.Label({
                     text: this.settings.get_string("starting"),
+                    y_align: Clutter.ActorAlign.CENTER,
+                }),
+            );
+
+            this.ui.set(
+                "pausedState",
+                new St.Label({
+                    text: this.settings.get_string("paused"),
+                    visible: false,
                     y_align: Clutter.ActorAlign.CENTER,
                 }),
             );
@@ -162,15 +154,18 @@ var SpTrayButton = GObject.registerClass(
             switch (this.settings.get_int("logo-position")) {
                 case 0:
                     box.remove_all_children();
+                    box.add_child(this.ui.get("pausedState"));
                     box.add_child(this.ui.get("label"));
                     break;
                 case 1:
                     box.remove_all_children();
                     box.add_child(this.ui.get("icon"));
+                    box.add_child(this.ui.get("pausedState"));
                     box.add_child(this.ui.get("label"));
                     break;
                 case 2:
                     box.remove_all_children();
+                    box.add_child(this.ui.get("pausedState"));
                     box.add_child(this.ui.get("label"));
                     box.add_child(this.ui.get("icon"));
                     break;
@@ -198,28 +193,41 @@ var SpTrayButton = GObject.registerClass(
             // destroy all ui elements
             this.ui.get("box").destroy();
             this.dbus.destroy();
+            if (this.marqueeTimeoutId) GLib.Source.remove(this.marqueeTimeoutId);
             super.destroy();
         }
 
-        showPaused(metadata) {
+        showPaused(metadata, shouldRestart = false) {
             if (this.settings.get_boolean("hidden-when-paused")) {
                 this.visible = false;
                 return;
             } else {
                 this.visible = true;
-                let text = this.settings.get_string("paused");
-                if (text.includes("{metadata}")) {
-                    text = text.replace("{metadata}", this._makeTrackData(metadata));
+                const pbStat = this.ui.get("pausedState");
+                pbStat.visible = true;
+                pbStat.text = this.settings.get_string("paused");
+                if (this.settings.get_boolean("metadata-when-paused")) {
+                    this._updateText(metadata, shouldRestart);
                 }
-                const button = this.ui.get("label");
-                button.set_text(text);
             }
         }
 
-        showPlaying(metadata) {
-            const button = this.ui.get("label");
+        showPlaying(metadata, shouldRestart = false) {
             this.visible = true;
-            button.set_text(this._makeTrackData(metadata));
+            const pbStat = this.ui.get("pausedState");
+            pbStat.visible = false;
+            this._updateText(metadata, shouldRestart);
+        }
+
+        _updateText(metadata, shouldRestart = false) {
+            const format = this._getFormat(metadata.trackType);
+            const button = this.ui.get("label");
+            if (!format) {
+                // TODO clarify why this is the way it is
+                button.set_text("");
+                return;
+            }
+            button.set_text(this._makeText(metadata, shouldRestart));
         }
 
         showInactive() {
@@ -227,49 +235,47 @@ var SpTrayButton = GObject.registerClass(
                 this.visible = false;
             } else {
                 this.visible = true;
+                const pbStat = this.ui.get("pausedState");
+                pbStat.visible = true;
+                pbStat.text = this.settings.get_string("off");
                 const button = this.ui.get("label");
-                button.set_text(this.settings.get_string("off"));
+                button.visible = false;
             }
+            this._stopMarquee();
         }
 
         showStopped() {
-            const button = this.ui.get("label");
             if (this.settings.get_boolean("hidden-when-stopped")) {
                 this.visible = false;
-                return;
+            } else {
+                this.visible = true;
+                const pbStat = this.ui.get("pausedState");
+                pbStat.visible = true;
+                pbStat.text = this.settings.get_string("stopped");
+                const button = this.ui.get("label");
+                button.visible = false;
             }
-            this.visible = true;
-            button.set_text(this.settings.get_string("stopped"));
+            this._stopMarquee();
         }
 
         // update the text on the tray display
-        updateText() {
+        updateLabel(shouldRestart = true) {
             if (!this.dbus.spotifyIsActive()) {
                 this.showInactive();
                 return;
             }
             switch (this.dbus.getPlaybackStatus()) {
                 case "Playing":
-                    this.showPlaying(this.dbus.extractMetadataInformation());
+                    this.showPlaying(this.dbus.extractMetadataInformation(), shouldRestart);
                     return;
                 case "Paused":
-                    this.showPaused(this.dbus.extractMetadataInformation());
+                    this.showPaused(this.dbus.extractMetadataInformation(), shouldRestart);
                     return;
                 case "Stopped":
                 default:
                     this.showStopped();
                     return;
             }
-        }
-
-        _makeTrackData(metadata) {
-            let format = this._getFormat(metadata.trackType);
-
-            if (!format) {
-                return "";
-            }
-
-            return this._generateText(format, metadata);
         }
 
         _getFormat(trackType) {
@@ -284,7 +290,41 @@ var SpTrayButton = GObject.registerClass(
             }
         }
 
-        _generateText(format, metadata) {
+        _makeText(metadata, shouldRestart) {
+            const marquee = true;
+            if (!this._getFormat(metadata.trackType)) {
+                return "";
+            }
+            return this.settings.get_int("display-mode") === 1
+                ? this._generateMarqueeText(metadata, shouldRestart)
+                : this._generateStaticText(metadata);
+        }
+
+        _generateMarqueeText(metadata, shouldRestart) {
+            if (shouldRestart || !this.marqueeGenerator) {
+                this.marqueeGenerator = marqueeTextGenerator.apply(this, [
+                    this._createFormattedText(metadata),
+                ]);
+            }
+            GLib.Source.remove(this.marqueeTimeoutId);
+            this.marqueeTimeoutId = GLib.timeout_add(
+                GLib.PRIORITY_DEFAULT,
+                this.settings.get_int("marquee-interval"),
+                () => this.updateLabel(false),
+            );
+            return this.marqueeGenerator.next().value;
+        }
+
+        _createFormattedText(metadata) {
+            return this._getFormat(metadata.trackType)
+                .replace("{artist}", metadata.artist)
+                .replace("{track}", metadata.title)
+                .replace("{album}", metadata.album)
+                .replace("{pbctr}", this.getPlaybackControl())
+                .trim();
+        }
+
+        _generateStaticText(metadata) {
             let maxTitleLength = this.settings.get_int("title-max-length");
             let maxArtistLength = this.settings.get_int("artist-max-length");
             let maxAlbumLength = this.settings.get_int("album-max-length");
@@ -302,13 +342,7 @@ var SpTrayButton = GObject.registerClass(
             if (metadata.artist.length > maxArtistLength) {
                 metadata.artist = metadata.artist.slice(0, maxArtistLength) + "...";
             }
-            this.getPlaybackControl();
-            return format
-                .replace("{artist}", metadata.artist)
-                .replace("{track}", metadata.title)
-                .replace("{album}", metadata.album)
-                .replace("{pbctr}", this.getPlaybackControl())
-                .trim();
+            return this._createFormattedText(metadata);
         }
 
         getPlaybackControl() {
@@ -359,6 +393,13 @@ var SpTrayButton = GObject.registerClass(
                     }
                 }
                 Main.activateWindow(this._spotiWin); // pull up the spotify window
+            }
+        }
+
+        _stopMarquee() {
+            if (this.marqueeTimeoutId) {
+                GLib.Source.remove(this.marqueeTimeoutId);
+                this.marqueeTimeoutId = null;
             }
         }
     },
