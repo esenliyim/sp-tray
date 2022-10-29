@@ -83,6 +83,7 @@ var SpTrayButton = GObject.registerClass(
             });
             this.ui.set("box", box);
 
+            // TODO mess with css to see if I can stop the label from jumping slightly left and right while marquee is on
             this.ui.set(
                 "label",
                 new St.Label({
@@ -209,7 +210,7 @@ var SpTrayButton = GObject.registerClass(
                 if (this.settings.get_boolean("metadata-when-paused")) {
                     this._updateText(metadata, shouldRestart);
                 } else {
-                    this._stopMarquee();
+                    this._pauseMarquee();
                     this.ui.get("label").visible = false;
                 }
             }
@@ -227,7 +228,7 @@ var SpTrayButton = GObject.registerClass(
             const format = this._getFormat(metadata.trackType);
             const button = this.ui.get("label");
             if (!format) {
-                // TODO clarify why this is the way it is
+                // we got something completely unrecognizable I guess so don't put anything on there
                 button.set_text("");
                 return;
             }
@@ -295,7 +296,6 @@ var SpTrayButton = GObject.registerClass(
         }
 
         _makeText(metadata, shouldRestart) {
-            const marquee = true;
             if (!this._getFormat(metadata.trackType)) {
                 return "";
             }
@@ -305,12 +305,14 @@ var SpTrayButton = GObject.registerClass(
         }
 
         _generateMarqueeText(metadata, shouldRestart) {
+            GLib.Source.remove(this.marqueeTimeoutId);
+            const text = this._createFormattedText(metadata);
+            if (text.length <= this.settings.get_int("marquee-length")) return text;
             if (shouldRestart || !this.marqueeGenerator) {
                 this.marqueeGenerator = marqueeTextGenerator.apply(this, [
                     this._createFormattedText(metadata),
                 ]);
             }
-            GLib.Source.remove(this.marqueeTimeoutId);
             this.marqueeTimeoutId = GLib.timeout_add(
                 GLib.PRIORITY_DEFAULT,
                 this.settings.get_int("marquee-interval"),
@@ -329,6 +331,7 @@ var SpTrayButton = GObject.registerClass(
         }
 
         _generateStaticText(metadata) {
+            this._stopMarquee();
             let maxTitleLength = this.settings.get_int("title-max-length");
             let maxArtistLength = this.settings.get_int("artist-max-length");
             let maxAlbumLength = this.settings.get_int("album-max-length");
@@ -400,11 +403,16 @@ var SpTrayButton = GObject.registerClass(
             }
         }
 
-        _stopMarquee() {
+        _pauseMarquee() {
             if (this.marqueeTimeoutId) {
                 GLib.Source.remove(this.marqueeTimeoutId);
                 this.marqueeTimeoutId = null;
             }
+        }
+
+        _stopMarquee() {
+            this._pauseMarquee();
+            this.marqueeGenerator = null;
         }
     },
 );
