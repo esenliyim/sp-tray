@@ -208,12 +208,16 @@ var SpTrayButton = GObject.registerClass(
                 pbStat.text = this.settings.get_string("paused");
                 if (this.settings.get_boolean("metadata-when-paused")) {
                     this._updateText(metadata, shouldRestart);
+                } else {
+                    this._stopMarquee();
+                    this.ui.get("label").visible = false;
                 }
             }
         }
 
         showPlaying(metadata, shouldRestart = false) {
             this.visible = true;
+            this.ui.get("label").visible = true;
             const pbStat = this.ui.get("pausedState");
             pbStat.visible = false;
             this._updateText(metadata, shouldRestart);

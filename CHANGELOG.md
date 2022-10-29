@@ -1,6 +1,6 @@
 Here be the notable changes to the extension's function.
 
-## Version 17 | 2022-10-29
+## Version 18 | 2022-10-29
 
 Added:
 
