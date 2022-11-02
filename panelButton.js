@@ -18,10 +18,11 @@ const PopupMenu = imports.ui.popupMenu;
 const Main = imports.ui.main;
 const { St, Clutter, GObject, Gio, GLib } = imports.gi;
 
-const Me = imports.misc.extensionUtils.getCurrentExtension();
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
 const { SpTrayDbus } = Me.imports.dbus;
 const { settingsFields } = Me.imports.settingsFields;
-const ExtensionUtils = imports.misc.extensionUtils;
+const { constants } = Me.imports.constants;
 
 const marqueeTextGenerator = function* (label) {
     const length = this.settings.get_int("marquee-length");
@@ -131,6 +132,7 @@ var SpTrayButton = GObject.registerClass(
                 return new St.Icon({
                     gicon,
                     style_class: "system-status-icon",
+                    y_align: Clutter.ActorAlign.CENTER,
                 });
             }
             return new St.Icon({
@@ -162,23 +164,22 @@ var SpTrayButton = GObject.registerClass(
         // if the spotify logo is to be shown, insert it where appropriate (sounded better in my head)
         _handleLogoDisplay() {
             let box = this.ui.get("box");
+            box.remove_all_children();
             switch (this.settings.get_int("logo-position")) {
-                case 0:
-                    box.remove_all_children();
-                    box.add_child(this.ui.get("pausedState"));
-                    box.add_child(this.ui.get("label"));
-                    break;
-                case 1:
-                    box.remove_all_children();
+                case constants.logoPosition.LEFT:
                     box.add_child(this.ui.get("icon"));
                     box.add_child(this.ui.get("pausedState"));
                     box.add_child(this.ui.get("label"));
                     break;
-                case 2:
-                    box.remove_all_children();
+                case constants.logoPosition.RIGHT:
                     box.add_child(this.ui.get("pausedState"));
                     box.add_child(this.ui.get("label"));
                     box.add_child(this.ui.get("icon"));
+                    break;
+                case constants.logoPosition.NONE:
+                default:
+                    box.add_child(this.ui.get("pausedState"));
+                    box.add_child(this.ui.get("label"));
                     break;
             }
         }
@@ -190,11 +191,14 @@ var SpTrayButton = GObject.registerClass(
             let positions = [Main.panel._leftBox, Main.panel._centerBox, Main.panel._rightBox];
 
             let pos = this.settings.get_int("position");
-            positions[pos].insert_child_at_index(this.container, pos === 2 ? 0 : -1);
+            positions[pos].insert_child_at_index(
+                this.container,
+                pos === constants.boxPosition.RIGHT ? 0 : -1,
+            );
         }
 
         _onMarqueeLengthChanged() {
-            this._setMarqueeStyle();
+            if (this) this._setMarqueeStyle();
             this.updateLabel(true);
         }
 

@@ -16,10 +16,11 @@
 "use strict";
 
 const Main = imports.ui.main;
-const Me = imports.misc.extensionUtils.getCurrentExtension();
 const ExtUtil = imports.misc.extensionUtils;
+const Me = ExtUtil.getCurrentExtension();
 
 const { SpTrayButton } = Me.imports.panelButton;
+const { constants } = Me.imports.constants;
 
 class SpTrayExtension {
     constructor() {
@@ -37,8 +38,8 @@ class SpTrayExtension {
         Main.panel.addToStatusArea(
             "SpTray",
             this.extensionButton,
-            pos === 2 ? 0 : -1,
-            this._getPosition(pos)
+            pos === constants.boxPosition.RIGHT ? 0 : -1,
+            this._getPosition(pos),
         );
     }
 
