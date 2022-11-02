@@ -84,13 +84,7 @@ var SpTrayButton = GObject.registerClass(
             this.ui.set("box", box);
 
             // TODO mess with css to see if I can stop the label from jumping slightly left and right while marquee is on
-            this.ui.set(
-                "label",
-                new St.Label({
-                    text: this.settings.get_string("starting"),
-                    y_align: Clutter.ActorAlign.CENTER,
-                }),
-            );
+            this.ui.set("label", this.makeLabel());
 
             this.ui.set(
                 "pausedState",
@@ -106,6 +100,22 @@ var SpTrayButton = GObject.registerClass(
             this._signals.push(this.connect("button-press-event", this.showSpotify.bind(this)));
 
             this.add_child(box);
+        }
+
+        makeLabel() {
+            // gotta override the style when the display mode is set to marquee in order to fix the width of the label.
+            // If left untouched, the width changes constantly as the text scrolls, because, you know, "i" and "w" don't
+            // have the same width and the total width of the string depends on the exact characters in it.
+            // I've found that setting width to <marquee-length>/2 em is something of a sweet spot that provides an
+            // acceptable constant width
+            const style = this.settings.get_int("display-mode")
+                ? `width: ${this.settings.get_int("marquee-length") / 2}em;`
+                : null;
+            return new St.Label({
+                text: this.settings.get_string("starting"),
+                y_align: Clutter.ActorAlign.CENTER,
+                style: style,
+            });
         }
 
         /**
@@ -183,6 +193,17 @@ var SpTrayButton = GObject.registerClass(
             positions[pos].insert_child_at_index(this.container, pos === 2 ? 0 : -1);
         }
 
+        _onMarqueeLengthChanged() {
+            this._setMarqueeStyle();
+            this.updateLabel(true);
+        }
+
+        _setMarqueeStyle() {
+            this.ui
+                .get("label")
+                .set_style(`width: ${this.settings.get_int("marquee-length") / 2}em;`);
+        }
+
         destroy() {
             // disconnect all signals
             this._settingSignals.forEach((signal) => {
@@ -208,6 +229,7 @@ var SpTrayButton = GObject.registerClass(
                 pbStat.visible = true;
                 pbStat.text = this.settings.get_string("paused");
                 if (this.settings.get_boolean("metadata-when-paused")) {
+                    this.ui.get("label").visible = true;
                     this._updateText(metadata, shouldRestart);
                 } else {
                     this._pauseMarquee();
@@ -299,26 +321,34 @@ var SpTrayButton = GObject.registerClass(
             if (!this._getFormat(metadata.trackType)) {
                 return "";
             }
-            return this.settings.get_int("display-mode") === 1
+            return this.settings.get_int("display-mode")
                 ? this._generateMarqueeText(metadata, shouldRestart)
                 : this._generateStaticText(metadata);
         }
 
         _generateMarqueeText(metadata, shouldRestart) {
-            GLib.Source.remove(this.marqueeTimeoutId);
+            this._pauseMarquee();
             const text = this._createFormattedText(metadata);
-            if (text.length <= this.settings.get_int("marquee-length")) return text;
-            if (shouldRestart || !this.marqueeGenerator) {
-                this.marqueeGenerator = marqueeTextGenerator.apply(this, [
-                    this._createFormattedText(metadata),
-                ]);
+            if (text.length <= this.settings.get_int("marquee-length")) {
+                this.ui.get("label").set_style(null); // let the system automatically decide the width
+                return text;
             }
+
+            if (shouldRestart || !this.marqueeGenerator) {
+                this.marqueeGenerator = marqueeTextGenerator.apply(this, [text]);
+            }
+            this._setMarqueeStyle();
             this.marqueeTimeoutId = GLib.timeout_add(
                 GLib.PRIORITY_DEFAULT,
                 this.settings.get_int("marquee-interval"),
-                () => this.updateLabel(false),
+                () => this.paintNextMarqueeFrame(),
             );
             return this.marqueeGenerator.next().value;
+        }
+
+        paintNextMarqueeFrame() {
+            this.ui.get("label").set_text(this.marqueeGenerator.next().value);
+            return GLib.SOURCE_CONTINUE;
         }
 
         _createFormattedText(metadata) {
@@ -404,7 +434,7 @@ var SpTrayButton = GObject.registerClass(
         }
 
         _pauseMarquee() {
-            if (this.marqueeTimeoutId) {
+            if (this.marqueeTimeoutId != null) {
                 GLib.Source.remove(this.marqueeTimeoutId);
                 this.marqueeTimeoutId = null;
             }

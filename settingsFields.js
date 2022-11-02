@@ -101,6 +101,7 @@ var settingsFields = [
         type: "value",
         resettable: true,
         resetCallback: "on_resetMarqueeLength_clicked",
+        changeCallback: "_onMarqueeLengthChanged",
         restartsAnimation: true,
     },
     {

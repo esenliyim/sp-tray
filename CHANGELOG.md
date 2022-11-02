@@ -5,6 +5,7 @@ Here be the notable changes to the extension's function.
 Added:
 
 - now able to display track metadata as a configurable, horizontally scrolling marquee.
+- support for GNOME 43
 
 Changed:
 
