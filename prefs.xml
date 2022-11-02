@@ -94,7 +94,7 @@
                         </child>
                         <child>
                             <object class="GtkButton" id="resetFormat">
-                                <property name="label" translatable="yes">↺</property>
+                                <property name="label">↺</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -124,7 +124,7 @@
                         </child>
                         <child>
                             <object class="GtkButton" id="resetPodcastFormat">
-                                <property name="label" translatable="yes">↺</property>
+                                <property name="label">↺</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -156,7 +156,7 @@
                         </child>
                         <child>
                             <object class="GtkButton" id="resetDisplayMode">
-                                <property name="label" translatable="yes">↺</property>
+                                <property name="label">↺</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -189,7 +189,7 @@
                         </child>
                         <child>
                             <object class="GtkButton" id="resetPosition">
-                                <property name="label" translatable="yes">↺</property>
+                                <property name="label">↺</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -222,7 +222,7 @@
                         </child>
                         <child>
                             <object class="GtkButton" id="resetLogo">
-                                <property name="label" translatable="yes">↺</property>
+                                <property name="label">↺</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -446,7 +446,7 @@
                         </child>
                         <child>
                             <object class="GtkButton" id="resetMarqueeTail">
-                                <property name="label" translatable="yes">↺</property>
+                                <property name="label">↺</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -503,7 +503,7 @@
                         </child>
                         <child>
                             <object class="GtkButton" id="resetNotRunning">
-                                <property name="label" translatable="yes">↺</property>
+                                <property name="label">↺</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -579,7 +579,7 @@
                         </child>
                         <child>
                             <object class="GtkButton" id="resetPaused">
-                                <property name="label" translatable="yes">↺</property>
+                                <property name="label">↺</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -636,7 +636,7 @@
                         </child>
                         <child>
                             <object class="GtkButton" id="resetStopped">
-                                <property name="label" translatable="yes">↺</property>
+                                <property name="label">↺</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -689,7 +689,7 @@
                         </child>
                         <child>
                             <object class="GtkButton" id="resetShuffle">
-                                <property name="label" translatable="yes">↺</property>
+                                <property name="label">↺</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -720,7 +720,7 @@
                         </child>
                         <child>
                             <object class="GtkButton" id="resetLoopPlaylist">
-                                <property name="label" translatable="yes">↺</property>
+                                <property name="label">↺</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -751,7 +751,7 @@
                         </child>
                         <child>
                             <object class="GtkButton" id="resetTrack">
-                                <property name="label" translatable="yes">↺</property>
+                                <property name="label">↺</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>

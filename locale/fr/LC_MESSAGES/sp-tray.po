@@ -1,15 +1,15 @@
-# German translations for sp-tray package.
+# French translations for sp-tray package.
 # Copyright (C) 2021 Emre Senliyim
 # This file is distributed under the same license as the sp-tray package.
 # Emre Senliyim <esenliyim@gmail.com>, 2021.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: sp-tray 1.0 \n"
+"Report-Msgid-Bugs-To: esenliyim@gmail.com \n"
 "POT-Creation-Date: 2020-06-03 17:42+0200\n"
 "PO-Revision-Date: 2020-06-03 17:45+0200\n"
-"Last-Translator: whiterqbbit\n"
+"Last-Translator: Emre Senliyim <esenliyim@gmail.com>\n"
 "Language-Team: french\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -35,8 +35,14 @@ msgstr "Spotify est inactif"
 msgid "Hide widget when playback is paused?"
 msgstr "Masquer le widget quand Spotify est en pause ?"
 
-msgid "Paused ({metadata} to include metadata)"
-msgstr "En pause ({metadata} pour inclure les métadonnées)"
+msgid "Paused"
+msgstr "En pause"
+
+msgid "Hide widget when playback is stopped?"
+msgstr "Masquer le widget quand Spotify est arrêtée ?"
+
+msgid "Stopped"
+msgstr "Arrêtée"
 
 msgid "Restore defaults"
 msgstr "Restaurer les paramètres par défaut"
@@ -76,3 +82,42 @@ msgstr "À gauche"
 
 msgid "Right of label"
 msgstr "À droite"
+
+msgid "Display mode"
+msgstr "Mode d'affichage"
+
+msgid "Static"
+msgstr "Affichage statique"
+
+msgid "Marquee"
+msgstr "Texte défilant"
+
+msgid "Static display settings"
+msgstr "Paramètres d'affichage statique"
+
+msgid "Marquee settings"
+msgstr "Paramètres de texte défilant"
+
+msgid "Max. marquee length"
+msgstr "Longueur maximale du texte"
+
+msgid "Marquee frame duration in milliseconds"
+msgstr "Intervalle d'animation en millisecondes"
+
+msgid "Marquee separator"
+msgstr "Séparateur"
+
+msgid "Show metadata when paused?"
+msgstr "Afficher les métadonnées quand Spotify est en pause ?"
+
+msgid "Loop and shuffle indicators"
+msgstr "Indicateurs de boucle et de lecture aléatoire"
+
+msgid "Shuffle"
+msgstr "Lecture aléatoire"
+
+msgid "Loop track"
+msgstr "Chanson en boucle"
+
+msgid "Loop playlist"
+msgstr "Playlist en boucle"

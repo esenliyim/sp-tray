@@ -14,25 +14,20 @@
 // along with this program.If not, see < http://www.gnu.org/licenses/>.
 
 const { GObject, Gtk, Gio } = imports.gi;
-const Me = imports.misc.extensionUtils.getCurrentExtension();
-
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
 const Gettext = imports.gettext;
 
-const ExtensionUtils = imports.misc.extensionUtils;
+const { settingsFields } = Me.imports.settingsFields;
 
 // to keep track of the registered scopeclass
 const registeredClass = [];
-
-// gtk4 does things quite a bit differently, so we gots to know what we're dealing with
-const _isGtk4 = _checkIfGtk4();
 
 function init() {
     // init translations
     Gettext.bindtextdomain("sp-tray", Me.dir.get_child("locale").get_path());
     Gettext.textdomain("sp-tray");
 }
-
-const { settingsFields } = Me.imports.settingsFields;
 
 function buildPrefsWidget() {
     let settings = ExtensionUtils.getSettings();
@@ -42,46 +37,43 @@ function buildPrefsWidget() {
             if (field.resettable) settings.reset(field.setting);
         });
     };
-    // use Gtk.BuilderScope to attach signal handlers to buttons on gtk 4+
-    if (_isGtk4) {
-        // register a new scope class if it hasn't already been registered
-        if (registeredClass.length === 0) {
-            let SpBuilderScope = GObject.registerClass(
-                {
-                    Implements: [Gtk.BuilderScope],
-                },
-                class SpBuilderScope extends GObject.Object {
-                    constructor() {
-                        super();
-                        settingsFields.forEach((field) => {
-                            if (!field.resettable) {
-                                return;
-                            }
-                            this[field.resetCallback] = (connectObject) => {
-                                settings.reset(field.setting);
-                            };
-                        });
-                    }
-
-                    vfunc_create_closure(builder, handlerName, flags, connectObject) {
-                        if (flags & Gtk.BuilderClosureFlags.SWAPPED) {
-                            throw new Error('Unsupported template signal flag "swapped"');
+    // register a new scope class if it hasn't already been registered
+    if (registeredClass.length === 0) {
+        let SpBuilderScope = GObject.registerClass(
+            {
+                Implements: [Gtk.BuilderScope],
+            },
+            class SpBuilderScope extends GObject.Object {
+                constructor() {
+                    super();
+                    settingsFields.forEach((field) => {
+                        if (!field.resettable) {
+                            return;
                         }
-                        if (typeof this[handlerName] === "undefined") {
-                            throw new Error(`${handlerName} is undefined`);
-                        }
-                        return this[handlerName].bind(connectObject || this);
-                    }
+                        this[field.resetCallback] = (connectObject) => {
+                            settings.reset(field.setting);
+                        };
+                    });
+                }
 
-                    on_defaults_clicked(connectObject) {
-                        resetAllToDefault();
+                vfunc_create_closure(builder, handlerName, flags, connectObject) {
+                    if (flags & Gtk.BuilderClosureFlags.SWAPPED) {
+                        throw new Error('Unsupported template signal flag "swapped"');
                     }
-                },
-            );
-            registeredClass.push(SpBuilderScope);
-        }
-        builder.set_scope(new registeredClass[0]());
+                    if (typeof this[handlerName] === "undefined") {
+                        throw new Error(`${handlerName} is undefined`);
+                    }
+                    return this[handlerName].bind(connectObject || this);
+                }
+
+                on_defaults_clicked(connectObject) {
+                    resetAllToDefault();
+                }
+            },
+        );
+        registeredClass.push(SpBuilderScope);
     }
+    builder.set_scope(new registeredClass[0]());
     builder.add_from_file(Me.dir.get_path() + "/prefs.xml");
     let box = builder.get_object("prefs_widget");
 
@@ -95,33 +87,5 @@ function buildPrefsWidget() {
         ),
     );
 
-    // use connect_signals_full to attach signal handlers to buttons on gtk <4
-    if (!_isGtk4) {
-        let SignalHandler = {
-            on_defaults_clicked(w) {
-                resetAllToDefault();
-            },
-        };
-
-        settingsFields.forEach((field) => {
-            if (!field.resettable) {
-                return;
-            }
-            SignalHandler[field.resetCallback] = (w) => {
-                settings.reset(field.setting);
-            };
-        });
-
-        builder.connect_signals_full((builder, object, signal, handler) => {
-            object.connect(signal, SignalHandler[handler].bind(this));
-        });
-
-        // gtk4 doesn't need show_all(), but lower versions do
-        box.show_all();
-    }
     return box;
-}
-
-function _checkIfGtk4() {
-    return Number.parseInt(imports.misc.config.PACKAGE_VERSION.split(".")) >= 40;
 }

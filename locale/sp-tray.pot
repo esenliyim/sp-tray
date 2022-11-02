@@ -25,19 +25,16 @@ msgstr ""
 msgid "Display format for songs"
 msgstr ""
 
-msgid "Hide widget when Spotify is inactive?"
+msgid "Display format for podcasts"
 msgstr ""
 
-msgid "Spotify is inactive"
+msgid "Display mode"
 msgstr ""
 
-msgid "Hide widget when playback is paused?"
+msgid "Static"
 msgstr ""
 
-msgid "Paused ({metadata} to include metadata)"
-msgstr ""
-
-msgid "Restore defaults"
+msgid "Marquee"
 msgstr ""
 
 msgid "Position in panel"
@@ -52,18 +49,6 @@ msgstr ""
 msgid "Right"
 msgstr ""
 
-msgid "Max. artist field length"
-msgstr ""
-
-msgid "Max. title field length"
-msgstr ""
-
-msgid "Max. album field length"
-msgstr ""
-
-msgid "Display format for podcasts"
-msgstr ""
-
 msgid "Show Spotify logo"
 msgstr ""
 
@@ -74,6 +59,45 @@ msgid "Left of label"
 msgstr ""
 
 msgid "Right of label"
+msgstr ""
+
+msgid "Static display settings"
+msgstr ""
+
+msgid "Max. title field length"
+msgstr ""
+
+msgid "Max. artist field length"
+msgstr ""
+
+msgid "Max. album field length"
+msgstr ""
+
+msgid "Marquee settings"
+msgstr ""
+
+msgid "Max. marquee length"
+msgstr ""
+
+msgid "Marquee frame duration in milliseconds"
+msgstr ""
+
+msgid "Marquee separator"
+msgstr ""
+
+msgid "Hide widget when Spotify is inactive?"
+msgstr ""
+
+msgid "Spotify is inactive"
+msgstr ""
+
+msgid "Hide widget when playback is paused?"
+msgstr ""
+
+msgid "Show metadata when paused?"
+msgstr ""
+
+msgid "Paused"
 msgstr ""
 
 msgid "Hide widget when playback is stopped?"
@@ -92,4 +116,7 @@ msgid "Loop track"
 msgstr ""
 
 msgid "Loop playlist"
+msgstr ""
+
+msgid "Restore defaults"
 msgstr ""

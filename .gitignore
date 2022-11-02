@@ -1,3 +1,5 @@
 *.zip
 package.sh
 .idea/
+translateAll.sh
+temp/

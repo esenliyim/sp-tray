@@ -26,6 +26,15 @@ msgstr "Oynatma modları için {pbctr}"
 msgid "Display format for songs"
 msgstr "Şarkı gösterim formatı"
 
+msgid "Display mode"
+msgstr "Yazı modu"
+
+msgid "Static"
+msgstr "Sabit yazı"
+
+msgid "Marquee"
+msgstr "Kayan yazı"
+
 msgid "Hide widget when Spotify is inactive?"
 msgstr "Spotify kapalıyken widget'ı gizle?"
 
@@ -35,8 +44,8 @@ msgstr "Spotify kapalı"
 msgid "Hide widget when playback is paused?"
 msgstr "Müzik duraklatıldığında widget'ı gizle?"
 
-msgid "Paused ({metadata} to include metadata)"
-msgstr "Duraklatıldı (parça bilgisi için {metadata})"
+msgid "Paused"
+msgstr "Duraklatıldı"
 
 msgid "Restore defaults"
 msgstr "Her şeyi sıfırla"
@@ -52,6 +61,9 @@ msgstr "Orta"
 
 msgid "Right"
 msgstr "Sağ"
+
+msgid "Static display settings"
+msgstr "Sabit yazı ayarları"
 
 msgid "Max. artist field length"
 msgstr "Sanatçı alanı maks. uzunluğu"
@@ -94,3 +106,18 @@ msgstr "Tek şarkı tekrarlama"
 
 msgid "Loop playlist"
 msgstr "Playlist tekrarlama"
+
+msgid "Marquee settings"
+msgstr "Kayan yazı ayarları"
+
+msgid "Max. marquee length"
+msgstr "Maks. kayan yazı uzunluğu"
+
+msgid "Marquee frame duration in milliseconds"
+msgstr "Milisaniye cinsinden kayan yazı güncelleme sıklığı"
+
+msgid "Marquee separator"
+msgstr "Kayan yazı ayracı"
+
+msgid "Show metadata when paused?"
+msgstr "Duraklatıldığında parça bilgisi göstermeye devam et?"

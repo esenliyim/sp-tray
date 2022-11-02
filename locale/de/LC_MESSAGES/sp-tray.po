@@ -26,20 +26,17 @@ msgstr "{pbctr} um Wiedergabemodi anzuzeigen."
 msgid "Display format for songs"
 msgstr "Anzeigeformat für Lieder"
 
-msgid "Hide widget when Spotify is inactive?"
-msgstr "Widget ausblenden wenn Spotify inaktiv?"
+msgid "Display format for podcasts"
+msgstr "Anzeigeformat für Podcasts"
 
-msgid "Spotify is inactive"
-msgstr "Spotify ist inaktiv"
+msgid "Display mode"
+msgstr "Anzeigemodus"
 
-msgid "Hide widget when playback is paused?"
-msgstr "Widget ausblenden wenn Wiedergabe pausiert?"
+msgid "Static"
+msgstr "Statisch"
 
-msgid "Paused ({metadata} to include metadata)"
-msgstr "Pausiert ({metadata} für Metadaten)"
-
-msgid "Restore defaults"
-msgstr "Alle zurücksetzen"
+msgid "Marquee"
+msgstr "Laufschrift"
 
 msgid "Position in panel"
 msgstr "Position am Panel"
@@ -53,18 +50,6 @@ msgstr "Mitte"
 msgid "Right"
 msgstr "Rechts"
 
-msgid "Max. artist field length"
-msgstr "Max. Länge des Künstler-Feldes"
-
-msgid "Max. title field length"
-msgstr "Max. Länge des Titel-Feldes"
-
-msgid "Max. album field length"
-msgstr "Max. Länge des Album-Feldes"
-
-msgid "Display format for podcasts"
-msgstr "Anzeigeformat für Podcasts"
-
 msgid "Show Spotify logo"
 msgstr "Spotify-Logo anzeigen"
 
@@ -76,6 +61,45 @@ msgstr "Linke Seite vom Schild"
 
 msgid "Right of label"
 msgstr "Rechte Seite vom Schild"
+
+msgid "Static display settings"
+msgstr "Einstellungen für statische Anzeige"
+
+msgid "Max. artist field length"
+msgstr "Max. Länge des Künstler-Feldes"
+
+msgid "Max. title field length"
+msgstr "Max. Länge des Titel-Feldes"
+
+msgid "Max. album field length"
+msgstr "Max. Länge des Album-Feldes"
+
+msgid "Marquee settings"
+msgstr "Laufschrifteinstellungen"
+
+msgid "Max. marquee length"
+msgstr "Max. Länge der Laufschrift"
+
+msgid "Marquee frame duration in milliseconds"
+msgstr "Animationsintervall in millisekunden"
+
+msgid "Marquee separator"
+msgstr "Separator"
+
+msgid "Hide widget when Spotify is inactive?"
+msgstr "Widget ausblenden wenn Spotify inaktiv?"
+
+msgid "Spotify is inactive"
+msgstr "Spotify ist inaktiv"
+
+msgid "Hide widget when playback is paused?"
+msgstr "Widget ausblenden wenn Wiedergabe pausiert?"
+
+msgid "Show metadata when paused?"
+msgstr "Metadata anzeigen wenn Wiedergabe pausiert?"
+
+msgid "Paused"
+msgstr "Pausiert"
 
 msgid "Hide widget when playback is stopped?"
 msgstr "Widget ausblenden wenn Wiedergabe gestoppt?"
@@ -94,3 +118,6 @@ msgstr "Song-Wiederholungsmodus"
 
 msgid "Loop playlist"
 msgstr "Playlist-Wiederholungsmodus"
+
+msgid "Restore defaults"
+msgstr "Alle zurücksetzen"

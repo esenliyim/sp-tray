@@ -1,15 +1,19 @@
 Here be the notable changes to the extension's function.
 
-## Version 18 | 2022-10-29
+## Version 18 | 2022-11-02
 
 Added:
 
-- now able to display track metadata as a configurable, horizontally scrolling marquee.
-- support for GNOME 43
+- Option to display track metadata as a configurable, horizontally scrolling marquee.
+- Support for GNOME 43
 
 Changed:
 
-- now showing metadata when paused is toggle with a switch instead of doing it with a placeholder string like a caveman
+- Setting to show metadata when paused is now a toggle switch instead of a placeholder string
+
+Removed:
+
+- Support for GNOME 3.xx, meaning no more Gtk3 because I can't test them.
 
 ## Version 16 | 2022-06-22
 
