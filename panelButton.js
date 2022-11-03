@@ -366,6 +366,7 @@ var SpTrayButton = GObject.registerClass(
 
         _generateStaticText(metadata) {
             this._stopMarquee();
+            this.ui.get("label").set_style(null);
             let maxTitleLength = this.settings.get_int("title-max-length");
             let maxArtistLength = this.settings.get_int("artist-max-length");
             let maxAlbumLength = this.settings.get_int("album-max-length");
