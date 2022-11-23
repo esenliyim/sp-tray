@@ -197,15 +197,10 @@ var SpTrayButton = GObject.registerClass(
             );
         }
 
-        _onMarqueeLengthChanged() {
-            if (this) this._setMarqueeStyle();
-            this.updateLabel(true);
-        }
-
-        _setMarqueeStyle() {
+        _setMarqueeStyle(length) {
             this.ui
                 .get("label")
-                .set_style(`width: ${this.settings.get_int("marquee-length") / 2}em;`);
+                .set_style(`width: ${length / 2}em;`);
         }
 
         destroy() {
@@ -333,7 +328,8 @@ var SpTrayButton = GObject.registerClass(
         _generateMarqueeText(metadata, shouldRestart) {
             this._pauseMarquee();
             const text = this._createFormattedText(metadata);
-            if (text.length <= this.settings.get_int("marquee-length")) {
+            const marqueeLength = this.settings.get_int("marquee-length")
+            if (text.length <= marqueeLength) {
                 this.ui.get("label").set_style(null); // let the system automatically decide the width
                 return text;
             }
@@ -341,7 +337,7 @@ var SpTrayButton = GObject.registerClass(
             if (shouldRestart || !this.marqueeGenerator) {
                 this.marqueeGenerator = marqueeTextGenerator.apply(this, [text]);
             }
-            this._setMarqueeStyle();
+            this._setMarqueeStyle(Math.min(text.length, marqueeLength));
             this.marqueeTimeoutId = GLib.timeout_add(
                 GLib.PRIORITY_DEFAULT,
                 this.settings.get_int("marquee-interval"),
