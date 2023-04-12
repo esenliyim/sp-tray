@@ -3,7 +3,7 @@ var settingsFields = [
     {
         setting: name in the settings schema,
         fieldId: name in the UI definition prefs.xml,
-        type: T Y P E,
+        type: "text" | "active" (aka. boolean) | "value" (aka number),
         resettable: whether it receives a default value,
         resetCallback: reset click callback,
         restartsAnimation: whether it should restart the marquee if it is active,

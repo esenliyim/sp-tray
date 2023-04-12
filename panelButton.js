@@ -224,9 +224,12 @@ var SpTrayButton = GObject.registerClass(
                 return;
             } else {
                 this.visible = true;
-                const pbStat = this.ui.get("pausedState");
-                pbStat.visible = true;
-                pbStat.text = this.settings.get_string("paused");
+                paused_text = this.settings.get_string("paused");
+                if (paused_text.trim() !== "") {
+                    const pbStat = this.ui.get("pausedState");
+                    pbStat.text = paused_text;
+                    pbStat.visible = true;
+                }
                 if (this.settings.get_boolean("metadata-when-paused")) {
                     this.ui.get("label").visible = true;
                     this._updateText(metadata, shouldRestart);
