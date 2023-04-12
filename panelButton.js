@@ -224,7 +224,7 @@ var SpTrayButton = GObject.registerClass(
                 return;
             } else {
                 this.visible = true;
-                paused_text = this.settings.get_string("paused");
+                let paused_text = this.settings.get_string("paused");
                 if (paused_text.trim() !== "") {
                     const pbStat = this.ui.get("pausedState");
                     pbStat.text = paused_text;
