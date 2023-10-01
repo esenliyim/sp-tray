@@ -1,4 +1,4 @@
-var settingsFields = [
+const settingsFields = [
     /*
     {
         setting: name in the settings schema,

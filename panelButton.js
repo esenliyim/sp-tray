@@ -13,12 +13,16 @@
 //     You should have received a copy of the GNU General Public License
 // along with this program.If not, see < http://www.gnu.org/licenses/>.
 
-const PanelMenu = imports.ui.panelMenu;
-const PopupMenu = imports.ui.popupMenu;
-const Main = imports.ui.main;
-const { St, Clutter, GObject, Gio, GLib } = imports.gi;
+import * as PanelMenu from "resource:///org/gnome/shell/ui/panelMenu.js";
+import * as Main from "resource:///org/gnome/shell/ui/main.js";
+import St from "gi://St";
+import Clutter from "gi://Clutter";
+import GObject from "gi://GObject";
+import Gio from "gi://Gio";
+import GLib from "gi://GLib";
 
-const ExtensionUtils = imports.misc.extensionUtils;
+import * as ExtensionUtils from "resource:///org/gnome/shell/misc/extensionUtils.js";
+
 const Me = ExtensionUtils.getCurrentExtension();
 const { SpTrayDbus } = Me.imports.dbus;
 const { settingsFields } = Me.imports.settingsFields;
@@ -36,7 +40,7 @@ const marqueeTextGenerator = function* (label) {
     }
 };
 
-var SpTrayButton = GObject.registerClass(
+const SpTrayButton = GObject.registerClass(
     { GTypeName: "SpTrayButton" },
     class SpTrayButton extends PanelMenu.Button {
         _init() {
@@ -198,9 +202,7 @@ var SpTrayButton = GObject.registerClass(
         }
 
         _setMarqueeStyle(length) {
-            this.ui
-                .get("label")
-                .set_style(`width: ${length / 2}em;`);
+            this.ui.get("label").set_style(`width: ${length / 2}em;`);
         }
 
         destroy() {
@@ -331,7 +333,7 @@ var SpTrayButton = GObject.registerClass(
         _generateMarqueeText(metadata, shouldRestart) {
             this._pauseMarquee();
             const text = this._createFormattedText(metadata);
-            const marqueeLength = this.settings.get_int("marquee-length")
+            const marqueeLength = this.settings.get_int("marquee-length");
             if (text.length <= marqueeLength) {
                 this.ui.get("label").set_style(null); // let the system automatically decide the width
                 return text;

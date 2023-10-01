@@ -1,4 +1,4 @@
-var constants = {
+const constants = {
     logoPosition: {
         NONE: 0,
         LEFT: 1,

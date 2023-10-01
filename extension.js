@@ -15,14 +15,16 @@
 
 "use strict";
 
-const Main = imports.ui.main;
-const ExtUtil = imports.misc.extensionUtils;
+import * as Main from "resource:///org/gnome/shell/ui/main.js";
+
+import * as ExtUtil from "resource:///org/gnome/shell/misc/extensionUtils.js";
+
 const Me = ExtUtil.getCurrentExtension();
 
 const { SpTrayButton } = Me.imports.panelButton;
 const { constants } = Me.imports.constants;
 
-class SpTrayExtension {
+export default class SpTrayExtension {
     constructor() {
         this.extensionButton = null;
     }

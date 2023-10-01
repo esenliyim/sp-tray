@@ -13,10 +13,14 @@
 //     You should have received a copy of the GNU General Public License
 // along with this program.If not, see < http://www.gnu.org/licenses/>.
 
-const { GObject, Gtk, Gio } = imports.gi;
-const ExtensionUtils = imports.misc.extensionUtils;
+import GObject from "gi://GObject";
+import Gtk from "gi://Gtk";
+import Gio from "gi://Gio";
+
+import * as ExtensionUtils from "resource:///org/gnome/shell/misc/extensionUtils.js";
+
 const Me = ExtensionUtils.getCurrentExtension();
-const Gettext = imports.gettext;
+import * as Gettext from "resource:///org/gnome/shell/gettext.js";
 
 const { settingsFields } = Me.imports.settingsFields;
 
