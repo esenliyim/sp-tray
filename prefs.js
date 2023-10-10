@@ -17,105 +17,78 @@ import GObject from "gi://GObject";
 import Gtk from "gi://Gtk";
 import Gio from "gi://Gio";
 
-import Adw from "gi://Adw";
-
 import {
     ExtensionPreferences,
     gettext as _,
 } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
 
-// import * as ExtensionUtils from "resource:///org/gnome/shell/misc/extensionUtils.js";
+import settingsFields from "./settingsFields.js";
 
-// const Me = ExtensionUtils.getCurrentExtension();
-// import * as Gettext from "resource:///org/gnome/shell/gettext.js";
-
-// const { settingsFields } = Me.imports.settingsFields;
-
-// to keep track of the registered scopeclass
-// const registeredClass = [];
-
-function init() {
-    // init translations
-    // Gettext.bindtextdomain("sp-tray", Me.dir.get_child("locale").get_path());
-    // Gettext.textdomain("sp-tray");
-}
-
-// function buildPrefsWidget() {
-//     let settings = ExtensionUtils.getSettings();
-//     let builder = new Gtk.Builder();
-//     const resetAllToDefault = () => {
-//         settingsFields.forEach((field) => {
-//             if (field.resettable) settings.reset(field.setting);
-//         });
-//     };
-//     // register a new scope class if it hasn't already been registered
-//     if (registeredClass.length === 0) {
-//         let SpBuilderScope = GObject.registerClass(
-//             {
-//                 Implements: [Gtk.BuilderScope],
-//             },
-//             class SpBuilderScope extends GObject.Object {
-//                 constructor() {
-//                     super();
-//                     settingsFields.forEach((field) => {
-//                         if (!field.resettable) {
-//                             return;
-//                         }
-//                         this[field.resetCallback] = (connectObject) => {
-//                             settings.reset(field.setting);
-//                         };
-//                     });
-//                 }
-
-//                 vfunc_create_closure(builder, handlerName, flags, connectObject) {
-//                     if (flags & Gtk.BuilderClosureFlags.SWAPPED) {
-//                         throw new Error('Unsupported template signal flag "swapped"');
-//                     }
-//                     if (typeof this[handlerName] === "undefined") {
-//                         throw new Error(`${handlerName} is undefined`);
-//                     }
-//                     return this[handlerName].bind(connectObject || this);
-//                 }
-
-//                 on_defaults_clicked(connectObject) {
-//                     resetAllToDefault();
-//                 }
-//             },
-//         );
-//         registeredClass.push(SpBuilderScope);
-//     }
-//     builder.set_scope(new registeredClass[0]());
-//     builder.add_from_file(Me.dir.get_path() + "/prefs.xml");
-//     let box = builder.get_object("prefs_widget");
-
-//     // bind switches and text fields to their respective settings
-//     settingsFields.forEach((field) =>
-//         settings.bind(
-//             field.setting,
-//             builder.get_object(field.fieldId),
-//             field.type,
-//             Gio.SettingsBindFlags.DEFAULT,
-//         ),
-//     );
-
-//     return box;
-// }
+const registeredClass = [];
 
 export default class SpTrayPrefs extends ExtensionPreferences {
     constructor(metadata) {
         super(metadata);
     }
 
-    fillPreferencesWindow(window) {
-        window._settings = this.getSettings();
+    getPreferencesWidget() {
+        const settings = this.getSettings();
 
-        const page = new Adw.PreferencesPage();
+        const builder = new Gtk.Builder();
+        const resetAllToDefault = () => {
+            settingsFields.forEach((field) => {
+                if (field.resettable) settings.reset(field.setting);
+            });
+        };
+        // register a new scope class if it hasn't already been registered
+        if (registeredClass.length === 0) {
+            let SpBuilderScope = GObject.registerClass(
+                {
+                    Implements: [Gtk.BuilderScope],
+                },
+                class SpBuilderScope extends GObject.Object {
+                    constructor() {
+                        super();
+                        settingsFields.forEach((field) => {
+                            if (!field.resettable) {
+                                return;
+                            }
+                            this[field.resetCallback] = (connectObject) => {
+                                settings.reset(field.setting);
+                            };
+                        });
+                    }
 
-        const group = new Adw.PreferencesGroup({
-            title: "lkasjdlkas",
-        });
+                    vfunc_create_closure(builder, handlerName, flags, connectObject) {
+                        if (flags & Gtk.BuilderClosureFlags.SWAPPED) {
+                            throw new Error('Unsupported template signal flag "swapped"');
+                        }
+                        if (typeof this[handlerName] === "undefined") {
+                            throw new Error(`${handlerName} is undefined`);
+                        }
+                        return this[handlerName].bind(connectObject || this);
+                    }
 
-        page.add(group);
-        window.add(page);
+                    on_defaults_clicked(connectObject) {
+                        resetAllToDefault();
+                    }
+                },
+            );
+            registeredClass.push(SpBuilderScope);
+        }
+        builder.set_scope(new registeredClass[0]());
+        builder.add_from_file(this.path + "/prefs.xml");
+
+        // bind switches and text fields to their respective settings
+        settingsFields.forEach((field) =>
+            settings.bind(
+                field.setting,
+                builder.get_object(field.fieldId),
+                field.type,
+                Gio.SettingsBindFlags.DEFAULT,
+            ),
+        );
+
+        return builder.get_object("prefs_widget");
     }
 }
