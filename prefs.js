@@ -24,62 +24,45 @@ import {
 
 import settingsFields from "./settingsFields.js";
 
-const registeredClass = [];
+const SpBuilderScope = GObject.registerClass(
+    {
+        Implements: [Gtk.BuilderScope],
+    },
+    class extends GObject.Object {
+        constructor(settings) {
+            super();
+            this.settings = settings;
+            settingsFields.forEach((field) => {
+                if (!field.resettable) {
+                    return;
+                }
+                this[field.resetCallback] = (connectObject) => {
+                    settings.reset(field.setting);
+                };
+            });
+        }
 
-// still an ugly hack-y thing but it works...
-function getBuilderScope(settings) {
-    // register a new scope class if it hasn't already been registered
-    if (registeredClass.length === 0) {
-        registerScopeClass();
-    }
-    return new registeredClass[0](settings);
-}
-
-function registerScopeClass() {
-    registeredClass.push(
-        GObject.registerClass(
-            {
-                Implements: [Gtk.BuilderScope],
-            },
-            SpBuilderScopeClass,
-        ),
-    );
-}
-
-class SpBuilderScopeClass extends GObject.Object {
-    constructor(settings) {
-        super();
-        this.settings = settings
-        settingsFields.forEach((field) => {
-            if (!field.resettable) {
-                return;
+        vfunc_create_closure(builder, handlerName, flags, connectObject) {
+            if (flags & Gtk.BuilderClosureFlags.SWAPPED) {
+                throw new Error('Unsupported template signal flag "swapped"');
             }
-            this[field.resetCallback] = (connectObject) => {
-                settings.reset(field.setting);
-            };
-        });
-    }
-
-    vfunc_create_closure(builder, handlerName, flags, connectObject) {
-        if (flags & Gtk.BuilderClosureFlags.SWAPPED) {
-            throw new Error('Unsupported template signal flag "swapped"');
+            if (typeof this[handlerName] === "undefined") {
+                throw new Error(`${handlerName} is undefined`);
+            }
+            return this[handlerName].bind(connectObject || this);
         }
-        if (typeof this[handlerName] === "undefined") {
-            throw new Error(`${handlerName} is undefined`);
+
+        resetAllToDefault() {
+            settingsFields.forEach((field) => {
+                if (field.resettable) this.settings.reset(field.setting);
+            });
         }
-        return this[handlerName].bind(connectObject || this);
-    }
 
-    resetAllToDefault() {
-        settingsFields.forEach((field) => {
-            if (field.resettable) this.settings.reset(field.setting);
-        });
-    };
-
-    on_defaults_clicked(connectObject) {
-        this.resetAllToDefault();
-    }
-}
+        on_defaults_clicked(connectObject) {
+            this.resetAllToDefault();
+        }
+    },
+);
 
 export default class SpTrayPrefs extends ExtensionPreferences {
     constructor(metadata) {
@@ -90,51 +73,8 @@ export default class SpTrayPrefs extends ExtensionPreferences {
         const settings = this.getSettings();
 
         const builder = new Gtk.Builder();
-        builder.set_scope(getBuilderScope(settings));
-
-        // const resetAllToDefault = () => {
-        //     settingsFields.forEach((field) => {
-        //         if (field.resettable) settings.reset(field.setting);
-        //     });
-        // };
-        // register a new scope class if it hasn't already been registered
-        // if (registeredClass.length === 0) {
-        //     let SpBuilderScope = GObject.registerClass(
-        //         {
-        //             Implements: [Gtk.BuilderScope],
-        //         },
-        //         class SpBuilderScope extends GObject.Object {
-        //             constructor() {
-        //                 super();
-        //                 settingsFields.forEach((field) => {
-        //                     if (!field.resettable) {
-        //                         return;
-        //                     }
-        //                     this[field.resetCallback] = (connectObject) => {
-        //                         settings.reset(field.setting);
-        //                     };
-        //                 });
-        //             }
-
-        //             vfunc_create_closure(builder, handlerName, flags, connectObject) {
-        //                 if (flags & Gtk.BuilderClosureFlags.SWAPPED) {
-        //                     throw new Error('Unsupported template signal flag "swapped"');
-        //                 }
-        //                 if (typeof this[handlerName] === "undefined") {
-        //                     throw new Error(`${handlerName} is undefined`);
-        //                 }
-        //                 return this[handlerName].bind(connectObject || this);
-        //             }
-
-        //             on_defaults_clicked(connectObject) {
-        //                 resetAllToDefault();
-        //             }
-        //         },
-        //     );
-        //     registeredClass.push(SpBuilderScope);
-        // }
-        // builder.set_scope(new registeredClass[0]());
-
+        // builder.set_scope(new RegisteredClass(settings));
+        builder.set_scope(new SpBuilderScope(settings));
         builder.add_from_file(this.path + "/prefs.xml");
 
         // bind switches and text fields to their respective settings
