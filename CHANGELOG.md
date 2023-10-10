@@ -1,5 +1,11 @@
 Here be the notable changes to the extension's function.
 
+## Version 23 | 2023-10-10
+
+Added:
+
+- Support for GNOME 45
+
 ## Version 18 | 2022-11-02
 
 Added:
