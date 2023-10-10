@@ -314,3 +314,5 @@ const SpTrayDbus = class SpTrayDbus {
         };
     }
 };
+
+export default SpTrayDbus;

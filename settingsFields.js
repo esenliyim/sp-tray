@@ -177,3 +177,5 @@ const settingsFields = [
         restartsAnimation: false,
     },
 ];
+
+export default settingsFields;

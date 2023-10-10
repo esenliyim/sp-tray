@@ -10,3 +10,5 @@ const constants = {
         RIGHT: 2,
     },
 };
+
+export default constants;

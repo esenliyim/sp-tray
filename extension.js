@@ -16,21 +16,19 @@
 "use strict";
 
 import * as Main from "resource:///org/gnome/shell/ui/main.js";
+import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
 
-import * as ExtUtil from "resource:///org/gnome/shell/misc/extensionUtils.js";
+import SpTrayButton from "./panelButton.js";
+import constants from "./constants.js";
 
-const Me = ExtUtil.getCurrentExtension();
-
-const { SpTrayButton } = Me.imports.panelButton;
-const { constants } = Me.imports.constants;
-
-export default class SpTrayExtension {
-    constructor() {
+export default class SpTrayExtension extends Extension {
+    constructor(metadata) {
+        super(metadata);
         this.extensionButton = null;
     }
 
     enable() {
-        this.settings = ExtUtil.getSettings();
+        this.settings = this.getSettings();
         this.extensionButton = new SpTrayButton();
         this._addToTray();
     }
@@ -57,6 +55,6 @@ export default class SpTrayExtension {
     }
 }
 
-function init() {
-    return new SpTrayExtension();
-}
+// function init() {
+//     return new SpTrayExtension();
+// }

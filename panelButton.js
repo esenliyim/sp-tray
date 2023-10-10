@@ -15,18 +15,18 @@
 
 import * as PanelMenu from "resource:///org/gnome/shell/ui/panelMenu.js";
 import * as Main from "resource:///org/gnome/shell/ui/main.js";
+
+import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
+
 import St from "gi://St";
 import Clutter from "gi://Clutter";
 import GObject from "gi://GObject";
 import Gio from "gi://Gio";
 import GLib from "gi://GLib";
 
-import * as ExtensionUtils from "resource:///org/gnome/shell/misc/extensionUtils.js";
-
-const Me = ExtensionUtils.getCurrentExtension();
-const { SpTrayDbus } = Me.imports.dbus;
-const { settingsFields } = Me.imports.settingsFields;
-const { constants } = Me.imports.constants;
+import SpTrayDbus from "./dbus.js";
+import settingsFields from "./settingsFields.js";
+import constants from "./constants.js";
 
 const marqueeTextGenerator = function* (label) {
     const length = this.settings.get_int("marquee-length");
@@ -44,7 +44,8 @@ const SpTrayButton = GObject.registerClass(
     { GTypeName: "SpTrayButton" },
     class SpTrayButton extends PanelMenu.Button {
         _init() {
-            super._init(null, Me.metadata.name);
+            this.extensionObject = Extension.lookupByUUID("sp-tray@sp-tray.esenliyim.github.com");
+            super._init(null, this.extensionObject.metadata.name);
 
             this.ui = new Map();
             this._settingSignals = [];
@@ -59,7 +60,7 @@ const SpTrayButton = GObject.registerClass(
         }
 
         _initSettings() {
-            this.settings = ExtensionUtils.getSettings();
+            this.settings = this.extensionObject.getSettings();
 
             // connect relevant settings to the button so that it can be instantly updated when they're changed
             // store the connected signals in an array for easy disconnection later on
@@ -452,3 +453,5 @@ const SpTrayButton = GObject.registerClass(
         }
     },
 );
+
+export default SpTrayButton;
