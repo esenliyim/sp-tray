@@ -39,6 +39,7 @@ Example marquee text, in the center of the status bar, with logo:
 2. Run the install script with `./<path_to_dir>/install.sh`. By default the files are copied into a new directory under `~/.local/share/gnome-shell/extensions/`.
 
 3. Restart gnome-shell (xorg) and activate the extension via gnome-tweaks. Gnome-shell cannot be restarted under Wayland, so you may have to log out and back in.
+    - As of shell version 45, your desktop environment might crash while trying to restart gnome-shell under X11 as well, so :tada: :tada: :tada:. Better to just log out and back in either way.
 
 The release version on the official Gnome website will be smaller in size and most likely most stable, but it might not be the most up-to-date version.
 
