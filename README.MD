@@ -22,15 +22,19 @@ Example marquee text, in the center of the status bar, with logo:
 
 - Supports [ncspot](https://github.com/hrkfdn/ncspot)
 
+- Supports GNOME shell versions before _and_ after 45. 
+
 ## Installation
 
-Preferably, you should:
+### Preferably, you should:
 
 [<img src="https://raw.githubusercontent.com/andyholmes/gnome-shell-extensions-badge/master/get-it-on-ego.svg?sanitize=true" alt="Get it on GNOME Extensions" height="100" align="middle">][extlink]
 
-Alternatively, you could:
+### Alternatively, you could:
 
 1. Clone this repo anywhere on your computer
+ 
+    - **For gnome-shell versions _before_ 45**: checkout the branch [gnome-44.x](https://github.com/esenliyim/sp-tray/tree/gnome-44.x) before proceeding to the next step. 
 
 2. Run the install script with `./<path_to_dir>/install.sh`. By default the files are copied into a new directory under `~/.local/share/gnome-shell/extensions/`.
 
