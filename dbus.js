@@ -1,4 +1,5 @@
-const { GLib, Gio } = imports.gi;
+import GLib from "gi://GLib";
+import Gio from "gi://Gio";
 
 //dbus constants
 const path = "/org/mpris/MediaPlayer2";
@@ -52,7 +53,7 @@ const supportedClients = [
     },
 ];
 
-var SpTrayDbus = class SpTrayDbus {
+const SpTrayDbus = class SpTrayDbus {
     constructor(panelButton) {
         this.proxy = null;
         this.panelButton = panelButton;
@@ -146,7 +147,7 @@ var SpTrayDbus = class SpTrayDbus {
             const unpacked = resp.deepUnpack();
             if (!this.shouldRetry(unpacked)) {
                 log(`Got good metadata on attempt ${attempt}`);
-                
+
                 try {
                     this.proxy.set_cached_property("Metadata", resp);
                 } catch (error) {
