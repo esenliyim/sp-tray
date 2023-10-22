@@ -7,6 +7,11 @@ PREFS_MODULES = prefs.js settingsFields.js
 INSTALLBASE = $(HOME)/.local/share/gnome-shell/extensions
 DEST = $(INSTALLBASE)/$(UUID)
 MSGSRC = $(wildcard locale/*/*/*.po)
+ifdef VERSION
+	ZIPVER = -v$(VERSION)
+else
+	ZIPVER = -v$(shell cat metadata.json | sed '/"version"/!d' | sed s/\"version\"://g | sed s/\ //g | sed s/,//g)
+endif
 
 all: extension
 
@@ -47,7 +52,6 @@ _build: all
 	for l in $(MSGSRC:.po=.mo) ; do \
 		af=_build/`dirname $$l .mo`; \
 		lf=_build/$$l; \
-		echo $$af; \
 		mkdir -p $$af; \
 		cp $$l $$lf; \
 	done;
