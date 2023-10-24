@@ -31,8 +31,11 @@ install: _build
 	rm -rf $(DEST)
 	mkdir -p $(DEST)
 	cp -r ./_build/* $(DEST)
-	-rm -fR _buil
+	-rm -fR _build
 	echo done
+
+uninstall:
+	rm -rf $(DEST)
 
 package: _build
 	cd _build ; \
