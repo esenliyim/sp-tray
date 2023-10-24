@@ -36,7 +36,7 @@ Example marquee text, in the center of the status bar, with logo:
  
     - **For gnome-shell versions _before_ 45**: checkout the branch [gnome-44.x](https://github.com/esenliyim/sp-tray/tree/gnome-44.x) before proceeding to the next step. 
 
-2. Run the install script with `./<path_to_dir>/install.sh`. By default the files are copied into a new directory under `~/.local/share/gnome-shell/extensions/`.
+2. Run the command `make install`. This will "build" the extension (compile settings and localizations), create a new directory under `~/.local/share/gnome-shell/extensions/`, and copy the files into it. 
 
 3. Restart gnome-shell (xorg) and activate the extension via gnome-tweaks. Gnome-shell cannot be restarted under Wayland, so you may have to log out and back in.
     - As of shell version 45, your desktop environment might crash while trying to restart gnome-shell under X11 as well, so :tada: :tada: :tada:. Better to just log out and back in either way.
