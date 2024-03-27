@@ -1,12 +1,10 @@
 {
     "description": "Adds a button to the panel that shows information Spotify playback. For bug reports, feature requests, translation contributions, etc., please visit the extension's github page.",
     "name": "spotify-tray",
-    "shell-version": [
-        "45"
-    ],
+    "shell-version": ["45", "46"],
     "url": "https://github.com/esenliyim/sp-tray",
     "uuid": "sp-tray@sp-tray.esenliyim.github.com",
-    "version": 24,
+    "version": 25,
     "settings-schema": "org.gnome.shell.extensions.sp-tray",
     "gettext-domain": "sp-tray"
 }
