@@ -411,35 +411,34 @@ const SpTrayButton = GObject.registerClass(
             return text;
         }
 
-        // many thanks to mheine's implementation
-        showSpotify() {
-            if (this._spotiWin && this._spotiWin.has_focus()) {
-                // spotify is up and focused
-                if (this._notSpotify) {
-                    // hide spotify and pull up the last active window if possible
-                    Main.activateWindow(this._notSpotify);
-                }
-            } else {
-                // spotify is unfocused or the tray icon has never been clicked before
-                this._spotiWin = this._notSpotify = null;
-                let wins = global.get_window_actors(); // get all open windows
-                for (let win of wins) {
-                    if (typeof win.get_meta_window === "function") {
-                        if (win.get_meta_window().get_wm_class() === "Spotify") {
-                            this._spotiWin = win.get_meta_window(); // mark the spotify window
-                        } else if (win.get_meta_window().has_focus()) {
-                            this._notSpotify = win.get_meta_window(); // mark the window that was active when the button was pressed
-                        }
 
-                        if (this._spotiWin && this._notSpotify) {
-                            break;
-                        }
-                    }
-                }
-                Main.activateWindow(this._spotiWin); // pull up the spotify window
+    showSpotify() {
+        let windows = global.get_window_actors();
+        let spotifyWindow = null;
+
+        for (let winActor of windows) {
+            let win = winActor.get_meta_window();
+            if (win.get_wm_class() === "Spotify") {
+                spotifyWindow = win; 
+                break;
             }
         }
 
+        if (spotifyWindow) {
+            if (spotifyWindow.has_focus()) {
+                spotifyWindow.minimize(global.get_current_time());
+            } else {
+                Main.activateWindow(spotifyWindow, global.get_current_time());
+            }
+        } else {
+            this.launchSpotify();
+        }
+    }
+
+    launchSpotify() {
+        const GLib = imports.gi.GLib;
+        GLib.spawn_command_line_async('spotify');
+    }
         _pauseMarquee() {
             if (this.marqueeTimeoutId != null) {
                 GLib.Source.remove(this.marqueeTimeoutId);
@@ -453,5 +452,4 @@ const SpTrayButton = GObject.registerClass(
         }
     },
 );
-
 export default SpTrayButton;
