@@ -1,7 +1,7 @@
 {
     "description": "Adds a button to the panel that shows information Spotify playback. For bug reports, feature requests, translation contributions, etc., please visit the extension's github page.",
     "name": "spotify-tray",
-    "shell-version": ["45", "46", "47"],
+    "shell-version": ["45", "46", "47", "48"],
     "url": "https://github.com/esenliyim/sp-tray",
     "uuid": "sp-tray@sp-tray.esenliyim.github.com",
     "version": 26,
