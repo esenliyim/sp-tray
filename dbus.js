@@ -245,7 +245,9 @@ const SpTrayDbus = class SpTrayDbus {
             log(`${client.name} vanished from DBus.`);
             return;
         }
-        this.proxy.disconnect(client.signal);
+        if (this.proxy) {
+            this.proxy.disconnect(client.signal);
+        }
         this.activeClient = null;
         log(`${client.name} vanished from DBus, looking for another client.`);
         const otherClient = this.checkForOnlineClients();
